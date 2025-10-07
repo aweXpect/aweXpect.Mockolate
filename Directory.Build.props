@@ -1,9 +1,9 @@
 <Project>
 
-	<PropertyGroup Condition="False">
+	<PropertyGroup>
 		<AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)/strongname.snk</AssemblyOriginatorKeyFile>
 		<SignAssembly>True</SignAssembly>
-		<PublicKey>PUT_PUBLIC_KEY_FROM_STRONGNAME_SIGN_HERE_AND_ENABLE_THIS_PROPERTY_GROUP</PublicKey>
+		<PublicKey>002400000480000094000000060200000024000052534131000400000100010029416e24d914e65631ce3a3c7eb017bab291dcaeaf1901ce399af70a3f460dcb1f21a9cb03ed2131bfb0c46e5b5c0863037f9142afa52c07f9670d58196c757c1508de6e9369248dd2598fccfcc3f70f106262fa9f8ffc4a5d6c5259d7ee7d127b8b34b5a322550e588420e77af0e829cd0a09bc3ce5211f15e5ca1061d3dfc5</PublicKey>
 	</PropertyGroup>
 
 </Project>
