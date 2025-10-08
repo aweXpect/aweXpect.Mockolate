@@ -13,6 +13,7 @@ namespace aweXpect
         public static aweXpect.Results.AndOrResult<Mockolate.Checks.CheckResult<TMock>, aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>>> Exactly<TMock>(this aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>> subject, aweXpect.Core.Times times) { }
         public static aweXpect.Results.AndOrResult<Mockolate.Checks.CheckResult<TMock>, aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>>> Never<TMock>(this aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>> subject) { }
         public static aweXpect.Results.AndOrResult<Mockolate.Checks.CheckResult<TMock>, aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>>> Once<TMock>(this aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>> subject) { }
+        public static aweXpect.Results.AndOrResult<Mockolate.Checks.CheckResult<TMock>, aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>>> Then<TMock>(this aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>> subject, params System.Func<TMock, Mockolate.Checks.CheckResult<TMock>>[] interactions) { }
         public static aweXpect.Results.AndOrResult<Mockolate.Checks.CheckResult<TMock>, aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>>> Twice<TMock>(this aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>> subject) { }
     }
 }
