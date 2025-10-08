@@ -6,35 +6,47 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=aweXpect_aweXpect.Mockolate&metric=coverage)](https://sonarcloud.io/summary/overall?id=aweXpect_aweXpect.Mockolate)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FaweXpect%2FaweXpect.Mockolate%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/aweXpect/aweXpect.Mockolate/main)
 
-Template for extension projects for [aweXpect](https://github.com/aweXpect/aweXpect).
+Expectations to verify interactions with mocks from [Mockolate](https://github.com/aweXpect/Mockolate).
 
-## Steps after creating a new project from this Template:
+## Features
 
-- Enable Sonarcloud analysis
-	- Create the project at [sonarcloud](https://sonarcloud.io/projects/create)
-	- Set "New Code" definition to "Previous version"
-	- Add the `SONAR_TOKEN` as repository secret
-	- Set the long-lived branch pattern to `(main|release/.*)`
-	- Change the Quality Profile for C# and the Quality Gate to "aweXpect way"
-- Enable Stryker Mutator
-	- Enable the repository in the [Stryker Mutator Dashboard](https://dashboard.stryker-mutator.io/repos/aweXpect)
-	- Add the API Key as `STRYKER_DASHBOARD_API_KEY` repository secret
-- Take over settings from Mockolate project
-	- General Settings
-	- Protect the `main` branch
-	- Create a "production" environment and add the `NUGET_API_KEY` secret
-- Support [StrongName signing](https://learn.microsoft.com/en-us/dotnet/standard/assembly/sign-strong-name):
-	- Create a
-	  new [Public/Private Key-Pair](https://learn.microsoft.com/en-us/dotnet/standard/assembly/create-public-private-key-pair):
-		- Open
-		  the [developer command prompt](https://learn.microsoft.com/en-us/visualstudio/ide/reference/command-prompt-powershell?view=vs-2022#start-from-windows-menu)
-		- Go to the project directory
-		- Type `sn -k strongname.snk` to create a new key pair
-		- Type `sn -p strongname.snk publicKey.snk` to extract the public key
-		- Type `sn -tp publicKey.snk` to display the public key, put it in "Directory.Build.props" and enable the
-		  corresponding `PropertyGroup`
-		- Delete the "publicKey.snk" file
-- Replace "Mockolate" with your suffix both in file names and in contents.
-- Adapt the copyright and project information in Source/Directory.Build.props
-- Adapt the README.md
+### Interaction count
+Verify that a method was called a specific number of times:
+
+```csharp
+var mock = Mock.Create<IMyService>();
+mock.Object.MyMethod();
+
+await That(mock.Invoked.MyMethod()).Once();             // Exactly once
+await That(mock.Invoked.MyMethod()).Twice();            // Exactly twice
+await That(mock.Invoked.MyMethod()).Never();            // Never called
+await That(mock.Invoked.MyMethod()).AtLeastOnce();      // At least once
+await That(mock.Invoked.MyMethod()).AtLeastTwice();     // At least twice
+await That(mock.Invoked.MyMethod()).AtLeast(3.Times()); // At least 3 times
+await That(mock.Invoked.MyMethod()).AtMostOnce();       // At most once
+await That(mock.Invoked.MyMethod()).AtMostTwice();      // At most twice
+await That(mock.Invoked.MyMethod()).AtMost(4.Times());  // At most 4 times
+await That(mock.Invoked.MyMethod()).Exactly(2.Times()); // Exactly 2 times
+```
+
+### Interaction order
+Verify that methods were called in a specific sequence:
+
+```csharp
+var mock = Mock.Create<IMyService>();
+mock.Object.MyMethod(1);
+mock.Object.MyMethod(2);
+mock.Object.MyMethod(3);
+mock.Object.MyMethod(4);
+
+// Verifies MyMethod(3) was called, then MyMethod(4)
+await That(mock.Invoked.MyMethod(3)).Then(
+    m => m.Invoked.MyMethod(4));
+
+// Verifies MyMethod(1), then MyMethod(2), then MyMethod(3) were called in order
+await That(mock.Invoked.MyMethod(1)).Then(
+    m => m.Invoked.MyMethod(2),
+    m => m.Invoked.MyMethod(3)
+);
+```
 
