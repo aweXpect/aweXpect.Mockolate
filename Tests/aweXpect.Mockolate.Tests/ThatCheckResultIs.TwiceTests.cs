@@ -5,10 +5,10 @@ namespace aweXpect.Mockolate.Tests;
 
 public sealed partial class ThatCheckResultIs
 {
-	public sealed class OnceTests
+	public sealed class TwiceTests
 	{
 		[Fact]
-		public async Task WhenInvokedTwice_ShouldFail()
+		public async Task WhenInvokedTwice_ShouldSucceed()
 		{
 			var mock = Mock.Create<IMyService>();
 
@@ -16,20 +16,9 @@ public sealed partial class ThatCheckResultIs
 			mock.Object.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Invoked.MyMethod(1, false)).Once();
+				=> await That(mock.Invoked.MyMethod(1, false)).Twice();
 
-			await That(Act).Throws<XunitException>()
-				.WithMessage("""
-					Expected that the Mock<ThatCheckResultIs.IMyService>
-					invoked method MyMethod(1, False) exactly once,
-					but found it twice
-
-					Interactions:
-					[
-					  [0] invoke method aweXpect.Mockolate.Tests.ThatCheckResultIs.IMyService.MyMethod(1, False),
-					  [1] invoke method aweXpect.Mockolate.Tests.ThatCheckResultIs.IMyService.MyMethod(1, False)
-					]
-					""");
+			await That(Act).DoesNotThrow();
 		}
 		[Fact]
 		public async Task WhenInvokedMoreThanTwice_ShouldFail()
@@ -41,12 +30,12 @@ public sealed partial class ThatCheckResultIs
 			mock.Object.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Invoked.MyMethod(1, false)).Once();
+				=> await That(mock.Invoked.MyMethod(1, false)).Twice();
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
 					Expected that the Mock<ThatCheckResultIs.IMyService>
-					invoked method MyMethod(1, False) exactly once,
+					invoked method MyMethod(1, False) exactly twice,
 					but found it 3 times
 
 					Interactions:
@@ -65,12 +54,12 @@ public sealed partial class ThatCheckResultIs
 
 
 			async Task Act()
-				=> await That(mock.Invoked.MyMethod(1, false)).Once();
+				=> await That(mock.Invoked.MyMethod(1, false)).Twice();
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
 					Expected that the Mock<ThatCheckResultIs.IMyService>
-					invoked method MyMethod(1, False) exactly once,
+					invoked method MyMethod(1, False) exactly twice,
 					but never found it
 					
 					Interactions:
@@ -79,16 +68,26 @@ public sealed partial class ThatCheckResultIs
 		}
 
 		[Fact]
-		public async Task WhenInvokedOnce_ShouldSucceed()
+		public async Task WhenInvokedOnce_ShouldFail()
 		{
 			var mock = Mock.Create<IMyService>();
 
 			mock.Object.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Invoked.MyMethod(1, false)).Once();
+				=> await That(mock.Invoked.MyMethod(1, false)).Twice();
 
-			await That(Act).DoesNotThrow();
+			await That(Act).Throws<XunitException>()
+				.WithMessage("""
+					Expected that the Mock<ThatCheckResultIs.IMyService>
+					invoked method MyMethod(1, False) exactly twice,
+					but found it only once
+					
+					Interactions:
+					[
+					  [0] invoke method aweXpect.Mockolate.Tests.ThatCheckResultIs.IMyService.MyMethod(1, False)
+					]
+					""");
 		}
 	}
 }

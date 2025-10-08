@@ -5,7 +5,7 @@ namespace aweXpect.Mockolate.Tests;
 
 public sealed partial class ThatCheckResultIs
 {
-	public sealed class OnceTests
+	public sealed class NeverTests
 	{
 		[Fact]
 		public async Task WhenInvokedTwice_ShouldFail()
@@ -16,12 +16,12 @@ public sealed partial class ThatCheckResultIs
 			mock.Object.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Invoked.MyMethod(1, false)).Once();
+				=> await That(mock.Invoked.MyMethod(1, false)).Never();
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
 					Expected that the Mock<ThatCheckResultIs.IMyService>
-					invoked method MyMethod(1, False) exactly once,
+					never invoked method MyMethod(1, False),
 					but found it twice
 
 					Interactions:
@@ -41,12 +41,12 @@ public sealed partial class ThatCheckResultIs
 			mock.Object.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Invoked.MyMethod(1, false)).Once();
+				=> await That(mock.Invoked.MyMethod(1, false)).Never();
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
 					Expected that the Mock<ThatCheckResultIs.IMyService>
-					invoked method MyMethod(1, False) exactly once,
+					never invoked method MyMethod(1, False),
 					but found it 3 times
 
 					Interactions:
@@ -59,34 +59,35 @@ public sealed partial class ThatCheckResultIs
 		}
 
 		[Fact]
-		public async Task WhenInvokedNever_ShouldFail()
-		{
-			var mock = Mock.Create<IMyService>();
-
-
-			async Task Act()
-				=> await That(mock.Invoked.MyMethod(1, false)).Once();
-
-			await That(Act).Throws<XunitException>()
-				.WithMessage("""
-					Expected that the Mock<ThatCheckResultIs.IMyService>
-					invoked method MyMethod(1, False) exactly once,
-					but never found it
-					
-					Interactions:
-					[]
-					""");
-		}
-
-		[Fact]
-		public async Task WhenInvokedOnce_ShouldSucceed()
+		public async Task WhenInvokedOnce_ShouldFail()
 		{
 			var mock = Mock.Create<IMyService>();
 
 			mock.Object.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Invoked.MyMethod(1, false)).Once();
+				=> await That(mock.Invoked.MyMethod(1, false)).Never();
+
+			await That(Act).Throws<XunitException>()
+				.WithMessage("""
+					Expected that the Mock<ThatCheckResultIs.IMyService>
+					never invoked method MyMethod(1, False),
+					but found it once
+					
+					Interactions:
+					[
+					  [0] invoke method aweXpect.Mockolate.Tests.ThatCheckResultIs.IMyService.MyMethod(1, False)
+					]
+					""");
+		}
+
+		[Fact]
+		public async Task WhenInvokedNever_ShouldSucceed()
+		{
+			var mock = Mock.Create<IMyService>();
+
+			async Task Act()
+				=> await That(mock.Invoked.MyMethod(1, false)).Never();
 
 			await That(Act).DoesNotThrow();
 		}
