@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net8.0</TargetFrameworks>
@@ -9,10 +9,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Remove="xunit" />
+		<PackageReference Include="xunit.v3" />
 		<PackageReference Include="PublicApiGenerator" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Expected\" />
-	</ItemGroup>
+	
 </Project>
