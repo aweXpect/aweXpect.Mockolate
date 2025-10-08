@@ -70,7 +70,7 @@ public static partial class ThatCheckResult
 					: int.MaxValue;
 				if (!hasInteractionAfter && _error is null)
 				{
-					_error = interactions.Length > 0 ? checkResult.Expectation + " too early" : checkResult.Expectation + " not at all";
+					_error = interactions.Length > 0 ? $"{checkResult.Expectation} too early" : $"{checkResult.Expectation} not at all";
 				}
 				return hasInteractionAfter;
 			}
