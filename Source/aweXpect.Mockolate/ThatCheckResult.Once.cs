@@ -14,7 +14,7 @@ namespace aweXpect;
 public static class ThatCheckResult
 {
 	/// <summary>
-	///     Verifies that the <paramref name="subject" /> is an absolute path.
+	///     Verifies that the mock method was invoked exactly once.
 	/// </summary>
 	public static AndOrResult<CheckResult<TMock>, IThat<CheckResult<TMock>>> Once<TMock>(
 		this IThat<CheckResult<TMock>> subject)
