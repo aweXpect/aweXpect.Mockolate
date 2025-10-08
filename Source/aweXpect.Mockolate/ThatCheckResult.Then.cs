@@ -64,13 +64,15 @@ public static partial class ThatCheckResult
 			return this;
 			bool VerifyInteractions(IInteraction[] interactions)
 			{
-				bool tempResult = interactions.Any(x => x.Index > after);
-				after = tempResult ? interactions.Where(x => x.Index > after).Min(x => x.Index) : int.MaxValue;
-				if (!tempResult && _error is null)
+				bool hasInteractionAfter = interactions.Any(x => x.Index > after);
+				after = hasInteractionAfter
+					? interactions.Where(x => x.Index > after).Min(x => x.Index)
+					: int.MaxValue;
+				if (!hasInteractionAfter && _error is null)
 				{
 					_error = interactions.Length > 0 ? checkResult.Expectation + " too early" : checkResult.Expectation + " not at all";
 				}
-				return tempResult;
+				return hasInteractionAfter;
 			}
 		}
 
