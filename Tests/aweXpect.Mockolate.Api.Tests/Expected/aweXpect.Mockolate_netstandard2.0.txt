@@ -2,8 +2,8 @@
 [assembly: System.Runtime.Versioning.TargetFramework(".NETStandard,Version=v2.0", FrameworkDisplayName=".NET Standard 2.0")]
 namespace aweXpect
 {
-    public static class DummyExtensions
+    public static class ThatCheckResult
     {
-        public static aweXpect.Results.AndOrResult<string, aweXpect.Core.IThat<string>> IsAbsolutePath(this aweXpect.Core.IThat<string> subject) { }
+        public static aweXpect.Results.AndOrResult<Mockolate.Checks.CheckResult<TMock>, aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>>> Once<TMock>(this aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>> subject) { }
     }
 }

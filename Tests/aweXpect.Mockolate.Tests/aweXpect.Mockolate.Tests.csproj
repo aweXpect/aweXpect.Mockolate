@@ -1,7 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<NoWarn>$(NoWarn);CS0649</NoWarn>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Source\aweXpect.Mockolate\aweXpect.Mockolate.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Mockolate"/>
 	</ItemGroup>
 
 </Project>
