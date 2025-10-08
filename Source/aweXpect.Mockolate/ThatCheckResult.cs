@@ -89,7 +89,7 @@ public static partial class ThatCheckResult
 		}
 	}
 
-	private class MyDescribableSubject<TMock> : IDescribableSubject
+	private sealed class MyDescribableSubject<TMock> : IDescribableSubject
 	{
 		public string GetDescription() => $"the {Formatter.Format(typeof(TMock))}";
 	}
