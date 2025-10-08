@@ -6,6 +6,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="aweXpect.Core"/>
+		<PackageReference Include="Mockolate"/>
 	</ItemGroup>
 
 </Project>
