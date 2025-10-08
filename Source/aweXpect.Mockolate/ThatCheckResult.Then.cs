@@ -9,6 +9,7 @@ using aweXpect.Helpers;
 using aweXpect.Results;
 using Mockolate;
 using Mockolate.Checks;
+using Mockolate.Interactions;
 
 namespace aweXpect;
 
@@ -31,8 +32,8 @@ public static partial class ThatCheckResult
 		: ConstraintResult.WithValue<CheckResult<TMock>>(grammars),
 			IValueConstraint<CheckResult<TMock>>
 	{
-		List<string> _expectations = [];
-		string? _error;
+		private readonly List<string> _expectations = [];
+		private string? _error;
 
 		public ConstraintResult IsMetBy(CheckResult<TMock> actual)
 		{
@@ -44,15 +45,7 @@ public static partial class ThatCheckResult
 			foreach (Func<TMock, CheckResult<TMock>>? check in interactions)
 			{
 				_expectations.Add(checkResult.Expectation);
-				if (!checkResult.Verify(interactions => {
-					bool tempResult = interactions.Any(x => x.Index > after);
-					after = tempResult ? interactions.Where(x => x.Index > after).Min(x => x.Index) : int.MaxValue;
-					if (!tempResult && _error is null)
-					{
-						_error = interactions.Length > 0 ? checkResult.Expectation + " too early" : checkResult.Expectation + " not at all";
-					}
-					return tempResult;
-				}))
+				if (!checkResult.Verify(VerifyInteractions))
 				{
 					result = false;
 				}
@@ -60,14 +53,7 @@ public static partial class ThatCheckResult
 			}
 
 			_expectations.Add(checkResult.Expectation);
-			result = checkResult.Verify(interactions => {
-				var tempResult = interactions.Any(x => x.Index > after);
-				if (!tempResult && _error is null)
-				{
-					_error = interactions.Length > 0 ? checkResult.Expectation + " too early" : checkResult.Expectation + " not at all";
-				}
-				return tempResult;
-			}) && result;
+			result = checkResult.Verify(VerifyInteractions) && result;
 			Outcome = result ? Outcome.Success : Outcome.Failure;
 			if (!result)
 			{
@@ -76,6 +62,16 @@ public static partial class ThatCheckResult
 					new ResultContext("Interactions", () => context)));
 			}
 			return this;
+			bool VerifyInteractions(IInteraction[] interactions)
+			{
+				bool tempResult = interactions.Any(x => x.Index > after);
+				after = tempResult ? interactions.Where(x => x.Index > after).Min(x => x.Index) : int.MaxValue;
+				if (!tempResult && _error is null)
+				{
+					_error = interactions.Length > 0 ? checkResult.Expectation + " too early" : checkResult.Expectation + " not at all";
+				}
+				return tempResult;
+			}
 		}
 
 		protected override void AppendNormalExpectation(StringBuilder stringBuilder, string? indentation = null)
