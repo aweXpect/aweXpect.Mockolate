@@ -39,14 +39,10 @@ mock.Object.MyMethod(2);
 mock.Object.MyMethod(3);
 mock.Object.MyMethod(4);
 
-// Verifies MyMethod(3) was called, then MyMethod(4)
-await That(mock.Invoked.MyMethod(3)).Then(
-    m => m.Invoked.MyMethod(4));
-
-// Verifies MyMethod(1), then MyMethod(2), then MyMethod(3) were called in order
+// Verifies MyMethod(1), then MyMethod(2), then MyMethod(4) were called in order
 await That(mock.Invoked.MyMethod(1)).Then(
     m => m.Invoked.MyMethod(2),
-    m => m.Invoked.MyMethod(3)
+    m => m.Invoked.MyMethod(4)
 );
 ```
 
