@@ -52,7 +52,6 @@ public sealed partial class ThatCheckResultIs
 		{
 			var mock = Mock.Create<IMyService>();
 
-
 			async Task Act()
 				=> await That(mock.Invoked.MyMethod(1, false)).AtMostTwice();
 

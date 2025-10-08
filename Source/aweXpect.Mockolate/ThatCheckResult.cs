@@ -122,7 +122,7 @@ public static partial class ThatCheckResult
 
 		protected override void AppendNormalResult(StringBuilder stringBuilder, string? indentation = null)
 		{
-			stringBuilder.Append("found ").Append(it).Append(" ").Append(_count.ToAmountString());
+			stringBuilder.Append("found ").Append(it).Append(' ').Append(_count.ToAmountString());
 		}
 
 		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
@@ -205,7 +205,7 @@ public static partial class ThatCheckResult
 
 		protected override void AppendNegatedResult(StringBuilder stringBuilder, string? indentation = null)
 		{
-			stringBuilder.Append("found ").Append(it).Append(" ").Append(_count.ToAmountString());
+			stringBuilder.Append("found ").Append(it).Append(' ').Append(_count.ToAmountString());
 		}
 
 		public override bool TryGetValue<TValue>([NotNullWhen(true)] out TValue? value) where TValue : default
