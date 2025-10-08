@@ -4,6 +4,12 @@ namespace aweXpect
 {
     public static class ThatCheckResult
     {
+        public static aweXpect.Results.AndOrResult<Mockolate.Checks.CheckResult<TMock>, aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>>> AtLeast<TMock>(this aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>> subject, aweXpect.Core.Times times) { }
+        public static aweXpect.Results.AndOrResult<Mockolate.Checks.CheckResult<TMock>, aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>>> AtLeastOnce<TMock>(this aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>> subject) { }
+        public static aweXpect.Results.AndOrResult<Mockolate.Checks.CheckResult<TMock>, aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>>> AtLeastTwice<TMock>(this aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>> subject) { }
+        public static aweXpect.Results.AndOrResult<Mockolate.Checks.CheckResult<TMock>, aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>>> AtMost<TMock>(this aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>> subject, aweXpect.Core.Times times) { }
+        public static aweXpect.Results.AndOrResult<Mockolate.Checks.CheckResult<TMock>, aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>>> AtMostOnce<TMock>(this aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>> subject) { }
+        public static aweXpect.Results.AndOrResult<Mockolate.Checks.CheckResult<TMock>, aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>>> AtMostTwice<TMock>(this aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>> subject) { }
         public static aweXpect.Results.AndOrResult<Mockolate.Checks.CheckResult<TMock>, aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>>> Exactly<TMock>(this aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>> subject, aweXpect.Core.Times times) { }
         public static aweXpect.Results.AndOrResult<Mockolate.Checks.CheckResult<TMock>, aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>>> Never<TMock>(this aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>> subject) { }
         public static aweXpect.Results.AndOrResult<Mockolate.Checks.CheckResult<TMock>, aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>>> Once<TMock>(this aweXpect.Core.IThat<Mockolate.Checks.CheckResult<TMock>> subject) { }
