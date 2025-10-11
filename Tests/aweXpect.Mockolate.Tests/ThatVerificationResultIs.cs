@@ -3,7 +3,7 @@ using Xunit.Sdk;
 
 namespace aweXpect.Mockolate.Tests;
 
-public sealed partial class ThatCheckResultIs
+public sealed partial class ThatVerificationResultIs
 {
 	public interface IMyService
 	{
