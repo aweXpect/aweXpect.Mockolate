@@ -2,26 +2,26 @@
 using System.Text;
 using aweXpect.Core;
 using aweXpect.Core.Constraints;
-using Mockolate.Checks;
+using Mockolate.Verify;
 
 namespace aweXpect;
 
 /// <summary>
-///     Expectations on the <see cref="CheckResult{TMock}" /> returned from a mockolate Mock.
+///     Expectations on the <see cref="VerificationResult{TMock}" /> returned from a mockolate Mock.
 /// </summary>
-public static partial class ThatCheckResult
+public static partial class ThatVerificationResult
 {
 	private sealed class HasExactlyConstraint<TMock>(
 		ExpectationBuilder expectationBuilder,
 		string it,
 		ExpectationGrammars grammars,
 		int expected)
-		: ConstraintResult.WithValue<CheckResult<TMock>>(grammars),
-			IValueConstraint<CheckResult<TMock>>
+		: ConstraintResult.WithValue<VerificationResult<TMock>>(grammars),
+			IValueConstraint<VerificationResult<TMock>>
 	{
 		private int _count = -1;
 
-		public ConstraintResult IsMetBy(CheckResult<TMock> actual)
+		public ConstraintResult IsMetBy(VerificationResult<TMock> actual)
 		{
 			Actual = actual;
 			Outcome = actual.Verify(interactions =>
@@ -94,12 +94,12 @@ public static partial class ThatCheckResult
 		string it,
 		ExpectationGrammars grammars,
 		int expected)
-		: ConstraintResult.WithValue<CheckResult<TMock>>(grammars),
-			IValueConstraint<CheckResult<TMock>>
+		: ConstraintResult.WithValue<VerificationResult<TMock>>(grammars),
+			IValueConstraint<VerificationResult<TMock>>
 	{
 		private int _count = -1;
 
-		public ConstraintResult IsMetBy(CheckResult<TMock> actual)
+		public ConstraintResult IsMetBy(VerificationResult<TMock> actual)
 		{
 			Actual = actual;
 			Outcome = actual.Verify(interactions =>
@@ -160,12 +160,12 @@ public static partial class ThatCheckResult
 		string it,
 		ExpectationGrammars grammars,
 		int expected)
-		: ConstraintResult.WithValue<CheckResult<TMock>>(grammars),
-			IValueConstraint<CheckResult<TMock>>
+		: ConstraintResult.WithValue<VerificationResult<TMock>>(grammars),
+			IValueConstraint<VerificationResult<TMock>>
 	{
 		private int _count = -1;
 
-		public ConstraintResult IsMetBy(CheckResult<TMock> actual)
+		public ConstraintResult IsMetBy(VerificationResult<TMock> actual)
 		{
 			Actual = actual;
 			Outcome = actual.Verify(interactions =>

@@ -3,7 +3,7 @@ using Xunit.Sdk;
 
 namespace aweXpect.Mockolate.Tests;
 
-public sealed partial class ThatCheckResultIs
+public sealed partial class ThatVerificationResultIs
 {
 	public sealed class AtLeastOnceTests
 	{
@@ -12,11 +12,11 @@ public sealed partial class ThatCheckResultIs
 		{
 			var mock = Mock.Create<IMyService>();
 
-			mock.Object.MyMethod(1, false);
-			mock.Object.MyMethod(1, false);
+			mock.Subject.MyMethod(1, false);
+			mock.Subject.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Invoked.MyMethod(1, false)).AtLeastOnce();
+				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtLeastOnce();
 
 			await That(Act).DoesNotThrow();
 		}
@@ -26,12 +26,12 @@ public sealed partial class ThatCheckResultIs
 		{
 			var mock = Mock.Create<IMyService>();
 
-			mock.Object.MyMethod(1, false);
-			mock.Object.MyMethod(1, false);
-			mock.Object.MyMethod(1, false);
+			mock.Subject.MyMethod(1, false);
+			mock.Subject.MyMethod(1, false);
+			mock.Subject.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Invoked.MyMethod(1, false)).AtLeastOnce();
+				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtLeastOnce();
 
 			await That(Act).DoesNotThrow();
 		}
@@ -42,11 +42,11 @@ public sealed partial class ThatCheckResultIs
 			var mock = Mock.Create<IMyService>();
 
 			async Task Act()
-				=> await That(mock.Invoked.MyMethod(1, false)).AtLeastOnce();
+				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtLeastOnce();
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-					Expected that the Mock<ThatCheckResultIs.IMyService>
+					Expected that the Mock<ThatVerificationResultIs.IMyService>
 					invoked method MyMethod(1, False) at least once,
 					but never found it
 					
@@ -60,10 +60,10 @@ public sealed partial class ThatCheckResultIs
 		{
 			var mock = Mock.Create<IMyService>();
 
-			mock.Object.MyMethod(1, false);
+			mock.Subject.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Invoked.MyMethod(1, false)).AtLeastOnce();
+				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtLeastOnce();
 
 			await That(Act).DoesNotThrow();
 		}

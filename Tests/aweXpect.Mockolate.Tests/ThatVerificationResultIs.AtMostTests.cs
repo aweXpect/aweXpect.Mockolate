@@ -3,7 +3,7 @@ using Xunit.Sdk;
 
 namespace aweXpect.Mockolate.Tests;
 
-public sealed partial class ThatCheckResultIs
+public sealed partial class ThatVerificationResultIs
 {
 	public sealed class AtMost
 	{
@@ -17,11 +17,11 @@ public sealed partial class ThatCheckResultIs
 
 			for (var i = 0; i < invocationTimes; i++)
 			{
-				mock.Object.MyMethod(1, false);
+				mock.Subject.MyMethod(1, false);
 			}
 
 			async Task Act()
-				=> await That(mock.Invoked.MyMethod(1, false)).AtMost(times);
+				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtMost(times);
 
 			await That(Act).DoesNotThrow();
 		}
@@ -35,15 +35,15 @@ public sealed partial class ThatCheckResultIs
 
 			for (var i = 0; i < invocationTimes; i++)
 			{
-				mock.Object.MyMethod(1, false);
+				mock.Subject.MyMethod(1, false);
 			}
 
 			async Task Act()
-				=> await That(mock.Invoked.MyMethod(1, false)).AtMost(times);
+				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtMost(times);
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage($"""
-					Expected that the Mock<ThatCheckResultIs.IMyService>
+					Expected that the Mock<ThatVerificationResultIs.IMyService>
 					invoked method MyMethod(1, False) at most {times} times,
 					but found it {invocationTimes} times
 					
@@ -64,11 +64,11 @@ public sealed partial class ThatCheckResultIs
 
 			for (var i = 0; i < times; i++)
 			{
-				mock.Object.MyMethod(1, false);
+				mock.Subject.MyMethod(1, false);
 			}
 
 			async Task Act()
-				=> await That(mock.Invoked.MyMethod(1, false)).AtMost(times);
+				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtMost(times);
 
 			await That(Act).DoesNotThrow();
 		}

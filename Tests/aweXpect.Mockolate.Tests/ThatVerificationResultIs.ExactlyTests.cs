@@ -3,7 +3,7 @@ using Xunit.Sdk;
 
 namespace aweXpect.Mockolate.Tests;
 
-public sealed partial class ThatCheckResultIs
+public sealed partial class ThatVerificationResultIs
 {
 	public sealed class ExactlyTests
 	{
@@ -16,11 +16,11 @@ public sealed partial class ThatCheckResultIs
 			var mock = Mock.Create<IMyService>();
 
 			async Task Act()
-				=> await That(mock.Invoked.MyMethod(1, false)).Exactly(times);
+				=> await That(mock.Verify.Invoked.MyMethod(1, false)).Exactly(times);
 
 			await That(Act).Throws<XunitException>().OnlyIf(shouldThrow)
 				.WithMessage($"""
-					Expected that the Mock<ThatCheckResultIs.IMyService>
+					Expected that the Mock<ThatVerificationResultIs.IMyService>
 					invoked method MyMethod(1, False) exactly {times} times,
 					but never found it
 					
@@ -38,15 +38,15 @@ public sealed partial class ThatCheckResultIs
 
 			for (var i = 0; i < invocationTimes; i++)
 			{
-				mock.Object.MyMethod(1, false);
+				mock.Subject.MyMethod(1, false);
 			}
 
 			async Task Act()
-				=> await That(mock.Invoked.MyMethod(1, false)).Exactly(times);
+				=> await That(mock.Verify.Invoked.MyMethod(1, false)).Exactly(times);
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage($"""
-					Expected that the Mock<ThatCheckResultIs.IMyService>
+					Expected that the Mock<ThatVerificationResultIs.IMyService>
 					invoked method MyMethod(1, False) exactly {times} times,
 					but found it only {invocationTimes} times
 					
@@ -66,15 +66,15 @@ public sealed partial class ThatCheckResultIs
 
 			for (var i = 0; i < invocationTimes; i++)
 			{
-				mock.Object.MyMethod(1, false);
+				mock.Subject.MyMethod(1, false);
 			}
 
 			async Task Act()
-				=> await That(mock.Invoked.MyMethod(1, false)).Exactly(times);
+				=> await That(mock.Verify.Invoked.MyMethod(1, false)).Exactly(times);
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage($"""
-					Expected that the Mock<ThatCheckResultIs.IMyService>
+					Expected that the Mock<ThatVerificationResultIs.IMyService>
 					invoked method MyMethod(1, False) exactly {times} times,
 					but found it {invocationTimes} times
 					
@@ -95,11 +95,11 @@ public sealed partial class ThatCheckResultIs
 
 			for (var i = 0; i < times; i++)
 			{
-				mock.Object.MyMethod(1, false);
+				mock.Subject.MyMethod(1, false);
 			}
 
 			async Task Act()
-				=> await That(mock.Invoked.MyMethod(1, false)).Exactly(times);
+				=> await That(mock.Verify.Invoked.MyMethod(1, false)).Exactly(times);
 
 			await That(Act).DoesNotThrow();
 		}

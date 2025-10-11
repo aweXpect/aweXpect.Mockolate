@@ -8,18 +8,18 @@ using aweXpect.Core.Constraints;
 using aweXpect.Helpers;
 using aweXpect.Results;
 using Mockolate;
-using Mockolate.Checks;
+using Mockolate.Verify;
 using Mockolate.Interactions;
 
 namespace aweXpect;
 
-public static partial class ThatCheckResult
+public static partial class ThatVerificationResult
 {
 	/// <summary>
 	///     Verifies that the <paramref name="interactions" /> happen after the current interaction in the given order.
 	/// </summary>
-	public static AndOrResult<CheckResult<TMock>, IThat<CheckResult<TMock>>> Then<TMock>(
-		this IThat<CheckResult<TMock>> subject, params Func<TMock, CheckResult<TMock>>[] interactions)
+	public static AndOrResult<VerificationResult<TMock>, IThat<VerificationResult<TMock>>> Then<TMock>(
+		this IThat<VerificationResult<TMock>> subject, params Func<TMock, VerificationResult<TMock>>[] interactions)
 		=> new(subject.Get().ExpectationBuilder.AddConstraint((expectationBuilder, it, grammars)
 				=> new ThenConstraint<TMock>(expectationBuilder, it, grammars, interactions)),
 			subject);
@@ -28,32 +28,32 @@ public static partial class ThatCheckResult
 		ExpectationBuilder expectationBuilder,
 		string it,
 		ExpectationGrammars grammars,
-		Func<TMock, CheckResult<TMock>>[] interactions)
-		: ConstraintResult.WithValue<CheckResult<TMock>>(grammars),
-			IValueConstraint<CheckResult<TMock>>
+		Func<TMock, VerificationResult<TMock>>[] interactions)
+		: ConstraintResult.WithValue<VerificationResult<TMock>>(grammars),
+			IValueConstraint<VerificationResult<TMock>>
 	{
 		private readonly List<string> _expectations = [];
 		private string? _error;
 
-		public ConstraintResult IsMetBy(CheckResult<TMock> actual)
+		public ConstraintResult IsMetBy(VerificationResult<TMock> actual)
 		{
 			Actual = actual;
 			_expectations.Clear();
 			bool result = true;
-			CheckResult<TMock> checkResult = actual;
+			VerificationResult<TMock> VerificationResult = actual;
 			int after = -1;
-			foreach (Func<TMock, CheckResult<TMock>>? check in interactions)
+			foreach (Func<TMock, VerificationResult<TMock>>? check in interactions)
 			{
-				_expectations.Add(checkResult.Expectation);
-				if (!checkResult.Verify(VerifyInteractions))
+				_expectations.Add(VerificationResult.Expectation);
+				if (!VerificationResult.Verify(VerifyInteractions))
 				{
 					result = false;
 				}
-				checkResult = check(checkResult.Mock);
+				VerificationResult = check(VerificationResult.Mock);
 			}
 
-			_expectations.Add(checkResult.Expectation);
-			result = checkResult.Verify(VerifyInteractions) && result;
+			_expectations.Add(VerificationResult.Expectation);
+			result = VerificationResult.Verify(VerifyInteractions) && result;
 			Outcome = result ? Outcome.Success : Outcome.Failure;
 			if (!result)
 			{
@@ -70,7 +70,7 @@ public static partial class ThatCheckResult
 					: int.MaxValue;
 				if (!hasInteractionAfter && _error is null)
 				{
-					_error = interactions.Length > 0 ? $"{checkResult.Expectation} too early" : $"{checkResult.Expectation} not at all";
+					_error = interactions.Length > 0 ? $"{VerificationResult.Expectation} too early" : $"{VerificationResult.Expectation} not at all";
 				}
 				return hasInteractionAfter;
 			}
