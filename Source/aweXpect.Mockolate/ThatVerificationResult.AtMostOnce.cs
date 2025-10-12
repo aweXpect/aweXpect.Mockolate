@@ -10,9 +10,9 @@ public static partial class ThatVerificationResult
 	/// <summary>
 	///     Verifies that the checked interaction happened at most once.
 	/// </summary>
-	public static AndOrResult<VerificationResult<TMock>, IThat<VerificationResult<TMock>>> AtMostOnce<TMock>(
-		this IThat<VerificationResult<TMock>> subject)
+	public static AndOrResult<VerificationResult<TVerify>, IThat<VerificationResult<TVerify>>> AtMostOnce<TVerify>(
+		this IThat<VerificationResult<TVerify>> subject)
 		=> new(subject.Get().ExpectationBuilder.AddConstraint((expectationBuilder, it, grammars)
-				=> new HasAtMostConstraint<TMock>(expectationBuilder, it, grammars, 1)),
+				=> new HasAtMostConstraint<TVerify>(expectationBuilder, it, grammars, 1)),
 			subject);
 }

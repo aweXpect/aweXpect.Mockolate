@@ -18,49 +18,52 @@ public static partial class ThatVerificationResult
 	/// <summary>
 	///     Verifies that the <paramref name="interactions" /> happen after the current interaction in the given order.
 	/// </summary>
-	public static AndOrResult<VerificationResult<TMock>, IThat<VerificationResult<TMock>>> Then<TMock>(
-		this IThat<VerificationResult<TMock>> subject, params Func<TMock, VerificationResult<TMock>>[] interactions)
+	public static AndOrResult<VerificationResult<TVerify>, IThat<VerificationResult<TVerify>>> Then<TVerify>(
+		this IThat<VerificationResult<TVerify>> subject, params Func<TVerify, VerificationResult<TVerify>>[] interactions)
 		=> new(subject.Get().ExpectationBuilder.AddConstraint((expectationBuilder, it, grammars)
-				=> new ThenConstraint<TMock>(expectationBuilder, it, grammars, interactions)),
+				=> new ThenConstraint<TVerify>(expectationBuilder, it, grammars, interactions)),
 			subject);
 
-	private sealed class ThenConstraint<TMock>(
+	private sealed class ThenConstraint<TVerify>(
 		ExpectationBuilder expectationBuilder,
 		string it,
 		ExpectationGrammars grammars,
-		Func<TMock, VerificationResult<TMock>>[] interactions)
-		: ConstraintResult.WithValue<VerificationResult<TMock>>(grammars),
-			IValueConstraint<VerificationResult<TMock>>
+		Func<TVerify, VerificationResult<TVerify>>[] interactions)
+		: ConstraintResult.WithValue<VerificationResult<TVerify>>(grammars),
+			IValueConstraint<VerificationResult<TVerify>>
 	{
 		private readonly List<string> _expectations = [];
 		private string? _error;
 
-		public ConstraintResult IsMetBy(VerificationResult<TMock> actual)
+		public ConstraintResult IsMetBy(VerificationResult<TVerify> actual)
 		{
 			Actual = actual;
 			_expectations.Clear();
 			bool result = true;
-			VerificationResult<TMock> VerificationResult = actual;
+			IVerificationResult<TVerify> verificationResult = actual;
 			int after = -1;
-			foreach (Func<TMock, VerificationResult<TMock>>? check in interactions)
+			foreach (Func<TVerify, VerificationResult<TVerify>>? check in interactions)
 			{
-				_expectations.Add(VerificationResult.Expectation);
-				if (!VerificationResult.Verify(VerifyInteractions))
+				_expectations.Add(verificationResult.Expectation);
+				if (!verificationResult.Verify(VerifyInteractions))
 				{
 					result = false;
 				}
-				VerificationResult = check(VerificationResult.Mock);
+				verificationResult = check(verificationResult.Object);
 			}
 
-			_expectations.Add(VerificationResult.Expectation);
-			result = VerificationResult.Verify(VerifyInteractions) && result;
+			_expectations.Add(verificationResult.Expectation);
+			result = verificationResult.Verify(VerifyInteractions) && result;
 			Outcome = result ? Outcome.Success : Outcome.Failure;
+			/* TODO: Disable and check if it can be re-enabled with `IMockVerify`
 			if (!result)
 			{
-				string context = Formatter.Format(((IMock)actual.Mock!).Interactions.Interactions, FormattingOptions.MultipleLines);
+				string context = Formatter.Format(((IVerificationResult<TVerify>)actual).Interactions.Interactions, FormattingOptions.MultipleLines);
 				expectationBuilder.UpdateContexts(contexts => contexts.Add(
 					new ResultContext("Interactions", () => context)));
 			}
+			*/
+			_ = expectationBuilder;
 			return this;
 			bool VerifyInteractions(IInteraction[] interactions)
 			{
@@ -70,7 +73,7 @@ public static partial class ThatVerificationResult
 					: int.MaxValue;
 				if (!hasInteractionAfter && _error is null)
 				{
-					_error = interactions.Length > 0 ? $"{VerificationResult.Expectation} too early" : $"{VerificationResult.Expectation} not at all";
+					_error = interactions.Length > 0 ? $"{verificationResult.Expectation} too early" : $"{verificationResult.Expectation} not at all";
 				}
 				return hasInteractionAfter;
 			}
@@ -99,7 +102,7 @@ public static partial class ThatVerificationResult
 		public override bool TryGetValue<TValue>([NotNullWhen(true)] out TValue? value) where TValue : default
 		{
 			if (typeof(TValue) == typeof(IDescribableSubject) &&
-				new MyDescribableSubject<TMock>() is TValue describableSubject)
+				new MyDescribableSubject<TVerify>() is TValue describableSubject)
 			{
 				value = describableSubject;
 				return true;

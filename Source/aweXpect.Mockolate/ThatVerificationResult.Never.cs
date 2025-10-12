@@ -10,9 +10,9 @@ public static partial class ThatVerificationResult
 	/// <summary>
 	///     Verifies that the checked interaction happened never.
 	/// </summary>
-	public static AndOrResult<VerificationResult<TMock>, IThat<VerificationResult<TMock>>> Never<TMock>(
-		this IThat<VerificationResult<TMock>> subject)
+	public static AndOrResult<VerificationResult<TVerify>, IThat<VerificationResult<TVerify>>> Never<TVerify>(
+		this IThat<VerificationResult<TVerify>> subject)
 		=> new(subject.Get().ExpectationBuilder.AddConstraint((expectationBuilder, it, grammars)
-				=> new HasExactlyConstraint<TMock>(expectationBuilder, it, grammars, 0)),
+				=> new HasExactlyConstraint<TVerify>(expectationBuilder, it, grammars, 0)),
 			subject);
 }
