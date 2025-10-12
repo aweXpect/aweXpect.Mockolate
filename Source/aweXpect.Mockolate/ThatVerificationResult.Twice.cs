@@ -10,9 +10,9 @@ public static partial class ThatVerificationResult
 	/// <summary>
 	///     Verifies that the checked interaction happened exactly twice.
 	/// </summary>
-	public static AndOrResult<VerificationResult<TMock>, IThat<VerificationResult<TMock>>> Twice<TMock>(
-		this IThat<VerificationResult<TMock>> subject)
+	public static AndOrResult<VerificationResult<TVerify>, IThat<VerificationResult<TVerify>>> Twice<TVerify>(
+		this IThat<VerificationResult<TVerify>> subject)
 		=> new(subject.Get().ExpectationBuilder.AddConstraint((expectationBuilder, it, grammars)
-				=> new HasExactlyConstraint<TMock>(expectationBuilder, it, grammars, 2)),
+				=> new HasExactlyConstraint<TVerify>(expectationBuilder, it, grammars, 2)),
 			subject);
 }

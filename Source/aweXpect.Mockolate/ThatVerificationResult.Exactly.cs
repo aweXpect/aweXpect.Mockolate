@@ -10,9 +10,9 @@ public static partial class ThatVerificationResult
 	/// <summary>
 	///     Verifies that the checked interaction happened exactly the number of <paramref name="times"/>.
 	/// </summary>
-	public static AndOrResult<VerificationResult<TMock>, IThat<VerificationResult<TMock>>> Exactly<TMock>(
-		this IThat<VerificationResult<TMock>> subject, Times times)
+	public static AndOrResult<VerificationResult<TVerify>, IThat<VerificationResult<TVerify>>> Exactly<TVerify>(
+		this IThat<VerificationResult<TVerify>> subject, Times times)
 		=> new(subject.Get().ExpectationBuilder.AddConstraint((expectationBuilder, it, grammars)
-				=> new HasExactlyConstraint<TMock>(expectationBuilder, it, grammars, times.Value)),
+				=> new HasExactlyConstraint<TVerify>(expectationBuilder, it, grammars, times.Value)),
 			subject);
 }
