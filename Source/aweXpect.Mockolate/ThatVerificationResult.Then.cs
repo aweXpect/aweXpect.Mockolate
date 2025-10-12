@@ -55,15 +55,12 @@ public static partial class ThatVerificationResult
 			_expectations.Add(verificationResult.Expectation);
 			result = verificationResult.Verify(VerifyInteractions) && result;
 			Outcome = result ? Outcome.Success : Outcome.Failure;
-			/* TODO: Disable and check if it can be re-enabled with `IMockVerify`
 			if (!result)
 			{
-				string context = Formatter.Format(((IVerificationResult<TVerify>)actual).Interactions.Interactions, FormattingOptions.MultipleLines);
+				string context = Formatter.Format(((IVerificationResult)actual).MockInteractions.Interactions, FormattingOptions.MultipleLines);
 				expectationBuilder.UpdateContexts(contexts => contexts.Add(
 					new ResultContext("Interactions", () => context)));
 			}
-			*/
-			_ = expectationBuilder;
 			return this;
 			bool VerifyInteractions(IInteraction[] interactions)
 			{
