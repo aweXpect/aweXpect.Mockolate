@@ -7,7 +7,6 @@ using aweXpect.Core;
 using aweXpect.Core.Constraints;
 using aweXpect.Helpers;
 using aweXpect.Results;
-using Mockolate;
 using Mockolate.Verify;
 using Mockolate.Interactions;
 
@@ -40,7 +39,8 @@ public static partial class ThatVerificationResult
 			Actual = actual;
 			_expectations.Clear();
 			bool result = true;
-			IVerificationResult<TVerify> verificationResult = actual;
+			TVerify verify = ((IVerificationResult<TVerify>)actual).Object;
+			IVerificationResult verificationResult = actual;
 			int after = -1;
 			foreach (Func<TVerify, VerificationResult<TVerify>>? check in interactions)
 			{
@@ -49,7 +49,7 @@ public static partial class ThatVerificationResult
 				{
 					result = false;
 				}
-				verificationResult = check(verificationResult.Object);
+				verificationResult = check(verify);
 			}
 
 			_expectations.Add(verificationResult.Expectation);
