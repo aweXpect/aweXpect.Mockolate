@@ -25,7 +25,7 @@ public static partial class ThatVerificationResult
 
 		public ConstraintResult IsMetBy(VerificationResult<TVerify> actual)
 		{
-			IVerificationResult<TVerify> result = actual;
+			IVerificationResult result = actual;
 			_expectation = result.Expectation;
 			Actual = actual;
 			Outcome = result.Verify(interactions =>
@@ -106,7 +106,7 @@ public static partial class ThatVerificationResult
 
 		public ConstraintResult IsMetBy(VerificationResult<TVerify> actual)
 		{
-			IVerificationResult<TVerify> result = actual;
+			IVerificationResult result = actual;
 			_expectation = result.Expectation;
 			Actual = actual;
 			Outcome = result.Verify(interactions =>
@@ -175,7 +175,7 @@ public static partial class ThatVerificationResult
 
 		public ConstraintResult IsMetBy(VerificationResult<TVerify> actual)
 		{
-			IVerificationResult<TVerify> result = actual;
+			IVerificationResult result = actual;
 			_expectation = result.Expectation;
 			Actual = actual;
 			Outcome = result.Verify(interactions =>
