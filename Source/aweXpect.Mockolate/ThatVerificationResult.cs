@@ -32,7 +32,7 @@ public static partial class ThatVerificationResult
 			{
 				string context = Formatter.Format(interactions, FormattingOptions.MultipleLines);
 				expectationBuilder.UpdateContexts(contexts => contexts.Add(
-					new ResultContext("Interactions", () => context)));
+					new ResultContext.SyncCallback("Interactions", () => context)));
 				_count = interactions.Length;
 				return interactions.Length == expected;
 			})
@@ -113,7 +113,7 @@ public static partial class ThatVerificationResult
 			{
 				string context = Formatter.Format(interactions, FormattingOptions.MultipleLines);
 				expectationBuilder.UpdateContexts(contexts => contexts.Add(
-					new ResultContext("Interactions", () => context)));
+					new ResultContext.SyncCallback("Interactions", () => context)));
 				_count = interactions.Length;
 				return interactions.Length <= expected;
 			})
@@ -182,7 +182,7 @@ public static partial class ThatVerificationResult
 			{
 				string context = Formatter.Format(interactions, FormattingOptions.MultipleLines);
 				expectationBuilder.UpdateContexts(contexts => contexts.Add(
-					new ResultContext("Interactions", () => context)));
+					new ResultContext.SyncCallback("Interactions", () => context)));
 				_count = interactions.Length;
 				return interactions.Length >= expected;
 			})
