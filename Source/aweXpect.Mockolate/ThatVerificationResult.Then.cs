@@ -59,7 +59,7 @@ public static partial class ThatVerificationResult
 			{
 				string context = Formatter.Format(((IVerificationResult)actual).MockInteractions.Interactions, FormattingOptions.MultipleLines);
 				expectationBuilder.UpdateContexts(contexts => contexts.Add(
-					new ResultContext("Interactions", () => context)));
+					new ResultContext.SyncCallback("Interactions", () => context)));
 			}
 			return this;
 			bool VerifyInteractions(IInteraction[] interactions)
