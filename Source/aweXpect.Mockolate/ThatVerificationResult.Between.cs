@@ -11,7 +11,7 @@ namespace aweXpect;
 public static partial class ThatVerificationResult
 {
 	/// <summary>
-	///     Verifies that the checked interaction happened at least the number of <paramref name="minimum" />.
+	///     Verifies that the checked interaction happened between <paramref name="minimum" />…
 	/// </summary>
 	public static BetweenResult<AndOrResult<VerificationResult<TVerify>, IThat<VerificationResult<TVerify>>>, Times>
 		Between<TVerify>(
