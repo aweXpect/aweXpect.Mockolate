@@ -12,11 +12,11 @@ public sealed partial class ThatVerificationResultIs
 		{
 			var mock = Mock.Create<IMyService>();
 
-			mock.Subject.MyMethod(1, false);
-			mock.Subject.MyMethod(1, false);
+			mock.MyMethod(1, false);
+			mock.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtLeastOnce();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).AtLeastOnce();
 
 			await That(Act).DoesNotThrow();
 		}
@@ -26,12 +26,12 @@ public sealed partial class ThatVerificationResultIs
 		{
 			var mock = Mock.Create<IMyService>();
 
-			mock.Subject.MyMethod(1, false);
-			mock.Subject.MyMethod(1, false);
-			mock.Subject.MyMethod(1, false);
+			mock.MyMethod(1, false);
+			mock.MyMethod(1, false);
+			mock.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtLeastOnce();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).AtLeastOnce();
 
 			await That(Act).DoesNotThrow();
 		}
@@ -42,7 +42,7 @@ public sealed partial class ThatVerificationResultIs
 			var mock = Mock.Create<IMyService>();
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtLeastOnce();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).AtLeastOnce();
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
@@ -60,10 +60,10 @@ public sealed partial class ThatVerificationResultIs
 		{
 			var mock = Mock.Create<IMyService>();
 
-			mock.Subject.MyMethod(1, false);
+			mock.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtLeastOnce();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).AtLeastOnce();
 
 			await That(Act).DoesNotThrow();
 		}

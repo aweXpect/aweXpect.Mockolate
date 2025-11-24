@@ -17,11 +17,11 @@ public sealed partial class ThatVerificationResultIs
 
 			for (var i = 0; i < invocationTimes; i++)
 			{
-				mock.Subject.MyMethod(1, false);
+				mock.MyMethod(1, false);
 			}
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtMost(times);
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).AtMost(times);
 
 			await That(Act).DoesNotThrow();
 		}
@@ -35,11 +35,11 @@ public sealed partial class ThatVerificationResultIs
 
 			for (var i = 0; i < invocationTimes; i++)
 			{
-				mock.Subject.MyMethod(1, false);
+				mock.MyMethod(1, false);
 			}
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtMost(times);
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).AtMost(times);
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage($"""
@@ -64,11 +64,11 @@ public sealed partial class ThatVerificationResultIs
 
 			for (var i = 0; i < times; i++)
 			{
-				mock.Subject.MyMethod(1, false);
+				mock.MyMethod(1, false);
 			}
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtMost(times);
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).AtMost(times);
 
 			await That(Act).DoesNotThrow();
 		}
