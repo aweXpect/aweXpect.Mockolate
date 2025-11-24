@@ -2,6 +2,10 @@
 [assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v10.0", FrameworkDisplayName=".NET 10.0")]
 namespace aweXpect
 {
+    public static class ThatMockVerify
+    {
+        public static aweXpect.Results.AndOrResult<Mockolate.Verify.IMockVerify<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.IMockVerify<TVerify>>> AllInteractionsAreVerified<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.IMockVerify<TVerify>> subject) { }
+    }
     public static class ThatVerificationResult
     {
         public static aweXpect.Results.AndOrResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>> AtLeast<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject, aweXpect.Core.Times times) { }
