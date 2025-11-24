@@ -20,8 +20,8 @@ public sealed partial class ThatVerificationResultIs
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-					Expected that the Mock<ThatVerificationResultIs.IMyService>
-					invoked method MyMethod(1, False) at most once,
+					Expected that the ThatVerificationResultIs.IMyService mock
+					invoked method MyMethod(1, false) at most once,
 					but found it twice
 
 					Interactions:
@@ -45,8 +45,8 @@ public sealed partial class ThatVerificationResultIs
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-					Expected that the Mock<ThatVerificationResultIs.IMyService>
-					invoked method MyMethod(1, False) at most once,
+					Expected that the ThatVerificationResultIs.IMyService mock
+					invoked method MyMethod(1, false) at most once,
 					but found it 3 times
 
 					Interactions:

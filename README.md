@@ -16,7 +16,7 @@ Verify that a method was called a specific number of times:
 ```csharp
 var mock = Mock.Create<IMyService>();
 mock.MyMethod();
-s
+
 await That(mock.VerifyMock.Invoked.MyMethod()).Once();             // Exactly once
 await That(mock.VerifyMock.Invoked.MyMethod()).Twice();            // Exactly twice
 await That(mock.VerifyMock.Invoked.MyMethod()).Never();            // Never called

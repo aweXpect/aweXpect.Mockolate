@@ -21,7 +21,7 @@ public sealed partial class ThatVerificationResultIs
 			await That(async Task () => await That(sut.VerifyMock.Invoked.MyMethod(Match.With(2))).Then(m => m.Invoked.MyMethod(Match.With(1))))
 				.Throws<XunitException>()
 				.WithMessage("""
-					Expected that the Mock<ThatVerificationResultIs.IMyService>
+					Expected that the ThatVerificationResultIs.IMyService mock
 					invoked method MyMethod(2), then
 					invoked method MyMethod(1) in order,
 					but it invoked method MyMethod(1) too early
@@ -50,7 +50,7 @@ public sealed partial class ThatVerificationResultIs
 			await That(async Task () => await That(sut.VerifyMock.Invoked.MyMethod(Match.With(6))).Then(m => m.Invoked.MyMethod(Match.With(4))))
 				.Throws<XunitException>()
 				.WithMessage("""
-					Expected that the Mock<ThatVerificationResultIs.IMyService>
+					Expected that the ThatVerificationResultIs.IMyService mock
 					invoked method MyMethod(6), then
 					invoked method MyMethod(4) in order,
 					but it invoked method MyMethod(6) not at all
@@ -67,7 +67,7 @@ public sealed partial class ThatVerificationResultIs
 			await That(async Task () => await That(sut.VerifyMock.Invoked.MyMethod(Match.With(1))).Then(m => m.Invoked.MyMethod(Match.With(6)), m => m.Invoked.MyMethod(Match.With(3))))
 				.Throws<XunitException>()
 				.WithMessage("""
-					Expected that the Mock<ThatVerificationResultIs.IMyService>
+					Expected that the ThatVerificationResultIs.IMyService mock
 					invoked method MyMethod(1), then
 					invoked method MyMethod(6), then
 					invoked method MyMethod(3) in order,
@@ -85,7 +85,7 @@ public sealed partial class ThatVerificationResultIs
 			await That(async Task () => await That(sut.VerifyMock.Invoked.MyMethod(Match.With(1))).Then(m => m.Invoked.MyMethod(Match.With(2)), m => m.Invoked.MyMethod(Match.With(6))))
 				.Throws<XunitException>()
 				.WithMessage("""
-					Expected that the Mock<ThatVerificationResultIs.IMyService>
+					Expected that the ThatVerificationResultIs.IMyService mock
 					invoked method MyMethod(1), then
 					invoked method MyMethod(2), then
 					invoked method MyMethod(6) in order,
