@@ -1,8 +1,8 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using aweXpect.Core;
 using aweXpect.Core.Constraints;
+using aweXpect.Helpers;
 using Mockolate.Verify;
 
 namespace aweXpect;
@@ -228,24 +228,6 @@ public static partial class ThatVerificationResult
 			}
 
 			return base.TryGetValue(out value);
-		}
-	}
-
-	private sealed class MyDescribableSubject<TVerify> : IDescribableSubject
-	{
-		public string GetDescription()
-		{
-			var mockVerify = Formatter.Format(typeof(TVerify));
-			if (mockVerify.StartsWith("MockVerify", StringComparison.Ordinal))
-			{
-				mockVerify = $"Mock{mockVerify.Substring("MockVerify".Length)}";
-				var genericSeparator = mockVerify.IndexOf(", ");
-				if (genericSeparator > 0)
-				{
-					mockVerify = $"{mockVerify.Substring(0, genericSeparator)}>";
-				}
-			}
-			return $"the {mockVerify} mock";
 		}
 	}
 
