@@ -245,7 +245,7 @@ public static partial class ThatVerificationResult
 					mockVerify = $"{mockVerify.Substring(0, genericSeparator)}>";
 				}
 			}
-			return $"the {mockVerify}";
+			return $"the {mockVerify} mock";
 		}
 	}
 

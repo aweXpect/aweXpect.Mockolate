@@ -12,16 +12,16 @@ public sealed partial class ThatVerificationResultIs
 		{
 			var mock = Mock.Create<IMyService>();
 
-			mock.Subject.MyMethod(1, false);
-			mock.Subject.MyMethod(1, false);
+			mock.MyMethod(1, false);
+			mock.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtMostOnce();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).AtMostOnce();
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-					Expected that the Mock<ThatVerificationResultIs.IMyService>
-					invoked method MyMethod(1, False) at most once,
+					Expected that the ThatVerificationResultIs.IMyService mock
+					invoked method MyMethod(1, false) at most once,
 					but found it twice
 
 					Interactions:
@@ -36,17 +36,17 @@ public sealed partial class ThatVerificationResultIs
 		{
 			var mock = Mock.Create<IMyService>();
 
-			mock.Subject.MyMethod(1, false);
-			mock.Subject.MyMethod(1, false);
-			mock.Subject.MyMethod(1, false);
+			mock.MyMethod(1, false);
+			mock.MyMethod(1, false);
+			mock.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtMostOnce();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).AtMostOnce();
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-					Expected that the Mock<ThatVerificationResultIs.IMyService>
-					invoked method MyMethod(1, False) at most once,
+					Expected that the ThatVerificationResultIs.IMyService mock
+					invoked method MyMethod(1, false) at most once,
 					but found it 3 times
 
 					Interactions:
@@ -64,7 +64,7 @@ public sealed partial class ThatVerificationResultIs
 			var mock = Mock.Create<IMyService>();
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtMostOnce();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).AtMostOnce();
 
 			await That(Act).DoesNotThrow();
 		}
@@ -74,10 +74,10 @@ public sealed partial class ThatVerificationResultIs
 		{
 			var mock = Mock.Create<IMyService>();
 
-			mock.Subject.MyMethod(1, false);
+			mock.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtMostOnce();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).AtMostOnce();
 
 			await That(Act).DoesNotThrow();
 		}

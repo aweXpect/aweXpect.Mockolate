@@ -16,12 +16,12 @@ public sealed partial class ThatVerificationResultIs
 			var mock = Mock.Create<IMyService>();
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtLeast(times);
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).AtLeast(times);
 
 			await That(Act).Throws<XunitException>().OnlyIf(shouldThrow)
 				.WithMessage($"""
-					Expected that the Mock<ThatVerificationResultIs.IMyService>
-					invoked method MyMethod(1, False) at least {times} times,
+					Expected that the ThatVerificationResultIs.IMyService mock
+					invoked method MyMethod(1, false) at least {times} times,
 					but never found it
 					
 					Interactions:
@@ -38,16 +38,16 @@ public sealed partial class ThatVerificationResultIs
 
 			for (var i = 0; i < invocationTimes; i++)
 			{
-				mock.Subject.MyMethod(1, false);
+				mock.MyMethod(1, false);
 			}
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtLeast(times);
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).AtLeast(times);
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage($"""
-					Expected that the Mock<ThatVerificationResultIs.IMyService>
-					invoked method MyMethod(1, False) at least {times} times,
+					Expected that the ThatVerificationResultIs.IMyService mock
+					invoked method MyMethod(1, false) at least {times} times,
 					but found it only {invocationTimes} times
 					
 					Interactions:
@@ -66,11 +66,11 @@ public sealed partial class ThatVerificationResultIs
 
 			for (var i = 0; i < invocationTimes; i++)
 			{
-				mock.Subject.MyMethod(1, false);
+				mock.MyMethod(1, false);
 			}
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtLeast(times);
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).AtLeast(times);
 
 			await That(Act).DoesNotThrow();
 		}
@@ -85,11 +85,11 @@ public sealed partial class ThatVerificationResultIs
 
 			for (var i = 0; i < times; i++)
 			{
-				mock.Subject.MyMethod(1, false);
+				mock.MyMethod(1, false);
 			}
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).AtLeast(times);
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).AtLeast(times);
 
 			await That(Act).DoesNotThrow();
 		}

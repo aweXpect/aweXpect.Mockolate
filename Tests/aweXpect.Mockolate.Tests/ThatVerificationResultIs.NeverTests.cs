@@ -12,16 +12,16 @@ public sealed partial class ThatVerificationResultIs
 		{
 			var mock = Mock.Create<IMyService>();
 
-			mock.Subject.MyMethod(1, false);
-			mock.Subject.MyMethod(1, false);
+			mock.MyMethod(1, false);
+			mock.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).Never();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Never();
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-					Expected that the Mock<ThatVerificationResultIs.IMyService>
-					never invoked method MyMethod(1, False),
+					Expected that the ThatVerificationResultIs.IMyService mock
+					never invoked method MyMethod(1, false),
 					but found it twice
 
 					Interactions:
@@ -36,17 +36,17 @@ public sealed partial class ThatVerificationResultIs
 		{
 			var mock = Mock.Create<IMyService>();
 
-			mock.Subject.MyMethod(1, false);
-			mock.Subject.MyMethod(1, false);
-			mock.Subject.MyMethod(1, false);
+			mock.MyMethod(1, false);
+			mock.MyMethod(1, false);
+			mock.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).Never();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Never();
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-					Expected that the Mock<ThatVerificationResultIs.IMyService>
-					never invoked method MyMethod(1, False),
+					Expected that the ThatVerificationResultIs.IMyService mock
+					never invoked method MyMethod(1, false),
 					but found it 3 times
 
 					Interactions:
@@ -63,15 +63,15 @@ public sealed partial class ThatVerificationResultIs
 		{
 			var mock = Mock.Create<IMyService>();
 
-			mock.Subject.MyMethod(1, false);
+			mock.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).Never();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Never();
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-					Expected that the Mock<ThatVerificationResultIs.IMyService>
-					never invoked method MyMethod(1, False),
+					Expected that the ThatVerificationResultIs.IMyService mock
+					never invoked method MyMethod(1, false),
 					but found it once
 					
 					Interactions:
@@ -87,7 +87,7 @@ public sealed partial class ThatVerificationResultIs
 			var mock = Mock.Create<IMyService>();
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).Never();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Never();
 
 			await That(Act).DoesNotThrow();
 		}

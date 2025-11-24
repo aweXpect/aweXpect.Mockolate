@@ -15,18 +15,18 @@ Verify that a method was called a specific number of times:
 
 ```csharp
 var mock = Mock.Create<IMyService>();
-mock.Subject.MyMethod();
+mock.MyMethod();
 
-await That(mock.Verify.Invoked.MyMethod()).Once();             // Exactly once
-await That(mock.Verify.Invoked.MyMethod()).Twice();            // Exactly twice
-await That(mock.Verify.Invoked.MyMethod()).Never();            // Never called
-await That(mock.Verify.Invoked.MyMethod()).AtLeastOnce();      // At least once
-await That(mock.Verify.Invoked.MyMethod()).AtLeastTwice();     // At least twice
-await That(mock.Verify.Invoked.MyMethod()).AtLeast(3.Times()); // At least 3 times
-await That(mock.Verify.Invoked.MyMethod()).AtMostOnce();       // At most once
-await That(mock.Verify.Invoked.MyMethod()).AtMostTwice();      // At most twice
-await That(mock.Verify.Invoked.MyMethod()).AtMost(4.Times());  // At most 4 times
-await That(mock.Verify.Invoked.MyMethod()).Exactly(2.Times()); // Exactly 2 times
+await That(mock.VerifyMock.Invoked.MyMethod()).Once();             // Exactly once
+await That(mock.VerifyMock.Invoked.MyMethod()).Twice();            // Exactly twice
+await That(mock.VerifyMock.Invoked.MyMethod()).Never();            // Never called
+await That(mock.VerifyMock.Invoked.MyMethod()).AtLeastOnce();      // At least once
+await That(mock.VerifyMock.Invoked.MyMethod()).AtLeastTwice();     // At least twice
+await That(mock.VerifyMock.Invoked.MyMethod()).AtLeast(3.Times()); // At least 3 times
+await That(mock.VerifyMock.Invoked.MyMethod()).AtMostOnce();       // At most once
+await That(mock.VerifyMock.Invoked.MyMethod()).AtMostTwice();      // At most twice
+await That(mock.VerifyMock.Invoked.MyMethod()).AtMost(4.Times());  // At most 4 times
+await That(mock.VerifyMock.Invoked.MyMethod()).Exactly(2.Times()); // Exactly 2 times
 ```
 
 ### Interaction order
@@ -34,15 +34,15 @@ Verify that methods were called in a specific sequence:
 
 ```csharp
 var mock = Mock.Create<IMyService>();
-mock.Subject.MyMethod(1);
-mock.Subject.MyMethod(2);
-mock.Subject.MyMethod(3);
-mock.Subject.MyMethod(4);
+mock.MyMethod(1);
+mock.MyMethod(2);
+mock.MyMethod(3);
+mock.MyMethod(4);
 
 // Verifies MyMethod(1), then MyMethod(2), then MyMethod(4) were called in order
-await That(mock.Verify.Invoked.MyMethod(1)).Then(
-    m => m.Invoked.MyMethod(2),
-    m => m.Invoked.MyMethod(4)
+await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1))).Then(
+    m => m.Invoked.MyMethod(Match.With(2)),
+    m => m.Invoked.MyMethod(Match.With(4))
 );
 ```
 

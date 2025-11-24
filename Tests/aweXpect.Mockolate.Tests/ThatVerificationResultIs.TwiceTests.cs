@@ -12,11 +12,11 @@ public sealed partial class ThatVerificationResultIs
 		{
 			var mock = Mock.Create<IMyService>();
 
-			mock.Subject.MyMethod(1, false);
-			mock.Subject.MyMethod(1, false);
+			mock.MyMethod(1, false);
+			mock.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).Twice();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Twice();
 
 			await That(Act).DoesNotThrow();
 		}
@@ -25,17 +25,17 @@ public sealed partial class ThatVerificationResultIs
 		{
 			var mock = Mock.Create<IMyService>();
 
-			mock.Subject.MyMethod(1, false);
-			mock.Subject.MyMethod(1, false);
-			mock.Subject.MyMethod(1, false);
+			mock.MyMethod(1, false);
+			mock.MyMethod(1, false);
+			mock.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).Twice();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Twice();
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-					Expected that the Mock<ThatVerificationResultIs.IMyService>
-					invoked method MyMethod(1, False) exactly twice,
+					Expected that the ThatVerificationResultIs.IMyService mock
+					invoked method MyMethod(1, false) exactly twice,
 					but found it 3 times
 
 					Interactions:
@@ -54,12 +54,12 @@ public sealed partial class ThatVerificationResultIs
 
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).Twice();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Twice();
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-					Expected that the Mock<ThatVerificationResultIs.IMyService>
-					invoked method MyMethod(1, False) exactly twice,
+					Expected that the ThatVerificationResultIs.IMyService mock
+					invoked method MyMethod(1, false) exactly twice,
 					but never found it
 					
 					Interactions:
@@ -72,15 +72,15 @@ public sealed partial class ThatVerificationResultIs
 		{
 			var mock = Mock.Create<IMyService>();
 
-			mock.Subject.MyMethod(1, false);
+			mock.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.Verify.Invoked.MyMethod(1, false)).Twice();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Twice();
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-					Expected that the Mock<ThatVerificationResultIs.IMyService>
-					invoked method MyMethod(1, False) exactly twice,
+					Expected that the ThatVerificationResultIs.IMyService mock
+					invoked method MyMethod(1, false) exactly twice,
 					but found it only once
 					
 					Interactions:

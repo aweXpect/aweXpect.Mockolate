@@ -14,16 +14,16 @@ public sealed partial class ThatVerificationResultIs
 		[InlineData(3, 8, 6)]
 		public async Task WhenInvokedInRange_ShouldSucceed(int minimum, int maximum, int invocationTimes)
 		{
-			Mock<IMyService> mock = Mock.Create<IMyService>();
+			IMyService mock = Mock.Create<IMyService>();
 
 			for (int i = 0; i < invocationTimes; i++)
 			{
-				mock.Subject.MyMethod(1, false);
+				mock.MyMethod(1, false);
 			}
 
 			async Task Act()
 			{
-				await That(mock.Verify.Invoked.MyMethod(1, false)).Between(minimum).And(maximum);
+				await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Between(minimum).And(maximum);
 			}
 
 			await That(Act).DoesNotThrow();
@@ -35,17 +35,17 @@ public sealed partial class ThatVerificationResultIs
 		[InlineData(1, 2, true)]
 		public async Task WhenInvokedNever_ShouldFailUnlessZero(int minimum, int maximum, bool shouldThrow)
 		{
-			Mock<IMyService> mock = Mock.Create<IMyService>();
+			IMyService mock = Mock.Create<IMyService>();
 
 			async Task Act()
 			{
-				await That(mock.Verify.Invoked.MyMethod(1, false)).Between(minimum).And(maximum);
+				await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Between(minimum).And(maximum);
 			}
 
 			await That(Act).Throws<XunitException>().OnlyIf(shouldThrow)
 				.WithMessage($"""
-				              Expected that the Mock<ThatVerificationResultIs.IMyService>
-				              invoked method MyMethod(1, False) between {minimum} and {maximum} times,
+				              Expected that the ThatVerificationResultIs.IMyService mock
+				              invoked method MyMethod(1, false) between {minimum} and {maximum} times,
 				              but never found it
 
 				              Interactions:
@@ -58,22 +58,22 @@ public sealed partial class ThatVerificationResultIs
 		[InlineData(8, 12, 6)]
 		public async Task WhenInvokedTooFewTimes_ShouldFail(int minimum, int maximum, int invocationTimes)
 		{
-			Mock<IMyService> mock = Mock.Create<IMyService>();
+			IMyService mock = Mock.Create<IMyService>();
 
 			for (int i = 0; i < invocationTimes; i++)
 			{
-				mock.Subject.MyMethod(1, false);
+				mock.MyMethod(1, false);
 			}
 
 			async Task Act()
 			{
-				await That(mock.Verify.Invoked.MyMethod(1, false)).Between(minimum).And(maximum);
+				await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Between(minimum).And(maximum);
 			}
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage($"""
-				              Expected that the Mock<ThatVerificationResultIs.IMyService>
-				              invoked method MyMethod(1, False) between {minimum} and {maximum} times,
+				              Expected that the ThatVerificationResultIs.IMyService mock
+				              invoked method MyMethod(1, false) between {minimum} and {maximum} times,
 				              but found it only {invocationTimes} times
 
 				              Interactions:
@@ -88,22 +88,22 @@ public sealed partial class ThatVerificationResultIs
 		[InlineData(8, 12, 14)]
 		public async Task WhenInvokedTooOften_ShouldFail(int minimum, int maximum, int invocationTimes)
 		{
-			Mock<IMyService> mock = Mock.Create<IMyService>();
+			IMyService mock = Mock.Create<IMyService>();
 
 			for (int i = 0; i < invocationTimes; i++)
 			{
-				mock.Subject.MyMethod(1, false);
+				mock.MyMethod(1, false);
 			}
 
 			async Task Act()
 			{
-				await That(mock.Verify.Invoked.MyMethod(1, false)).Between(minimum).And(maximum);
+				await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Between(minimum).And(maximum);
 			}
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage($"""
-				              Expected that the Mock<ThatVerificationResultIs.IMyService>
-				              invoked method MyMethod(1, False) between {minimum} and {maximum} times,
+				              Expected that the ThatVerificationResultIs.IMyService mock
+				              invoked method MyMethod(1, false) between {minimum} and {maximum} times,
 				              but found it {invocationTimes} times
 
 				              Interactions:

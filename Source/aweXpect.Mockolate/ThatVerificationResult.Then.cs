@@ -7,6 +7,8 @@ using aweXpect.Core;
 using aweXpect.Core.Constraints;
 using aweXpect.Helpers;
 using aweXpect.Results;
+using Mockolate;
+using Mockolate.Exceptions;
 using Mockolate.Verify;
 using Mockolate.Interactions;
 
@@ -17,35 +19,36 @@ public static partial class ThatVerificationResult
 	/// <summary>
 	///     Verifies that the <paramref name="interactions" /> happen after the current interaction in the given order.
 	/// </summary>
-	public static AndOrResult<VerificationResult<TVerify>, IThat<VerificationResult<TVerify>>> Then<TVerify>(
-		this IThat<VerificationResult<TVerify>> subject, params Func<TVerify, VerificationResult<TVerify>>[] interactions)
+	public static AndOrResult<VerificationResult<T>, IThat<VerificationResult<T>>> Then<T>(
+		this IThat<VerificationResult<T>> subject, params Func<IMockVerify<T>, VerificationResult<T>>[] interactions)
 		=> new(subject.Get().ExpectationBuilder.AddConstraint((expectationBuilder, it, grammars)
-				=> new ThenConstraint<TVerify>(expectationBuilder, it, grammars, interactions)),
+				=> new ThenConstraint<T>(expectationBuilder, it, grammars, interactions)),
 			subject);
 
-	private sealed class ThenConstraint<TVerify>(
+	private sealed class ThenConstraint<T>(
 		ExpectationBuilder expectationBuilder,
 		string it,
 		ExpectationGrammars grammars,
-		Func<TVerify, VerificationResult<TVerify>>[] interactions)
-		: ConstraintResult.WithValue<VerificationResult<TVerify>>(grammars),
-			IValueConstraint<VerificationResult<TVerify>>
+		Func<IMockVerify<T>, VerificationResult<T>>[] interactions)
+		: ConstraintResult.WithValue<VerificationResult<T>>(grammars),
+			IValueConstraint<VerificationResult<T>>
 	{
 		private readonly List<string> _expectations = [];
 		private string? _error;
 
-		public ConstraintResult IsMetBy(VerificationResult<TVerify> actual)
+		public ConstraintResult IsMetBy(VerificationResult<T> actual)
 		{
 			Actual = actual;
 			_expectations.Clear();
 			bool result = true;
-			TVerify verify = ((IVerificationResult<TVerify>)actual).Object;
+			IMockVerify<T> verify = GetMockVerify(((IVerificationResult<T>)actual).Object);
 			IVerificationResult verificationResult = actual;
 			int after = -1;
-			foreach (Func<TVerify, VerificationResult<TVerify>>? check in interactions)
+			foreach (Func<IMockVerify<T>, VerificationResult<T>> check in interactions)
 			{
-				_expectations.Add(verificationResult.Expectation);
-				if (!verificationResult.Verify(VerifyInteractions))
+				IVerificationResult currentVerificationResult = verificationResult;
+				_expectations.Add(currentVerificationResult.Expectation);
+				if (!verificationResult.Verify(i => VerifyInteractions(i, currentVerificationResult)))
 				{
 					result = false;
 				}
@@ -53,7 +56,7 @@ public static partial class ThatVerificationResult
 			}
 
 			_expectations.Add(verificationResult.Expectation);
-			result = verificationResult.Verify(VerifyInteractions) && result;
+			result = verificationResult.Verify(i => VerifyInteractions(i, verificationResult)) && result;
 			Outcome = result ? Outcome.Success : Outcome.Failure;
 			if (!result)
 			{
@@ -62,17 +65,31 @@ public static partial class ThatVerificationResult
 					new ResultContext.SyncCallback("Interactions", () => context)));
 			}
 			return this;
-			bool VerifyInteractions(IInteraction[] interactions)
+			bool VerifyInteractions(IInteraction[] filteredInteractions, IVerificationResult currentVerificationResult)
 			{
-				bool hasInteractionAfter = interactions.Any(x => x.Index > after);
+				bool hasInteractionAfter = filteredInteractions.Any(x => x.Index > after);
 				after = hasInteractionAfter
-					? interactions.Where(x => x.Index > after).Min(x => x.Index)
+					? filteredInteractions.Where(x => x.Index > after).Min(x => x.Index)
 					: int.MaxValue;
 				if (!hasInteractionAfter && _error is null)
 				{
-					_error = interactions.Length > 0 ? $"{verificationResult.Expectation} too early" : $"{verificationResult.Expectation} not at all";
+					_error = filteredInteractions.Length > 0 ? $"{currentVerificationResult.Expectation} too early" : $"{currentVerificationResult.Expectation} not at all";
 				}
 				return hasInteractionAfter;
+			}
+			static IMockVerify<T> GetMockVerify(T subject)
+			{
+				if (subject is IMockSubject<T> mockSubject)
+				{
+					return mockSubject.Mock;
+				}
+
+				if (subject is IHasMockRegistration hasMockRegistration)
+				{
+					return new Mock<T>(subject, hasMockRegistration.Registrations);
+				}
+
+				throw new MockException("The subject is no mock subject.");
 			}
 		}
 
@@ -99,7 +116,7 @@ public static partial class ThatVerificationResult
 		public override bool TryGetValue<TValue>([NotNullWhen(true)] out TValue? value) where TValue : default
 		{
 			if (typeof(TValue) == typeof(IDescribableSubject) &&
-				new MyDescribableSubject<TVerify>() is TValue describableSubject)
+				new MyDescribableSubject<T>() is TValue describableSubject)
 			{
 				value = describableSubject;
 				return true;
