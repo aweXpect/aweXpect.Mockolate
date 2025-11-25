@@ -1,4 +1,4 @@
-﻿namespace aweXpect.Api.Tests;
+﻿namespace aweXpect.Mockolate.Api.Tests;
 
 /// <summary>
 ///     Whenever a test fails, this means that the public API surface changed.

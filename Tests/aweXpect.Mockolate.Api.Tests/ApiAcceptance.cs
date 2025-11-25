@@ -1,4 +1,4 @@
-﻿namespace aweXpect.Api.Tests;
+﻿namespace aweXpect.Mockolate.Api.Tests;
 
 public sealed class ApiAcceptance
 {
