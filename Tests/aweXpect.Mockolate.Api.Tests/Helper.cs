@@ -7,7 +7,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using PublicApiGenerator;
 
-namespace aweXpect.Api.Tests;
+namespace aweXpect.Mockolate.Api.Tests;
 
 public static class Helper
 {
