@@ -16,7 +16,7 @@ public sealed partial class ThatVerificationResultIs
 			var mock = Mock.Create<IMyService>();
 
 			async Task Act()
-				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Exactly(times);
+				=> await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Exactly(times);
 
 			await That(Act).Throws<XunitException>().OnlyIf(shouldThrow)
 				.WithMessage($"""
@@ -42,7 +42,7 @@ public sealed partial class ThatVerificationResultIs
 			}
 
 			async Task Act()
-				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Exactly(times);
+				=> await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Exactly(times);
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage($"""
@@ -70,7 +70,7 @@ public sealed partial class ThatVerificationResultIs
 			}
 
 			async Task Act()
-				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Exactly(times);
+				=> await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Exactly(times);
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage($"""
@@ -99,7 +99,7 @@ public sealed partial class ThatVerificationResultIs
 			}
 
 			async Task Act()
-				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Exactly(times);
+				=> await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Exactly(times);
 
 			await That(Act).DoesNotThrow();
 		}

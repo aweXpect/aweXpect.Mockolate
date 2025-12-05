@@ -23,7 +23,7 @@ public sealed partial class ThatVerificationResultIs
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Between(minimum).And(maximum);
+				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Between(minimum).And(maximum);
 			}
 
 			await That(Act).DoesNotThrow();
@@ -39,7 +39,7 @@ public sealed partial class ThatVerificationResultIs
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Between(minimum).And(maximum);
+				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Between(minimum).And(maximum);
 			}
 
 			await That(Act).Throws<XunitException>().OnlyIf(shouldThrow)
@@ -67,7 +67,7 @@ public sealed partial class ThatVerificationResultIs
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Between(minimum).And(maximum);
+				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Between(minimum).And(maximum);
 			}
 
 			await That(Act).Throws<XunitException>()
@@ -97,7 +97,7 @@ public sealed partial class ThatVerificationResultIs
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Between(minimum).And(maximum);
+				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Between(minimum).And(maximum);
 			}
 
 			await That(Act).Throws<XunitException>()

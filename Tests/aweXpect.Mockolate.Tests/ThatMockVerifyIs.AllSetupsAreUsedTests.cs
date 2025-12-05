@@ -12,7 +12,7 @@ public sealed partial class ThatMockVerifyIs
 		public async Task WhenAllInvocationsWereVerified_ShouldNotThrow()
 		{
 			IMyService mock = Mock.Create<IMyService>();
-			mock.SetupMock.Method.DoWork(Match.Any<int>());
+			mock.SetupMock.Method.DoWork(It.IsAny<int>());
 
 			mock.DoWork(1);
 			mock.DoWork(2);
@@ -29,8 +29,8 @@ public sealed partial class ThatMockVerifyIs
 		public async Task WhenOneSetupIsNotUsed_ShouldThrow()
 		{
 			IMyService mock = Mock.Create<IMyService>();
-			mock.SetupMock.Method.DoWork(Match.With(1));
-			mock.SetupMock.Method.DoWork(Match.With(2));
+			mock.SetupMock.Method.DoWork(It.Is(1));
+			mock.SetupMock.Method.DoWork(It.Is(2));
 
 			mock.DoWork(1);
 
@@ -44,7 +44,7 @@ public sealed partial class ThatMockVerifyIs
 				             Expected that the ThatMockVerifyIs.IMyService mock
 				             has used all setups,
 				             but the following setup was not used:
-				              - void aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService.DoWork(2 value)
+				              - void aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService.DoWork(2)
 				             """);
 		}
 
@@ -52,9 +52,9 @@ public sealed partial class ThatMockVerifyIs
 		public async Task WhenMultipleSetupsAreNotUsed_ShouldThrow()
 		{
 			IMyService mock = Mock.Create<IMyService>();
-			mock.SetupMock.Method.DoWork(Match.With(1));
-			mock.SetupMock.Method.DoWork(Match.With(2));
-			mock.SetupMock.Method.DoWork(Match.With(3));
+			mock.SetupMock.Method.DoWork(It.Is(1));
+			mock.SetupMock.Method.DoWork(It.Is(2));
+			mock.SetupMock.Method.DoWork(It.Is(3));
 
 			mock.DoWork(2);
 
@@ -68,8 +68,8 @@ public sealed partial class ThatMockVerifyIs
 				             Expected that the ThatMockVerifyIs.IMyService mock
 				             has used all setups,
 				             but the following 2 setups were not used:
-				              - void aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService.DoWork(3 value)
-				              - void aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService.DoWork(1 value)
+				              - void aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService.DoWork(3)
+				              - void aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService.DoWork(1)
 				             """);
 		}
 
@@ -77,7 +77,7 @@ public sealed partial class ThatMockVerifyIs
 		public async Task Negated_WhenAllSetupsAreUsed_ShouldThrow()
 		{
 			IMyService mock = Mock.Create<IMyService>();
-			mock.SetupMock.Method.DoWork(Match.Any<int>());
+			mock.SetupMock.Method.DoWork(It.IsAny<int>());
 
 			mock.DoWork(1);
 			mock.DoWork(2);

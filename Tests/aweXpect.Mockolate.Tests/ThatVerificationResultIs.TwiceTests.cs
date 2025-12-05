@@ -16,7 +16,7 @@ public sealed partial class ThatVerificationResultIs
 			mock.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Twice();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Twice();
 
 			await That(Act).DoesNotThrow();
 		}
@@ -30,7 +30,7 @@ public sealed partial class ThatVerificationResultIs
 			mock.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Twice();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Twice();
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
@@ -54,7 +54,7 @@ public sealed partial class ThatVerificationResultIs
 
 
 			async Task Act()
-				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Twice();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Twice();
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
@@ -75,7 +75,7 @@ public sealed partial class ThatVerificationResultIs
 			mock.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Twice();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Twice();
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""

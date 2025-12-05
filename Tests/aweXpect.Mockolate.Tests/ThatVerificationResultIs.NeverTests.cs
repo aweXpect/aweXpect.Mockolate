@@ -16,7 +16,7 @@ public sealed partial class ThatVerificationResultIs
 			mock.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Never();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Never();
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
@@ -41,7 +41,7 @@ public sealed partial class ThatVerificationResultIs
 			mock.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Never();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Never();
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
@@ -66,7 +66,7 @@ public sealed partial class ThatVerificationResultIs
 			mock.MyMethod(1, false);
 
 			async Task Act()
-				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Never();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Never();
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
@@ -87,7 +87,7 @@ public sealed partial class ThatVerificationResultIs
 			var mock = Mock.Create<IMyService>();
 
 			async Task Act()
-				=> await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Never();
+				=> await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Never();
 
 			await That(Act).DoesNotThrow();
 		}
