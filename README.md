@@ -40,9 +40,9 @@ mock.MyMethod(3);
 mock.MyMethod(4);
 
 // Verifies MyMethod(1), then MyMethod(2), then MyMethod(4) were called in order
-await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1))).Then(
-    m => m.Invoked.MyMethod(Match.With(2)),
-    m => m.Invoked.MyMethod(Match.With(4))
+await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1))).Then(
+    m => m.Invoked.MyMethod(It.Is(2)),
+    m => m.Invoked.MyMethod(It.Is(4))
 );
 ```
 

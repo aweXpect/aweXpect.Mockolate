@@ -16,7 +16,7 @@ public sealed partial class ThatMockVerifyIs
 			mock.DoWork(1);
 			mock.DoWork(2);
 
-			mock.VerifyMock.Invoked.DoWork(Match.Any<int>()).AtLeastOnce();
+			mock.VerifyMock.Invoked.DoWork(It.IsAny<int>()).AtLeastOnce();
 
 			async Task Act()
 			{
@@ -34,7 +34,7 @@ public sealed partial class ThatMockVerifyIs
 			mock.DoWork(1);
 			mock.DoWork(2);
 
-			mock.VerifyMock.Invoked.DoWork(Match.With(1)).AtLeastOnce();
+			mock.VerifyMock.Invoked.DoWork(It.Is(1)).AtLeastOnce();
 
 			async Task Act()
 			{
@@ -59,7 +59,7 @@ public sealed partial class ThatMockVerifyIs
 			mock.DoWork(2);
 			mock.DoWork(3);
 
-			mock.VerifyMock.Invoked.DoWork(Match.With(2)).AtLeastOnce();
+			mock.VerifyMock.Invoked.DoWork(It.Is(2)).AtLeastOnce();
 
 			async Task Act()
 			{
@@ -84,7 +84,7 @@ public sealed partial class ThatMockVerifyIs
 			mock.DoWork(1);
 			mock.DoWork(2);
 
-			mock.VerifyMock.Invoked.DoWork(Match.Any<int>()).AtLeastOnce();
+			mock.VerifyMock.Invoked.DoWork(It.IsAny<int>()).AtLeastOnce();
 
 			async Task Act()
 			{

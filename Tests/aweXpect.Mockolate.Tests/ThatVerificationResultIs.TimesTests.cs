@@ -24,7 +24,7 @@ public sealed partial class ThatVerificationResultIs
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Times(n => n % 2 == 0);
+				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Times(n => n % 2 == 0);
 			}
 
 			string expectedFoundTimes = count switch
@@ -63,7 +63,7 @@ public sealed partial class ThatVerificationResultIs
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(Match.With(1), Match.With(false))).Times(n => n % 2 == 1);
+				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Times(n => n % 2 == 1);
 			}
 
 			string expectedFoundTimes = count switch

@@ -17,8 +17,8 @@ public sealed partial class ThatVerificationResultIs
 			sut.MyMethod(3);
 			sut.MyMethod(4);
 
-			await That(sut.VerifyMock.Invoked.MyMethod(Match.With(3))).Then(m => m.Invoked.MyMethod(Match.With(4)));
-			await That(async Task () => await That(sut.VerifyMock.Invoked.MyMethod(Match.With(2))).Then(m => m.Invoked.MyMethod(Match.With(1))))
+			await That(sut.VerifyMock.Invoked.MyMethod(It.Is(3))).Then(m => m.Invoked.MyMethod(It.Is(4)));
+			await That(async Task () => await That(sut.VerifyMock.Invoked.MyMethod(It.Is(2))).Then(m => m.Invoked.MyMethod(It.Is(1))))
 				.Throws<XunitException>()
 				.WithMessage("""
 					Expected that the ThatVerificationResultIs.IMyService mock
@@ -34,7 +34,7 @@ public sealed partial class ThatVerificationResultIs
 					  [3] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(4)
 					]
 					""");
-			await That(sut.VerifyMock.Invoked.MyMethod(Match.With(1))).Then(m => m.Invoked.MyMethod(Match.With(2)), m => m.Invoked.MyMethod(Match.With(3)));
+			await That(sut.VerifyMock.Invoked.MyMethod(It.Is(1))).Then(m => m.Invoked.MyMethod(It.Is(2)), m => m.Invoked.MyMethod(It.Is(3)));
 		}
 
 		[Fact]
@@ -47,7 +47,7 @@ public sealed partial class ThatVerificationResultIs
 			sut.MyMethod(3);
 			sut.MyMethod(4);
 
-			await That(async Task () => await That(sut.VerifyMock.Invoked.MyMethod(Match.With(6))).Then(m => m.Invoked.MyMethod(Match.With(4))))
+			await That(async Task () => await That(sut.VerifyMock.Invoked.MyMethod(It.Is(6))).Then(m => m.Invoked.MyMethod(It.Is(4))))
 				.Throws<XunitException>()
 				.WithMessage("""
 					Expected that the ThatVerificationResultIs.IMyService mock
@@ -64,7 +64,7 @@ public sealed partial class ThatVerificationResultIs
 					]
 					""");
 
-			await That(async Task () => await That(sut.VerifyMock.Invoked.MyMethod(Match.With(1))).Then(m => m.Invoked.MyMethod(Match.With(6)), m => m.Invoked.MyMethod(Match.With(3))))
+			await That(async Task () => await That(sut.VerifyMock.Invoked.MyMethod(It.Is(1))).Then(m => m.Invoked.MyMethod(It.Is(6)), m => m.Invoked.MyMethod(It.Is(3))))
 				.Throws<XunitException>()
 				.WithMessage("""
 					Expected that the ThatVerificationResultIs.IMyService mock
@@ -82,7 +82,7 @@ public sealed partial class ThatVerificationResultIs
 					]
 					""");
 
-			await That(async Task () => await That(sut.VerifyMock.Invoked.MyMethod(Match.With(1))).Then(m => m.Invoked.MyMethod(Match.With(2)), m => m.Invoked.MyMethod(Match.With(6))))
+			await That(async Task () => await That(sut.VerifyMock.Invoked.MyMethod(It.Is(1))).Then(m => m.Invoked.MyMethod(It.Is(2)), m => m.Invoked.MyMethod(It.Is(6))))
 				.Throws<XunitException>()
 				.WithMessage("""
 					Expected that the ThatVerificationResultIs.IMyService mock
