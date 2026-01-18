@@ -11,6 +11,7 @@ Expectations to verify interactions with mocks from [Mockolate](https://github.c
 ## Features
 
 ### Interaction count
+
 Verify that a method was called a specific number of times:
 
 ```csharp
@@ -30,6 +31,7 @@ await That(mock.VerifyMock.Invoked.MyMethod()).Exactly(2.Times()); // Exactly 2 
 ```
 
 ### Interaction order
+
 Verify that methods were called in a specific sequence:
 
 ```csharp
@@ -49,7 +51,9 @@ await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1))).Then(
 ### Additional Verifications
 
 #### All interactions are verified
-With `AllInteractionsAreVerified` you can check whether all interactions with the mock have actually been verified. This helps to detect unintended or forgotten calls.
+
+With `AllInteractionsAreVerified` you can check whether all interactions with the mock have actually been verified. This
+helps to detect unintended or forgotten calls.
 
 ```csharp
 var mock = Mock.Create<IMyService>();
@@ -62,7 +66,9 @@ await That(mock.VerifyMock).AllInteractionsAreVerified();
 ```
 
 #### All setups are used
-With `AllSetupsAreUsed` you can check whether all defined setups on the mock have actually been used. This ensures that no setup configurations remain unused.
+
+With `AllSetupsAreUsed` you can check whether all defined setups on the mock have actually been used. This ensures that
+no setup configurations remain unused.
 
 ```csharp
 var mock = Mock.Create<IMyService>();
