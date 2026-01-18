@@ -46,3 +46,31 @@ await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1))).Then(
 );
 ```
 
+### Additional Verifications
+
+#### All interactions are verified
+With `AllInteractionsAreVerified` you can check whether all interactions with the mock have actually been verified. This helps to detect unintended or forgotten calls.
+
+```csharp
+var mock = Mock.Create<IMyService>();
+mock.MyMethod(1);
+mock.MyMethod(2);
+
+await That(mock.VerifyMock.Invoked.MyMethod(It.IsAny<int>())).AtLeastOnce();
+ // Succeeds, because the verification applies to both method calls.
+await That(mock.VerifyMock).AllInteractionsAreVerified();
+```
+
+#### All setups are used
+With `AllSetupsAreUsed` you can check whether all defined setups on the mock have actually been used. This ensures that no setup configurations remain unused.
+
+```csharp
+var mock = Mock.Create<IMyService>();
+mock.SetupMock.Method.MyMethod(It.Is(1)).Returns(10);
+mock.SetupMock.Method.MyMethod(It.Is(2)).Returns(20);
+
+mock.DoWork(1);
+
+// Fails, because the setup for MyMethod(2) was never used.
+await That(mock.VerifyMock).AllSetupsAreUsed();
+```
