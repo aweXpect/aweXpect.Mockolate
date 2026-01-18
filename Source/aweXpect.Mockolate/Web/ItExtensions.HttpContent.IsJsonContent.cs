@@ -127,7 +127,7 @@ public static class AweXpectItExtensions
 			return true;
 		}
 
-		private JsonDocumentOptions GetDefaultOptions() => new()
+		private static JsonDocumentOptions GetDefaultOptions() => new()
 		{
 			AllowTrailingCommas = true,
 		};
