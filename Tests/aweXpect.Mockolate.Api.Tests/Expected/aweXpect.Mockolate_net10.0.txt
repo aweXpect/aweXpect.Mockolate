@@ -1,5 +1,26 @@
 [assembly: System.Reflection.AssemblyMetadata("RepositoryUrl", "https://github.com/aweXpect/aweXpect.Mockolate.git")]
 [assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v10.0", FrameworkDisplayName=".NET 10.0")]
+namespace Mockolate.Web
+{
+    public static class AweXpectItExtensions
+    {
+        public interface IJsonContentBodyParameter : Mockolate.Parameters.IParameter<System.Net.Http.HttpContent?>, Mockolate.Web.AweXpectItExtensions.IJsonContentParameter, Mockolate.Web.ItExtensions.IHttpContentParameter<Mockolate.Web.AweXpectItExtensions.IJsonContentParameter>
+        {
+            Mockolate.Web.AweXpectItExtensions.IJsonContentBodyParameter IgnoringAdditionalProperties(bool ignoreAdditionalProperties = true);
+        }
+        public interface IJsonContentParameter : Mockolate.Parameters.IParameter<System.Net.Http.HttpContent?>, Mockolate.Web.ItExtensions.IHttpContentParameter<Mockolate.Web.AweXpectItExtensions.IJsonContentParameter>
+        {
+            Mockolate.Web.AweXpectItExtensions.IJsonContentBodyParameter WithBody(string json, System.Text.Json.JsonDocumentOptions? options = default);
+            Mockolate.Web.AweXpectItExtensions.IJsonContentBodyParameter WithBodyMatching(object? expected, System.Text.Json.JsonDocumentOptions? options = default);
+            Mockolate.Web.AweXpectItExtensions.IJsonContentBodyParameter WithBodyMatching<T>(System.Collections.Generic.IEnumerable<T> expected, System.Text.Json.JsonDocumentOptions? options = default);
+        }
+        extension(Mockolate.It _)
+        {
+            Mockolate.Web.AweXpectItExtensions.IJsonContentParameter IsJsonContent();
+            Mockolate.Web.AweXpectItExtensions.IJsonContentParameter IsJsonContent(string mediaType);
+        }
+    }
+}
 namespace aweXpect
 {
     public static class ThatMockVerify
