@@ -4,20 +4,15 @@ namespace Mockolate.Web
 {
     public static class AweXpectItExtensions
     {
-        public interface IJsonContentBodyParameter : Mockolate.Parameters.IParameter<System.Net.Http.HttpContent?>, Mockolate.Web.AweXpectItExtensions.IJsonContentParameter, Mockolate.Web.ItExtensions.IHttpContentParameter<Mockolate.Web.AweXpectItExtensions.IJsonContentParameter>
+        public interface IJsonContentBodyParameter : Mockolate.Parameters.IParameter<System.Net.Http.HttpContent?>, Mockolate.Web.ItExtensions.IHttpContentParameter, Mockolate.Web.ItExtensions.IHttpHeaderParameter<Mockolate.Web.ItExtensions.IHttpContentHeaderParameter>
         {
             Mockolate.Web.AweXpectItExtensions.IJsonContentBodyParameter IgnoringAdditionalProperties(bool ignoreAdditionalProperties = true);
         }
-        public interface IJsonContentParameter : Mockolate.Parameters.IParameter<System.Net.Http.HttpContent?>, Mockolate.Web.ItExtensions.IHttpContentParameter<Mockolate.Web.AweXpectItExtensions.IJsonContentParameter>
+        extension(Mockolate.Web.ItExtensions.IHttpContentParameter parameter)
         {
-            Mockolate.Web.AweXpectItExtensions.IJsonContentBodyParameter WithBody(string json, System.Text.Json.JsonDocumentOptions? options = default);
-            Mockolate.Web.AweXpectItExtensions.IJsonContentBodyParameter WithBodyMatching(object? expected, System.Text.Json.JsonDocumentOptions? options = default);
-            Mockolate.Web.AweXpectItExtensions.IJsonContentBodyParameter WithBodyMatching<T>(System.Collections.Generic.IEnumerable<T> expected, System.Text.Json.JsonDocumentOptions? options = default);
-        }
-        extension(Mockolate.It _)
-        {
-            Mockolate.Web.AweXpectItExtensions.IJsonContentParameter IsJsonContent();
-            Mockolate.Web.AweXpectItExtensions.IJsonContentParameter IsJsonContent(string mediaType);
+            Mockolate.Web.AweXpectItExtensions.IJsonContentBodyParameter WithJson(string json, System.Text.Json.JsonDocumentOptions? options = default);
+            Mockolate.Web.AweXpectItExtensions.IJsonContentBodyParameter WithJsonMatching(object? expected, System.Text.Json.JsonDocumentOptions? options = default);
+            Mockolate.Web.AweXpectItExtensions.IJsonContentBodyParameter WithJsonMatching<T>(System.Collections.Generic.IEnumerable<T> expected, System.Text.Json.JsonDocumentOptions? options = default);
         }
     }
 }

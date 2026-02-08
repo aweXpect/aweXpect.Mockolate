@@ -15,47 +15,47 @@ namespace Mockolate.Web;
 public static class AweXpectItExtensions
 {
 	/// <inheritdoc cref="ItExtensions" />
-	extension(It _)
+	extension(ItExtensions.IHttpContentParameter parameter)
 	{
 		/// <summary>
-		///     Expects the <see cref="HttpContent" /> parameter to be a JSON content.
+		///     Expects the <see cref="HttpContent" /> to have a body equal to the given <paramref name="json" />.
 		/// </summary>
-		public static IJsonContentParameter IsJsonContent()
-			=> new JsonContentParameter();
+		public IJsonContentBodyParameter WithJson(string json, JsonDocumentOptions? options = null)
+		{
+			JsonContentParameter jsonContentParameter = new(parameter);
+			jsonContentParameter.WithBody(json, options);
+			parameter.WithString(b => jsonContentParameter.Matches(b));
+			return jsonContentParameter;
+		}
 
 		/// <summary>
-		///     Expects the <see cref="HttpContent" /> parameter to be a JSON content
-		///     with the given <paramref name="mediaType" />.
+		///     Expects the <see cref="HttpContent" /> to have a JSON body which matches the <paramref name="expected" /> value.
 		/// </summary>
-		public static IJsonContentParameter IsJsonContent(string mediaType)
-			=> new JsonContentParameter().WithMediaType(mediaType);
-	}
-
-	/// <summary>
-	///     Further expectations on the JSON <see cref="HttpContent" />.
-	/// </summary>
-	public interface IJsonContentParameter : ItExtensions.IHttpContentParameter<IJsonContentParameter>
-	{
-		/// <summary>
-		///     Expects the <see cref="StringContent" /> to have a body equal to the given <paramref name="json" />.
-		/// </summary>
-		IJsonContentBodyParameter WithBody(string json, JsonDocumentOptions? options = null);
+		public IJsonContentBodyParameter WithJsonMatching(object? expected, JsonDocumentOptions? options = null)
+		{
+			JsonContentParameter jsonContentParameter = new(parameter);
+			jsonContentParameter.WithBodyMatching(expected, options);
+			parameter.WithString(b => jsonContentParameter.Matches(b));
+			return jsonContentParameter;
+		}
 
 		/// <summary>
-		///     Expects the <see cref="StringContent" /> to have a JSON body which matches the <paramref name="expected" /> value.
+		///     Expects the <see cref="HttpContent" /> to have a JSON body which matches the <paramref name="expected" /> value.
 		/// </summary>
-		IJsonContentBodyParameter WithBodyMatching(object? expected, JsonDocumentOptions? options = null);
-
-		/// <summary>
-		///     Expects the <see cref="StringContent" /> to have a JSON body which matches the <paramref name="expected" /> value.
-		/// </summary>
-		IJsonContentBodyParameter WithBodyMatching<T>(IEnumerable<T> expected, JsonDocumentOptions? options = null);
+		public IJsonContentBodyParameter WithJsonMatching<T>(IEnumerable<T> expected,
+			JsonDocumentOptions? options = null)
+		{
+			JsonContentParameter jsonContentParameter = new(parameter);
+			jsonContentParameter.WithBodyMatching(expected, options);
+			parameter.WithString(b => jsonContentParameter.Matches(b));
+			return jsonContentParameter;
+		}
 	}
 
 	/// <summary>
 	///     Further expectations on the matching of a JSON body of the <see cref="HttpContent" />.
 	/// </summary>
-	public interface IJsonContentBodyParameter : IJsonContentParameter
+	public interface IJsonContentBodyParameter : ItExtensions.IHttpContentParameter
 	{
 		/// <summary>
 		///     Ignores additional properties in JSON objects when comparing.
@@ -63,32 +63,18 @@ public static class AweXpectItExtensions
 		IJsonContentBodyParameter IgnoringAdditionalProperties(bool ignoreAdditionalProperties = true);
 	}
 
-	private sealed class JsonContentParameter : HttpContentParameter<IJsonContentParameter>, IJsonContentBodyParameter
+	private sealed class JsonContentParameter : IJsonContentBodyParameter, IParameter
 	{
+		private readonly ItExtensions.IHttpContentParameter _parameter;
+
 		private string? _body;
 		private bool _ignoringAdditionalProperties = true;
 		private JsonDocumentOptions? _jsonDocumentOptions;
 
-		/// <inheritdoc cref="HttpContentParameter{TParameter}.GetThis" />
-		protected override IJsonContentParameter GetThis => this;
-
-		/// <inheritdoc cref="IJsonContentParameter.WithBody(string, JsonDocumentOptions?)" />
-		public IJsonContentBodyParameter WithBody(string json,
-			JsonDocumentOptions? options = null)
+		public JsonContentParameter(ItExtensions.IHttpContentParameter parameter)
 		{
-			_body = json;
-			_jsonDocumentOptions = options;
-			return this;
+			_parameter = parameter;
 		}
-
-		/// <inheritdoc cref="IJsonContentParameter.WithBodyMatching(object, JsonDocumentOptions?)" />
-		public IJsonContentBodyParameter WithBodyMatching(object? expected,
-			JsonDocumentOptions? options = null)
-			=> WithBody(JsonSerializer.Serialize(expected, JsonSerializerOptions.Default), options);
-
-		public IJsonContentBodyParameter WithBodyMatching<T>(IEnumerable<T> expected,
-			JsonDocumentOptions? options = null)
-			=> WithBody(JsonSerializer.Serialize<object>(expected, JsonSerializerOptions.Default), options);
 
 		/// <inheritdoc cref="IJsonContentBodyParameter.IgnoringAdditionalProperties(bool)" />
 		public IJsonContentBodyParameter IgnoringAdditionalProperties(bool ignoreAdditionalProperties = true)
@@ -97,19 +83,76 @@ public static class AweXpectItExtensions
 			return this;
 		}
 
-		protected override bool Matches(HttpContent value)
-		{
-			if (!base.Matches(value))
-			{
-				return false;
-			}
+		public IParameter<HttpContent?> Do(Action<HttpContent?> callback)
+			=> _parameter.Do(callback);
 
+		public ItExtensions.IHttpContentHeaderParameter WithHeaders(
+			params IEnumerable<(string Name, HttpHeaderValue Value)> headers)
+			=> _parameter.WithHeaders(headers);
+
+		public ItExtensions.IHttpContentHeaderParameter WithHeaders(string headers)
+			=> _parameter.WithHeaders(headers);
+
+		public ItExtensions.IHttpContentHeaderParameter WithHeaders(string name, HttpHeaderValue value)
+			=> _parameter.WithHeaders(name, value);
+
+		public ItExtensions.IHttpContentParameter WithString(Func<string, bool> predicate)
+			=> _parameter.WithString(predicate);
+
+		public ItExtensions.IStringContentBodyParameter WithString(string expected)
+			=> _parameter.WithString(expected);
+
+		public ItExtensions.IStringContentBodyMatchingParameter WithStringMatching(string pattern)
+			=> _parameter.WithStringMatching(pattern);
+
+		public ItExtensions.IHttpContentParameter WithBytes(byte[] bytes)
+			=> _parameter.WithBytes(bytes);
+
+		public ItExtensions.IHttpContentParameter WithBytes(Func<byte[], bool> predicate)
+			=> _parameter.WithBytes(predicate);
+
+		public ItExtensions.IFormDataContentParameter WithFormData(string key, HttpFormDataValue value)
+			=> _parameter.WithFormData(key, value);
+
+		public ItExtensions.IFormDataContentParameter WithFormData(
+			params IEnumerable<(string Key, HttpFormDataValue Value)> values)
+			=> _parameter.WithFormData(values);
+
+		public ItExtensions.IFormDataContentParameter WithFormData(string values)
+			=> _parameter.WithFormData(values);
+
+		public ItExtensions.IHttpContentParameter WithMediaType(string? mediaType)
+			=> _parameter.WithMediaType(mediaType);
+
+		public bool Matches(object? value)
+			=> ((IParameter)_parameter).Matches(value);
+
+		public void InvokeCallbacks(object? value)
+			=> ((IParameter)_parameter).InvokeCallbacks(value);
+
+		public void WithBody(string json,
+			JsonDocumentOptions? options = null)
+		{
+			_body = json;
+			_jsonDocumentOptions = options;
+		}
+
+		public void WithBodyMatching(object? expected,
+			JsonDocumentOptions? options = null)
+			=> WithBody(JsonSerializer.Serialize(expected, JsonSerializerOptions.Default), options);
+
+		public void WithBodyMatching<T>(IEnumerable<T> expected,
+			JsonDocumentOptions? options = null)
+			=> WithBody(JsonSerializer.Serialize<object>(expected, JsonSerializerOptions.Default), options);
+
+		public bool Matches(string value)
+		{
 			if (_body is not null)
 			{
 				try
 				{
 					JsonDocumentOptions options = _jsonDocumentOptions ?? GetDefaultOptions();
-					using JsonDocument actualDocument = JsonDocument.Parse(value.ReadAsStream(), options);
+					using JsonDocument actualDocument = JsonDocument.Parse(value, options);
 					using JsonDocument expectedDocument = JsonDocument.Parse(_body, options);
 
 					if (!Compare(actualDocument.RootElement, expectedDocument.RootElement,
@@ -223,60 +266,6 @@ public static class AweXpectItExtensions
 			}
 
 			return false;
-		}
-	}
-
-	private abstract class HttpContentParameter<TParameter>
-		: ItExtensions.IHttpContentParameter<TParameter>, IParameter
-	{
-		private List<Action<HttpContent?>>? _callbacks;
-		private string? _mediaType;
-
-		/// <summary>
-		///     Returns <c>this</c> typed as <typeparamref name="TParameter" /> for fluent API.
-		/// </summary>
-		protected abstract TParameter GetThis { get; }
-
-		/// <inheritdoc cref="ItExtensions.IHttpContentParameter{TParameter}.WithMediaType(string?)" />
-		public TParameter WithMediaType(string? mediaType)
-		{
-			_mediaType = mediaType;
-			return GetThis;
-		}
-
-		/// <inheritdoc cref="IParameter{T}.Do(Action{T})" />
-		public IParameter<HttpContent?> Do(Action<HttpContent?> callback)
-		{
-			_callbacks ??= [];
-			_callbacks.Add(callback);
-			return this;
-		}
-
-		/// <inheritdoc cref="IParameter.Matches(object?)" />
-		public bool Matches(object? value)
-			=> value is HttpContent typedValue && Matches(typedValue);
-
-		/// <inheritdoc cref="IParameter.InvokeCallbacks(object?)" />
-		public void InvokeCallbacks(object? value)
-		{
-			if (value is HttpContent httpContent)
-			{
-				_callbacks?.ForEach(a => a.Invoke(httpContent));
-			}
-		}
-
-		/// <summary>
-		///     Checks whether the given <see cref="HttpContent" /> <paramref name="value" /> matches the expectations.
-		/// </summary>
-		protected virtual bool Matches(HttpContent value)
-		{
-			if (_mediaType is not null &&
-			    value.Headers.ContentType?.MediaType?.Equals(_mediaType, StringComparison.OrdinalIgnoreCase) != true)
-			{
-				return false;
-			}
-
-			return true;
 		}
 	}
 }

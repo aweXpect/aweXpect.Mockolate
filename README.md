@@ -85,22 +85,17 @@ await That(mock.VerifyMock).AllSetupsAreUsed();
 
 #### JSON Content
 
-With `It.IsJsonContent()`, you can precisely verify JSON content in HTTP requests during your tests. This feature is
+You can precisely verify JSON content in HTTP requests during your tests. This feature is
 especially useful for testing HTTP clients and web APIs.
 
 ```csharp
 // Verifies that a request was sent with a JSON body equivalent to { "foo": 1, "bar": "baz" }
 httpClient.SetupMock.Method
-    .PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching(new { foo = 1, bar = \"baz\" }))
+    .PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new { foo = 1, bar = \"baz\" }))
     .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
 // You can also provide a string representation of the JSON and it ignores formatting differences or property order
 httpClient.SetupMock.Method
-    .PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBody("{\"bar\": \"baz\", \"foo\": 1}"))
+    .PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJson("{\"bar\": \"baz\", \"foo\": 1}"))
     .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
-
-// In addition, you can specify the expected media type
-httpClient.SetupMock.Method
-    .PostAsync(It.IsAny<Uri>(), It.IsJsonContent("application/json"))
-    .ReturnsAsync(...);
 ```

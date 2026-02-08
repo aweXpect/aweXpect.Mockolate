@@ -1,7 +1,6 @@
 ﻿#if NET8_0_OR_GREATER
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading;
 using Mockolate;
@@ -24,7 +23,7 @@ public sealed partial class ItExtensionsTests
 			{
 				HttpClient httpClient = Mock.Create<HttpClient>();
 				httpClient.SetupMock.Method
-					.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching(expected))
+					.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(expected))
 					.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
 				HttpResponseMessage result = await httpClient.PostAsync("https://www.aweXpect.com",
@@ -42,7 +41,7 @@ public sealed partial class ItExtensionsTests
 			{
 				HttpClient httpClient = Mock.Create<HttpClient>();
 				httpClient.SetupMock.Method
-					.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching(expected))
+					.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(expected))
 					.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
 				HttpResponseMessage result = await httpClient.PostAsync("https://www.aweXpect.com",
@@ -60,7 +59,7 @@ public sealed partial class ItExtensionsTests
 			{
 				HttpClient httpClient = Mock.Create<HttpClient>();
 				httpClient.SetupMock.Method
-					.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching(expected))
+					.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(expected))
 					.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
 				HttpResponseMessage result = await httpClient.PostAsync("https://www.aweXpect.com",
@@ -78,7 +77,7 @@ public sealed partial class ItExtensionsTests
 			{
 				HttpClient httpClient = Mock.Create<HttpClient>();
 				httpClient.SetupMock.Method
-					.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching(null))
+					.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(null))
 					.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
 				HttpResponseMessage result = await httpClient.PostAsync("https://www.aweXpect.com",
@@ -95,7 +94,7 @@ public sealed partial class ItExtensionsTests
 				string body = "[{\"foo\": 2}, {\"foo\": 3}, {\"foo\": 4}]";
 				HttpClient httpClient = Mock.Create<HttpClient>();
 				httpClient.SetupMock.Method
-					.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching([
+					.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching([
 						new
 						{
 							foo = 2,
@@ -120,32 +119,13 @@ public sealed partial class ItExtensionsTests
 			}
 
 			[Theory]
-			[InlineData("application/json", true)]
-			[InlineData("text/plain", false)]
-			[InlineData("application/txt", false)]
-			public async Task ShouldVerifyMediaType(string mediaType, bool expectSuccess)
-			{
-				HttpClient httpClient = Mock.Create<HttpClient>();
-				httpClient.SetupMock.Method
-					.PostAsync(It.IsAny<Uri>(), It.IsJsonContent("application/json"))
-					.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
-
-				HttpResponseMessage result = await httpClient.PostAsync("https://www.aweXpect.com",
-					new StringContent("", Encoding.UTF8, mediaType),
-					CancellationToken.None);
-
-				await That(result.StatusCode)
-					.IsEqualTo(expectSuccess ? HttpStatusCode.OK : HttpStatusCode.NotImplemented);
-			}
-
-			[Theory]
 			[InlineData("\"foo\"", "foo", true)]
 			[InlineData("\"foo\"", "bar", false)]
 			public async Task StringValue_ShouldSucceedWhenMatching(string body, string expected, bool expectSuccess)
 			{
 				HttpClient httpClient = Mock.Create<HttpClient>();
 				httpClient.SetupMock.Method
-					.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching(expected))
+					.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(expected))
 					.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
 				HttpResponseMessage result = await httpClient.PostAsync("https://www.aweXpect.com",
@@ -165,7 +145,7 @@ public sealed partial class ItExtensionsTests
 			{
 				HttpClient httpClient = Mock.Create<HttpClient>();
 				httpClient.SetupMock.Method
-					.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBody(expected))
+					.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJson(expected))
 					.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
 				HttpResponseMessage result = await httpClient.PostAsync("https://www.aweXpect.com",
@@ -181,7 +161,7 @@ public sealed partial class ItExtensionsTests
 			{
 				HttpClient httpClient = Mock.Create<HttpClient>();
 				httpClient.SetupMock.Method
-					.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching(new
+					.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
 					{
 						foo = 1,
 						bar = 2,
@@ -209,7 +189,7 @@ public sealed partial class ItExtensionsTests
 			{
 				HttpClient httpClient = Mock.Create<HttpClient>();
 				httpClient.SetupMock.Method
-					.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching(new
+					.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
 					{
 						foo = 1,
 						bar = 2,
@@ -239,7 +219,7 @@ public sealed partial class ItExtensionsTests
 			{
 				HttpClient httpClient = Mock.Create<HttpClient>();
 				httpClient.SetupMock.Method
-					.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBody(expected, new JsonDocumentOptions
+					.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJson(expected, new JsonDocumentOptions
 					{
 						AllowTrailingCommas = allowTrailingCommas,
 					}))
@@ -261,7 +241,7 @@ public sealed partial class ItExtensionsTests
 				{
 					HttpClient httpClient = Mock.Create<HttpClient>();
 					httpClient.SetupMock.Method
-						.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching(expected))
+						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(expected))
 						.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
 					HttpResponseMessage result = await httpClient.PostAsync("https://www.aweXpect.com",
@@ -278,7 +258,7 @@ public sealed partial class ItExtensionsTests
 				{
 					HttpClient httpClient = Mock.Create<HttpClient>();
 					httpClient.SetupMock.Method
-						.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching(expected))
+						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(expected))
 						.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
 					HttpResponseMessage result = await httpClient.PostAsync("https://www.aweXpect.com",
@@ -295,7 +275,7 @@ public sealed partial class ItExtensionsTests
 					string body = "[1, 2]";
 					HttpClient httpClient = Mock.Create<HttpClient>();
 					httpClient.SetupMock.Method
-						.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching([2, 1,]))
+						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching([2, 1,]))
 						.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
 					HttpResponseMessage result = await httpClient.PostAsync("https://www.aweXpect.com",
@@ -312,7 +292,7 @@ public sealed partial class ItExtensionsTests
 					string body = "[1, 2]";
 					HttpClient httpClient = Mock.Create<HttpClient>();
 					httpClient.SetupMock.Method
-						.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching([1, 2, 3,]))
+						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching([1, 2, 3,]))
 						.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
 					HttpResponseMessage result = await httpClient.PostAsync("https://www.aweXpect.com",
@@ -329,7 +309,7 @@ public sealed partial class ItExtensionsTests
 					string body = "[1, 2, 3]";
 					HttpClient httpClient = Mock.Create<HttpClient>();
 					httpClient.SetupMock.Method
-						.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching([1, 2,]))
+						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching([1, 2,]))
 						.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
 					HttpResponseMessage result = await httpClient.PostAsync("https://www.aweXpect.com",
@@ -347,7 +327,7 @@ public sealed partial class ItExtensionsTests
 					HttpClient httpClient = Mock.Create<HttpClient>();
 					httpClient.SetupMock.Method
 						.PostAsync(It.IsAny<Uri>(),
-							It.IsJsonContent().WithBodyMatching([1, 2,]).IgnoringAdditionalProperties(false))
+							It.IsHttpContent().WithJsonMatching([1, 2,]).IgnoringAdditionalProperties(false))
 						.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
 					HttpResponseMessage result = await httpClient.PostAsync("https://www.aweXpect.com",
@@ -366,7 +346,7 @@ public sealed partial class ItExtensionsTests
 					string body = "[1, 2,]";
 					HttpClient httpClient = Mock.Create<HttpClient>();
 					httpClient.SetupMock.Method
-						.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching([1, 2,], new JsonDocumentOptions
+						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching([1, 2,], new JsonDocumentOptions
 						{
 							AllowTrailingCommas = allowTrailingCommas,
 						}))
@@ -424,7 +404,7 @@ public sealed partial class ItExtensionsTests
 				{
 					HttpClient httpClient = Mock.Create<HttpClient>();
 					httpClient.SetupMock.Method
-						.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching(new
+						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
 						{
 							foo = 2,
 						}))
@@ -445,7 +425,7 @@ public sealed partial class ItExtensionsTests
 				{
 					HttpClient httpClient = Mock.Create<HttpClient>();
 					httpClient.SetupMock.Method
-						.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching(new object()))
+						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new object()))
 						.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
 					HttpResponseMessage result = await httpClient.PostAsync("https://www.aweXpect.com",
@@ -462,7 +442,7 @@ public sealed partial class ItExtensionsTests
 					string body = "{\"bar\": 2}";
 					HttpClient httpClient = Mock.Create<HttpClient>();
 					httpClient.SetupMock.Method
-						.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching(new
+						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
 						{
 							bar = 3,
 						}))
@@ -482,7 +462,7 @@ public sealed partial class ItExtensionsTests
 					string body = "{\"foo\": null, \"bar\": 2}";
 					HttpClient httpClient = Mock.Create<HttpClient>();
 					httpClient.SetupMock.Method
-						.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching(new
+						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
 						{
 							bar = 2,
 						}))
@@ -502,7 +482,7 @@ public sealed partial class ItExtensionsTests
 					string body = "{\"foo\": null, \"bar\": 2}";
 					HttpClient httpClient = Mock.Create<HttpClient>();
 					httpClient.SetupMock.Method
-						.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching(new
+						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
 						{
 							bar = 2,
 						}).IgnoringAdditionalProperties(false))
@@ -524,7 +504,7 @@ public sealed partial class ItExtensionsTests
 					string body = "{\"foo\": 1,}";
 					HttpClient httpClient = Mock.Create<HttpClient>();
 					httpClient.SetupMock.Method
-						.PostAsync(It.IsAny<Uri>(), It.IsJsonContent().WithBodyMatching(new
+						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
 							{
 								foo = 1,
 							},
