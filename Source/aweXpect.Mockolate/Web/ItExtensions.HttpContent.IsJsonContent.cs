@@ -124,26 +124,11 @@ public static class AweXpectItExtensions
 		public ItExtensions.IHttpContentParameter WithMediaType(string? mediaType)
 			=> _parameter.WithMediaType(mediaType);
 
-		public bool Matches(object? value)
-			=> ((IParameter)_parameter).Matches(value);
-
 		public void InvokeCallbacks(object? value)
 			=> ((IParameter)_parameter).InvokeCallbacks(value);
 
-		public void WithBody(string json,
-			JsonDocumentOptions? options = null)
-		{
-			_body = json;
-			_jsonDocumentOptions = options;
-		}
-
-		public void WithBodyMatching(object? expected,
-			JsonDocumentOptions? options = null)
-			=> WithBody(JsonSerializer.Serialize(expected, JsonSerializerOptions.Default), options);
-
-		public void WithBodyMatching<T>(IEnumerable<T> expected,
-			JsonDocumentOptions? options = null)
-			=> WithBody(JsonSerializer.Serialize<object>(expected, JsonSerializerOptions.Default), options);
+		public bool Matches(object? value)
+			=> ((IParameter)_parameter).Matches(value);
 
 		public bool Matches(string value)
 		{
@@ -169,6 +154,21 @@ public static class AweXpectItExtensions
 
 			return true;
 		}
+
+		public void WithBody(string json,
+			JsonDocumentOptions? options = null)
+		{
+			_body = json;
+			_jsonDocumentOptions = options;
+		}
+
+		public void WithBodyMatching(object? expected,
+			JsonDocumentOptions? options = null)
+			=> WithBody(JsonSerializer.Serialize(expected, JsonSerializerOptions.Default), options);
+
+		public void WithBodyMatching<T>(IEnumerable<T> expected,
+			JsonDocumentOptions? options = null)
+			=> WithBody(JsonSerializer.Serialize<object>(expected, JsonSerializerOptions.Default), options);
 
 		private static JsonDocumentOptions GetDefaultOptions() => new()
 		{
