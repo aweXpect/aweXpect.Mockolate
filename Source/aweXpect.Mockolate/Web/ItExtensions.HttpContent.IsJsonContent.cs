@@ -90,36 +90,11 @@ public static class AweXpectItExtensions
 			params IEnumerable<(string Name, HttpHeaderValue Value)> headers)
 			=> _parameter.WithHeaders(headers);
 
-		public ItExtensions.IHttpContentHeaderParameter WithHeaders(string headers)
-			=> _parameter.WithHeaders(headers);
-
-		public ItExtensions.IHttpContentHeaderParameter WithHeaders(string name, HttpHeaderValue value)
-			=> _parameter.WithHeaders(name, value);
-
 		public ItExtensions.IHttpContentParameter WithString(Func<string, bool> predicate)
 			=> _parameter.WithString(predicate);
 
-		public ItExtensions.IStringContentBodyParameter WithString(string expected)
-			=> _parameter.WithString(expected);
-
-		public ItExtensions.IStringContentBodyMatchingParameter WithStringMatching(string pattern)
-			=> _parameter.WithStringMatching(pattern);
-
-		public ItExtensions.IHttpContentParameter WithBytes(byte[] bytes)
-			=> _parameter.WithBytes(bytes);
-
 		public ItExtensions.IHttpContentParameter WithBytes(Func<byte[], bool> predicate)
 			=> _parameter.WithBytes(predicate);
-
-		public ItExtensions.IFormDataContentParameter WithFormData(string key, HttpFormDataValue value)
-			=> _parameter.WithFormData(key, value);
-
-		public ItExtensions.IFormDataContentParameter WithFormData(
-			params IEnumerable<(string Key, HttpFormDataValue Value)> values)
-			=> _parameter.WithFormData(values);
-
-		public ItExtensions.IFormDataContentParameter WithFormData(string values)
-			=> _parameter.WithFormData(values);
 
 		public ItExtensions.IHttpContentParameter WithMediaType(string? mediaType)
 			=> _parameter.WithMediaType(mediaType);

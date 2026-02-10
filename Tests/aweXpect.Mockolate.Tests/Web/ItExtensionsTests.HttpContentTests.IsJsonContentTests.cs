@@ -116,6 +116,22 @@ public sealed partial class ItExtensionsTests
 
 				await That(result.StatusCode)
 					.IsEqualTo(HttpStatusCode.OK);
+				await That(httpClient.VerifyMock.Invoked
+						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching([
+							new
+							{
+								foo = 2,
+							},
+							new
+							{
+								foo = 3,
+							},
+							new
+							{
+								foo = 4,
+							},
+						])))
+					.Once();
 			}
 
 			[Theory]
@@ -179,6 +195,13 @@ public sealed partial class ItExtensionsTests
 
 				await That(result.StatusCode)
 					.IsEqualTo(HttpStatusCode.OK);
+				await That(httpClient.VerifyMock.Invoked
+						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
+						{
+							foo = 1,
+							bar = 2,
+						})))
+					.Once();
 			}
 
 			[Theory]
@@ -250,6 +273,9 @@ public sealed partial class ItExtensionsTests
 
 					await That(result.StatusCode)
 						.IsEqualTo(HttpStatusCode.OK);
+					await That(httpClient.VerifyMock.Invoked
+							.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(expected)))
+						.Once();
 				}
 
 				[Theory]
@@ -318,6 +344,9 @@ public sealed partial class ItExtensionsTests
 
 					await That(result.StatusCode)
 						.IsEqualTo(HttpStatusCode.OK);
+					await That(httpClient.VerifyMock.Invoked
+							.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching([1, 2,])))
+						.Once();
 				}
 
 				[Fact]
@@ -434,6 +463,9 @@ public sealed partial class ItExtensionsTests
 
 					await That(result.StatusCode)
 						.IsEqualTo(HttpStatusCode.OK);
+					await That(httpClient.VerifyMock.Invoked
+							.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new object())))
+						.Once();
 				}
 
 				[Fact]
@@ -474,6 +506,12 @@ public sealed partial class ItExtensionsTests
 
 					await That(result.StatusCode)
 						.IsEqualTo(HttpStatusCode.OK);
+					await That(httpClient.VerifyMock.Invoked
+							.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
+							{
+								bar = 2,
+							})))
+						.Once();
 				}
 
 				[Fact]
