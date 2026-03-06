@@ -16,6 +16,29 @@ namespace Mockolate.Web
         }
     }
 }
+namespace aweXpect.Options
+{
+    public class WithinOptions
+    {
+        public WithinOptions() { }
+        public System.Threading.CancellationToken? CancellationToken { get; set; }
+        public System.TimeSpan? Timeout { get; set; }
+    }
+}
+namespace aweXpect.Results
+{
+    public class AndOrWithinResult<TType, TThat> : aweXpect.Results.AndOrWithinResult<TType, TThat, aweXpect.Results.AndOrWithinResult<TType, TThat>>
+    {
+        public AndOrWithinResult(aweXpect.Core.ExpectationBuilder expectationBuilder, TThat returnValue, aweXpect.Options.WithinOptions options) { }
+    }
+    public class AndOrWithinResult<TType, TThat, TSelf> : aweXpect.Results.AndOrResult<TType, TThat>
+        where TSelf : aweXpect.Results.AndOrWithinResult<TType, TThat, TSelf>
+    {
+        protected AndOrWithinResult(aweXpect.Core.ExpectationBuilder expectationBuilder, TThat returnValue, aweXpect.Options.WithinOptions options) { }
+        public TSelf WithCancellation(System.Threading.CancellationToken cancellationToken) { }
+        public TSelf Within(System.TimeSpan timeout) { }
+    }
+}
 namespace aweXpect
 {
     public static class ThatMockVerify
@@ -25,18 +48,18 @@ namespace aweXpect
     }
     public static class ThatVerificationResult
     {
-        public static aweXpect.Results.AndOrResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>> AtLeast<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject, aweXpect.Core.Times times) { }
-        public static aweXpect.Results.AndOrResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>> AtLeastOnce<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject) { }
-        public static aweXpect.Results.AndOrResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>> AtLeastTwice<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject) { }
+        public static aweXpect.Results.AndOrWithinResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>> AtLeast<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject, aweXpect.Core.Times times) { }
+        public static aweXpect.Results.AndOrWithinResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>> AtLeastOnce<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject) { }
+        public static aweXpect.Results.AndOrWithinResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>> AtLeastTwice<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject) { }
         public static aweXpect.Results.AndOrResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>> AtMost<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject, aweXpect.Core.Times times) { }
         public static aweXpect.Results.AndOrResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>> AtMostOnce<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject) { }
         public static aweXpect.Results.AndOrResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>> AtMostTwice<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject) { }
-        public static aweXpect.Results.BetweenResult<aweXpect.Results.AndOrResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>>, aweXpect.Core.Times> Between<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject, int minimum) { }
-        public static aweXpect.Results.AndOrResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>> Exactly<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject, aweXpect.Core.Times times) { }
+        public static aweXpect.Results.BetweenResult<aweXpect.Results.AndOrWithinResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>>, aweXpect.Core.Times> Between<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject, int minimum) { }
+        public static aweXpect.Results.AndOrWithinResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>> Exactly<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject, aweXpect.Core.Times times) { }
         public static aweXpect.Results.AndOrResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>> Never<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject) { }
-        public static aweXpect.Results.AndOrResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>> Once<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject) { }
+        public static aweXpect.Results.AndOrWithinResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>> Once<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject) { }
         public static aweXpect.Results.AndOrResult<Mockolate.Verify.VerificationResult<T>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<T>>> Then<T>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<T>> subject, params System.Func<Mockolate.Verify.IMockVerify<T>, Mockolate.Verify.VerificationResult<T>>[] interactions) { }
-        public static aweXpect.Results.AndOrResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>> Times<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject, System.Func<int, bool> predicate, [System.Runtime.CompilerServices.CallerArgumentExpression("predicate")] string doNotPopulateThisValue = "") { }
-        public static aweXpect.Results.AndOrResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>> Twice<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject) { }
+        public static aweXpect.Results.AndOrWithinResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>> Times<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject, System.Func<int, bool> predicate, [System.Runtime.CompilerServices.CallerArgumentExpression("predicate")] string doNotPopulateThisValue = "") { }
+        public static aweXpect.Results.AndOrWithinResult<Mockolate.Verify.VerificationResult<TVerify>, aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>>> Twice<TVerify>(this aweXpect.Core.IThat<Mockolate.Verify.VerificationResult<TVerify>> subject) { }
     }
 }

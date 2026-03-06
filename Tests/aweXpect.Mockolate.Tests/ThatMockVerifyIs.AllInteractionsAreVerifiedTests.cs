@@ -9,6 +9,29 @@ public sealed partial class ThatMockVerifyIs
 	public sealed class AllInteractionsAreVerifiedTests
 	{
 		[Fact]
+		public async Task Negated_WhenAllAreVerified_ShouldThrow()
+		{
+			IMyService mock = Mock.Create<IMyService>();
+
+			mock.DoWork(1);
+			mock.DoWork(2);
+
+			mock.VerifyMock.Invoked.DoWork(It.IsAny<int>()).AtLeastOnce();
+
+			async Task Act()
+			{
+				await That(mock.VerifyMock).DoesNotComplyWith(it => it.AllInteractionsAreVerified());
+			}
+
+			await That(Act).Throws<XunitException>()
+				.WithMessage("""
+				             Expected that the ThatMockVerifyIs.IMyService mock
+				             has not all interactions verified,
+				             but all were
+				             """);
+		}
+
+		[Fact]
 		public async Task WhenAllInvocationsWereVerified_ShouldNotThrow()
 		{
 			IMyService mock = Mock.Create<IMyService>();
@@ -24,30 +47,6 @@ public sealed partial class ThatMockVerifyIs
 			}
 
 			await That(Act).DoesNotThrow();
-		}
-
-		[Fact]
-		public async Task WhenOneInvocationIsNotVerified_ShouldThrow()
-		{
-			IMyService mock = Mock.Create<IMyService>();
-
-			mock.DoWork(1);
-			mock.DoWork(2);
-
-			mock.VerifyMock.Invoked.DoWork(It.Is(1)).AtLeastOnce();
-
-			async Task Act()
-			{
-				await That(mock.VerifyMock).AllInteractionsAreVerified();
-			}
-
-			await That(Act).Throws<XunitException>()
-				.WithMessage("""
-				             Expected that the ThatMockVerifyIs.IMyService mock
-				             has all interactions verified,
-				             but the following interaction was not verified:
-				              - [1] invoke method aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService.DoWork(2)
-				             """);
 		}
 
 		[Fact]
@@ -77,25 +76,26 @@ public sealed partial class ThatMockVerifyIs
 		}
 
 		[Fact]
-		public async Task Negated_WhenAllAreVerified_ShouldThrow()
+		public async Task WhenOneInvocationIsNotVerified_ShouldThrow()
 		{
 			IMyService mock = Mock.Create<IMyService>();
 
 			mock.DoWork(1);
 			mock.DoWork(2);
 
-			mock.VerifyMock.Invoked.DoWork(It.IsAny<int>()).AtLeastOnce();
+			mock.VerifyMock.Invoked.DoWork(It.Is(1)).AtLeastOnce();
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock).DoesNotComplyWith(it => it.AllInteractionsAreVerified());
+				await That(mock.VerifyMock).AllInteractionsAreVerified();
 			}
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
 				             Expected that the ThatMockVerifyIs.IMyService mock
-				             has not all interactions verified,
-				             but all were
+				             has all interactions verified,
+				             but the following interaction was not verified:
+				              - [1] invoke method aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService.DoWork(2)
 				             """);
 		}
 	}

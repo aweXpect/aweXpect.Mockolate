@@ -44,6 +44,7 @@
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="aweXpect"/>
+		<PackageReference Include="aweXpect.Chronology"/>
 	</ItemGroup>
 
 </Project>
