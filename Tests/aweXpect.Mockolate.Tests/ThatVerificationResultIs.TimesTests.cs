@@ -136,8 +136,9 @@ public sealed partial class ThatVerificationResultIs
 		{
 			IMyService mock = Mock.Create<IMyService>();
 
-			Task backgroundTask = Task.Delay(50).ContinueWith(async _ =>
+			Task backgroundTask = Task.Run(async () =>
 			{
+				await Task.Delay(50);
 				for (int i = 0; i < invocationTimes; i++)
 				{
 					mock.MyMethod(1, false);
@@ -158,8 +159,9 @@ public sealed partial class ThatVerificationResultIs
 		{
 			IMyService mock = Mock.Create<IMyService>();
 
-			Task backgroundTask = Task.Delay(50).ContinueWith(async _ =>
+			Task backgroundTask = Task.Run(async () =>
 			{
+				await Task.Delay(50);
 				for (int i = 0; i < invocationTimes; i++)
 				{
 					mock.MyMethod(1, false);

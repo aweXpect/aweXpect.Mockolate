@@ -50,7 +50,7 @@ public static partial class ThatVerificationResult
 		{
 			if (options.CancellationToken is not null)
 			{
-				actual = actual.WithCancellation(cancellationToken);
+				actual = actual.WithCancellation(options.CancellationToken.Value);
 			}
 
 			if (options.Timeout is not null)
