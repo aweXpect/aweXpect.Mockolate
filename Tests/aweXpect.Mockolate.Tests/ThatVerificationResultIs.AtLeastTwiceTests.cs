@@ -54,6 +54,28 @@ public sealed partial class ThatVerificationResultIs
 		[Theory]
 		[InlineData(7)]
 		[InlineData(2)]
+		public async Task WhenInvokedInBackground_WithCancellation_ShouldSucceed(int invocationTimes)
+		{
+			IMyService mock = Mock.Create<IMyService>();
+			using CancellationTokenSource cts = new(30.Seconds());
+			CancellationToken token = cts.Token;
+
+			Task backgroundTask = Task.Delay(50, token).ContinueWith(_ =>
+			{
+				for (int i = 0; i < invocationTimes; i++)
+				{
+					mock.MyMethod(1, false);
+				}
+			}, token);
+
+			await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).AtLeastTwice().WithCancellation(token);
+
+			await backgroundTask;
+		}
+
+		[Theory]
+		[InlineData(7)]
+		[InlineData(2)]
 		public async Task WhenInvokedInBackground_Within_ShouldSucceed(int invocationTimes)
 		{
 			IMyService mock = Mock.Create<IMyService>();
