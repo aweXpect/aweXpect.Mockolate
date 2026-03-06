@@ -1,5 +1,6 @@
 ﻿using aweXpect.Core;
 using aweXpect.Helpers;
+using aweXpect.Options;
 using aweXpect.Results;
 using Mockolate.Verify;
 
@@ -10,9 +11,14 @@ public static partial class ThatVerificationResult
 	/// <summary>
 	///     Verifies that the checked interaction happened at least once.
 	/// </summary>
-	public static AndOrResult<VerificationResult<TVerify>, IThat<VerificationResult<TVerify>>> AtLeastOnce<TVerify>(
-		this IThat<VerificationResult<TVerify>> subject)
-		=> new(subject.Get().ExpectationBuilder.AddConstraint((expectationBuilder, it, grammars)
-				=> new HasAtLeastConstraint<TVerify>(expectationBuilder, it, grammars, 1)),
-			subject);
+	public static AndOrWithinResult<VerificationResult<TVerify>, IThat<VerificationResult<TVerify>>>
+		AtLeastOnce<TVerify>(this IThat<VerificationResult<TVerify>> subject)
+	{
+		WithinOptions options = new();
+		return new AndOrWithinResult<VerificationResult<TVerify>, IThat<VerificationResult<TVerify>>>(
+			subject.Get().ExpectationBuilder.AddConstraint((expectationBuilder, it, grammars)
+				=> new HasAtLeastConstraint<TVerify>(expectationBuilder, it, grammars, 1, options)),
+			subject,
+			options);
+	}
 }

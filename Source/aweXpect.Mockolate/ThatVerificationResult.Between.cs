@@ -1,8 +1,11 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using aweXpect.Core;
 using aweXpect.Core.Constraints;
 using aweXpect.Helpers;
+using aweXpect.Options;
 using aweXpect.Results;
 using Mockolate.Verify;
 
@@ -13,28 +16,69 @@ public static partial class ThatVerificationResult
 	/// <summary>
 	///     Verifies that the checked interaction happened between <paramref name="minimum" />…
 	/// </summary>
-	public static BetweenResult<AndOrResult<VerificationResult<TVerify>, IThat<VerificationResult<TVerify>>>, Times>
-		Between<TVerify>(
-			this IThat<VerificationResult<TVerify>> subject, int minimum)
-		=> new(maximum => new AndOrResult<VerificationResult<TVerify>, IThat<VerificationResult<TVerify>>>(subject.Get()
-				.ExpectationBuilder.AddConstraint((expectationBuilder, it, grammars)
-					=> new HasBetweenConstraint<TVerify>(expectationBuilder, it, grammars, minimum, maximum.Value)),
-			subject));
-	
+	public static BetweenResult<AndOrWithinResult<VerificationResult<TVerify>, IThat<VerificationResult<TVerify>>>,
+			Times>
+		Between<TVerify>(this IThat<VerificationResult<TVerify>> subject, int minimum)
+	{
+		WithinOptions options = new();
+		return new
+			BetweenResult<AndOrWithinResult<VerificationResult<TVerify>, IThat<VerificationResult<TVerify>>>,
+				Times>(maximum
+				=> new AndOrWithinResult<VerificationResult<TVerify>, IThat<VerificationResult<TVerify>>>(
+					subject.Get().ExpectationBuilder.AddConstraint((expectationBuilder, it, grammars)
+						=> new HasBetweenConstraint<TVerify>(expectationBuilder, it, grammars, minimum,
+							maximum.Value, options)),
+					subject,
+					options));
+	}
+
 	private sealed class HasBetweenConstraint<TVerify>(
 		ExpectationBuilder expectationBuilder,
 		string it,
 		ExpectationGrammars grammars,
 		int minimum,
-		int maximum)
+		int maximum,
+		WithinOptions options)
 		: ConstraintResult.WithValue<VerificationResult<TVerify>>(grammars),
-			IValueConstraint<VerificationResult<TVerify>>
+			IAsyncConstraint<VerificationResult<TVerify>>
 	{
 		private int _count = -1;
 		private string _expectation = "";
 
-		public ConstraintResult IsMetBy(VerificationResult<TVerify> actual)
+		public async Task<ConstraintResult> IsMetBy(VerificationResult<TVerify> actual,
+			CancellationToken cancellationToken)
 		{
+			if (options.CancellationToken is not null)
+			{
+				actual = actual.WithCancellation(options.CancellationToken.Value);
+			}
+
+			if (options.Timeout is not null)
+			{
+				actual = actual.Within(options.Timeout.Value);
+			}
+			else if (expectationBuilder.Timeout is not null)
+			{
+				actual = actual.Within(expectationBuilder.Timeout.Value);
+			}
+
+			if (actual is IAsyncVerificationResult asyncVerificationResult)
+			{
+				_expectation = asyncVerificationResult.Expectation;
+				Actual = actual;
+				Outcome = await asyncVerificationResult.VerifyAsync(interactions =>
+				{
+					string context = Formatter.Format(interactions, FormattingOptions.MultipleLines);
+					expectationBuilder.UpdateContexts(contexts => contexts.Add(
+						new ResultContext.SyncCallback("Interactions", () => context)));
+					_count = interactions.Length;
+					return interactions.Length >= minimum && interactions.Length <= maximum;
+				})
+					? Outcome.Success
+					: Outcome.Failure;
+				return this;
+			}
+
 			IVerificationResult result = actual;
 			_expectation = result.Expectation;
 			Actual = actual;

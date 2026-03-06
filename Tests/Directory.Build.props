@@ -15,7 +15,7 @@
 		<IsPackable>false</IsPackable>
 		<IsTestProject>true</IsTestProject>
 		<SignAssembly>False</SignAssembly>
-		<NoWarn>701;1702;CA1845</NoWarn>
+		<NoWarn>701;1702;CA1845;xUnit1051</NoWarn>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)' == 'net48'">
@@ -44,6 +44,7 @@
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="aweXpect"/>
+		<PackageReference Include="aweXpect.Chronology"/>
 	</ItemGroup>
 
 </Project>

@@ -30,6 +30,39 @@ await That(mock.VerifyMock.Invoked.MyMethod()).AtMost(4.Times());  // At most 4 
 await That(mock.VerifyMock.Invoked.MyMethod()).Exactly(2.Times()); // Exactly 2 times
 ```
 
+#### Asynchronous verification
+
+With `Within(TimeSpan timeout)`, you can check whether the expected number of calls occurred within a given time
+interval. This is useful for asynchronous or delayed invocations in the background.
+
+```csharp
+var mock = Mock.Create<IMyService>();
+
+// Start asynchronous calls, e.g., in a Task
+Task.Run(async () =>
+{
+    await Task.Delay(500);
+    mock.MyMethod();
+});
+
+// Verifies that MyMethod was called at least once within 1 second
+await That(mock.VerifyMock.Invoked.MyMethod())
+    .AtLeastOnce()
+    .Within(TimeSpan.FromSeconds(1));
+```
+
+Instead of a fixed time span, you can also provide a `CancellationToken` to limit how long the verification should wait
+for the expected interactions:
+
+```csharp
+var token = new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token;
+
+// Verifies that MyMethod was called at least once within 1 second
+await That(mock.VerifyMock.Invoked.MyMethod())
+    .AtLeastOnce()
+    .WithCancellation(token);
+```
+
 ### Interaction order
 
 Verify that methods were called in a specific sequence:

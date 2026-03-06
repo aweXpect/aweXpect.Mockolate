@@ -18,23 +18,25 @@ public sealed partial class ThatVerificationResultIs
 			sut.MyMethod(4);
 
 			await That(sut.VerifyMock.Invoked.MyMethod(It.Is(3))).Then(m => m.Invoked.MyMethod(It.Is(4)));
-			await That(async Task () => await That(sut.VerifyMock.Invoked.MyMethod(It.Is(2))).Then(m => m.Invoked.MyMethod(It.Is(1))))
+			await That(async Task ()
+					=> await That(sut.VerifyMock.Invoked.MyMethod(It.Is(2))).Then(m => m.Invoked.MyMethod(It.Is(1))))
 				.Throws<XunitException>()
 				.WithMessage("""
-					Expected that the ThatVerificationResultIs.IMyService mock
-					invoked method MyMethod(2), then
-					invoked method MyMethod(1) in order,
-					but it invoked method MyMethod(1) too early
+				             Expected that the ThatVerificationResultIs.IMyService mock
+				             invoked method MyMethod(2), then
+				             invoked method MyMethod(1) in order,
+				             but it invoked method MyMethod(1) too early
 
-					Interactions:
-					[
-					  [0] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1),
-					  [1] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(2),
-					  [2] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(3),
-					  [3] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(4)
-					]
-					""");
-			await That(sut.VerifyMock.Invoked.MyMethod(It.Is(1))).Then(m => m.Invoked.MyMethod(It.Is(2)), m => m.Invoked.MyMethod(It.Is(3)));
+				             Interactions:
+				             [
+				               [0] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1),
+				               [1] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(2),
+				               [2] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(3),
+				               [3] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(4)
+				             ]
+				             """);
+			await That(sut.VerifyMock.Invoked.MyMethod(It.Is(1)))
+				.Then(m => m.Invoked.MyMethod(It.Is(2)), m => m.Invoked.MyMethod(It.Is(3)));
 		}
 
 		[Fact]
@@ -47,58 +49,61 @@ public sealed partial class ThatVerificationResultIs
 			sut.MyMethod(3);
 			sut.MyMethod(4);
 
-			await That(async Task () => await That(sut.VerifyMock.Invoked.MyMethod(It.Is(6))).Then(m => m.Invoked.MyMethod(It.Is(4))))
+			await That(async Task ()
+					=> await That(sut.VerifyMock.Invoked.MyMethod(It.Is(6))).Then(m => m.Invoked.MyMethod(It.Is(4))))
 				.Throws<XunitException>()
 				.WithMessage("""
-					Expected that the ThatVerificationResultIs.IMyService mock
-					invoked method MyMethod(6), then
-					invoked method MyMethod(4) in order,
-					but it invoked method MyMethod(6) not at all
+				             Expected that the ThatVerificationResultIs.IMyService mock
+				             invoked method MyMethod(6), then
+				             invoked method MyMethod(4) in order,
+				             but it invoked method MyMethod(6) not at all
 
-					Interactions:
-					[
-					  [0] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1),
-					  [1] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(2),
-					  [2] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(3),
-					  [3] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(4)
-					]
-					""");
+				             Interactions:
+				             [
+				               [0] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1),
+				               [1] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(2),
+				               [2] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(3),
+				               [3] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(4)
+				             ]
+				             """);
 
-			await That(async Task () => await That(sut.VerifyMock.Invoked.MyMethod(It.Is(1))).Then(m => m.Invoked.MyMethod(It.Is(6)), m => m.Invoked.MyMethod(It.Is(3))))
+			await That(async Task () => await That(sut.VerifyMock.Invoked.MyMethod(It.Is(1)))
+					.Then(m => m.Invoked.MyMethod(It.Is(6)), m => m.Invoked.MyMethod(It.Is(3))))
 				.Throws<XunitException>()
 				.WithMessage("""
-					Expected that the ThatVerificationResultIs.IMyService mock
-					invoked method MyMethod(1), then
-					invoked method MyMethod(6), then
-					invoked method MyMethod(3) in order,
-					but it invoked method MyMethod(6) not at all
+				             Expected that the ThatVerificationResultIs.IMyService mock
+				             invoked method MyMethod(1), then
+				             invoked method MyMethod(6), then
+				             invoked method MyMethod(3) in order,
+				             but it invoked method MyMethod(6) not at all
 
-					Interactions:
-					[
-					  [0] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1),
-					  [1] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(2),
-					  [2] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(3),
-					  [3] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(4)
-					]
-					""");
+				             Interactions:
+				             [
+				               [0] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1),
+				               [1] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(2),
+				               [2] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(3),
+				               [3] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(4)
+				             ]
+				             """);
 
-			await That(async Task () => await That(sut.VerifyMock.Invoked.MyMethod(It.Is(1))).Then(m => m.Invoked.MyMethod(It.Is(2)), m => m.Invoked.MyMethod(It.Is(6))))
+			await That(async Task () => await That(sut.VerifyMock.Invoked.MyMethod(It.Is(1)))
+					.Then(m => m.Invoked.MyMethod(It.Is(2)), m => m.Invoked.MyMethod(It.Is(6))))
 				.Throws<XunitException>()
 				.WithMessage("""
-					Expected that the ThatVerificationResultIs.IMyService mock
-					invoked method MyMethod(1), then
-					invoked method MyMethod(2), then
-					invoked method MyMethod(6) in order,
-					but it invoked method MyMethod(6) not at all
+				             Expected that the ThatVerificationResultIs.IMyService mock
+				             invoked method MyMethod(1), then
+				             invoked method MyMethod(2), then
+				             invoked method MyMethod(6) in order,
+				             but it invoked method MyMethod(6) not at all
 
-					Interactions:
-					[
-					  [0] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1),
-					  [1] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(2),
-					  [2] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(3),
-					  [3] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(4)
-					]
-					""");
+				             Interactions:
+				             [
+				               [0] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1),
+				               [1] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(2),
+				               [2] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(3),
+				               [3] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(4)
+				             ]
+				             """);
 		}
 	}
 }

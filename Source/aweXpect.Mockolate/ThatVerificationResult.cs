@@ -1,8 +1,11 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using aweXpect.Core;
 using aweXpect.Core.Constraints;
 using aweXpect.Helpers;
+using aweXpect.Options;
 using Mockolate.Verify;
 
 namespace aweXpect;
@@ -12,19 +15,61 @@ namespace aweXpect;
 /// </summary>
 public static partial class ThatVerificationResult
 {
+	private static string ToAmountString(this int number)
+		=> number switch
+		{
+			0 => "never",
+			1 => "once",
+			2 => "twice",
+			_ => $"{number} times",
+		};
+
 	private sealed class HasExactlyConstraint<TVerify>(
 		ExpectationBuilder expectationBuilder,
 		string it,
 		ExpectationGrammars grammars,
-		int expected)
+		int expected,
+		WithinOptions options)
 		: ConstraintResult.WithValue<VerificationResult<TVerify>>(grammars),
-			IValueConstraint<VerificationResult<TVerify>>
+			IAsyncConstraint<VerificationResult<TVerify>>
 	{
 		private int _count = -1;
 		private string _expectation = "";
 
-		public ConstraintResult IsMetBy(VerificationResult<TVerify> actual)
+		public async Task<ConstraintResult> IsMetBy(VerificationResult<TVerify> actual,
+			CancellationToken cancellationToken)
 		{
+			if (options.CancellationToken is not null)
+			{
+				actual = actual.WithCancellation(options.CancellationToken.Value);
+			}
+
+			if (options.Timeout is not null)
+			{
+				actual = actual.Within(options.Timeout.Value);
+			}
+			else if (expectationBuilder.Timeout is not null)
+			{
+				actual = actual.Within(expectationBuilder.Timeout.Value);
+			}
+
+			if (actual is IAsyncVerificationResult asyncVerificationResult)
+			{
+				_expectation = asyncVerificationResult.Expectation;
+				Actual = actual;
+				Outcome = await asyncVerificationResult.VerifyAsync(interactions =>
+				{
+					string context = Formatter.Format(interactions, FormattingOptions.MultipleLines);
+					expectationBuilder.UpdateContexts(contexts => contexts.Add(
+						new ResultContext.SyncCallback("Interactions", () => context)));
+					_count = interactions.Length;
+					return interactions.Length == expected;
+				})
+					? Outcome.Success
+					: Outcome.Failure;
+				return this;
+			}
+
 			IVerificationResult result = actual;
 			_expectation = result.Expectation;
 			Actual = actual;
@@ -61,7 +106,8 @@ public static partial class ThatVerificationResult
 			}
 			else
 			{
-				stringBuilder.Append("found ").Append(it).Append(_count < expected ? " only " : " ").Append(_count.ToAmountString());
+				stringBuilder.Append("found ").Append(it).Append(_count < expected ? " only " : " ")
+					.Append(_count.ToAmountString());
 			}
 		}
 
@@ -83,7 +129,7 @@ public static partial class ThatVerificationResult
 		public override bool TryGetValue<TValue>([NotNullWhen(true)] out TValue? value) where TValue : default
 		{
 			if (typeof(TValue) == typeof(IDescribableSubject) &&
-				new MyDescribableSubject<TVerify>() is TValue describableSubject)
+			    new MyDescribableSubject<TVerify>() is TValue describableSubject)
 			{
 				value = describableSubject;
 				return true;
@@ -123,19 +169,13 @@ public static partial class ThatVerificationResult
 		}
 
 		protected override void AppendNormalExpectation(StringBuilder stringBuilder, string? indentation = null)
-		{
-			stringBuilder.Append(_expectation).Append(" at most ").Append(expected.ToAmountString());
-		}
+			=> stringBuilder.Append(_expectation).Append(" at most ").Append(expected.ToAmountString());
 
 		protected override void AppendNormalResult(StringBuilder stringBuilder, string? indentation = null)
-		{
-			stringBuilder.Append("found ").Append(it).Append(' ').Append(_count.ToAmountString());
-		}
+			=> stringBuilder.Append("found ").Append(it).Append(' ').Append(_count.ToAmountString());
 
 		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
-		{
-			stringBuilder.Append(_expectation).Append(" more than ").Append(expected.ToAmountString());
-		}
+			=> stringBuilder.Append(_expectation).Append(" more than ").Append(expected.ToAmountString());
 
 		protected override void AppendNegatedResult(StringBuilder stringBuilder, string? indentation = null)
 		{
@@ -152,7 +192,7 @@ public static partial class ThatVerificationResult
 		public override bool TryGetValue<TValue>([NotNullWhen(true)] out TValue? value) where TValue : default
 		{
 			if (typeof(TValue) == typeof(IDescribableSubject) &&
-				new MyDescribableSubject<TVerify>() is TValue describableSubject)
+			    new MyDescribableSubject<TVerify>() is TValue describableSubject)
 			{
 				value = describableSubject;
 				return true;
@@ -166,15 +206,48 @@ public static partial class ThatVerificationResult
 		ExpectationBuilder expectationBuilder,
 		string it,
 		ExpectationGrammars grammars,
-		int expected)
+		int expected,
+		WithinOptions options)
 		: ConstraintResult.WithValue<VerificationResult<TVerify>>(grammars),
-			IValueConstraint<VerificationResult<TVerify>>
+			IAsyncConstraint<VerificationResult<TVerify>>
 	{
 		private int _count = -1;
 		private string _expectation = "";
 
-		public ConstraintResult IsMetBy(VerificationResult<TVerify> actual)
+		public async Task<ConstraintResult> IsMetBy(VerificationResult<TVerify> actual,
+			CancellationToken cancellationToken)
 		{
+			if (options.CancellationToken is not null)
+			{
+				actual = actual.WithCancellation(options.CancellationToken.Value);
+			}
+
+			if (options.Timeout is not null)
+			{
+				actual = actual.Within(options.Timeout.Value);
+			}
+			else if (expectationBuilder.Timeout is not null)
+			{
+				actual = actual.Within(expectationBuilder.Timeout.Value);
+			}
+
+			if (actual is IAsyncVerificationResult asyncVerificationResult)
+			{
+				_expectation = asyncVerificationResult.Expectation;
+				Actual = actual;
+				Outcome = await asyncVerificationResult.VerifyAsync(interactions =>
+				{
+					string context = Formatter.Format(interactions, FormattingOptions.MultipleLines);
+					expectationBuilder.UpdateContexts(contexts => contexts.Add(
+						new ResultContext.SyncCallback("Interactions", () => context)));
+					_count = interactions.Length;
+					return interactions.Length >= expected;
+				})
+					? Outcome.Success
+					: Outcome.Failure;
+				return this;
+			}
+
 			IVerificationResult result = actual;
 			_expectation = result.Expectation;
 			Actual = actual;
@@ -192,9 +265,7 @@ public static partial class ThatVerificationResult
 		}
 
 		protected override void AppendNormalExpectation(StringBuilder stringBuilder, string? indentation = null)
-		{
-			stringBuilder.Append(_expectation).Append(" at least ").Append(expected.ToAmountString());
-		}
+			=> stringBuilder.Append(_expectation).Append(" at least ").Append(expected.ToAmountString());
 
 		protected override void AppendNormalResult(StringBuilder stringBuilder, string? indentation = null)
 		{
@@ -209,19 +280,15 @@ public static partial class ThatVerificationResult
 		}
 
 		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
-		{
-			stringBuilder.Append(_expectation).Append(" less than ").Append(expected.ToAmountString());
-		}
+			=> stringBuilder.Append(_expectation).Append(" less than ").Append(expected.ToAmountString());
 
 		protected override void AppendNegatedResult(StringBuilder stringBuilder, string? indentation = null)
-		{
-			stringBuilder.Append("found ").Append(it).Append(' ').Append(_count.ToAmountString());
-		}
+			=> stringBuilder.Append("found ").Append(it).Append(' ').Append(_count.ToAmountString());
 
 		public override bool TryGetValue<TValue>([NotNullWhen(true)] out TValue? value) where TValue : default
 		{
 			if (typeof(TValue) == typeof(IDescribableSubject) &&
-				new MyDescribableSubject<TVerify>() is TValue describableSubject)
+			    new MyDescribableSubject<TVerify>() is TValue describableSubject)
 			{
 				value = describableSubject;
 				return true;
@@ -230,13 +297,4 @@ public static partial class ThatVerificationResult
 			return base.TryGetValue(out value);
 		}
 	}
-
-	private static string ToAmountString(this int number)
-		=> number switch
-		{
-			0 => "never",
-			1 => "once",
-			2 => "twice",
-			_ => $"{number} times"
-		};
 }

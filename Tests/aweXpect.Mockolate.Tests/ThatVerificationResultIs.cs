@@ -1,7 +1,4 @@
-﻿using Mockolate;
-using Xunit.Sdk;
-
-namespace aweXpect.Mockolate.Tests;
+﻿namespace aweXpect.Mockolate.Tests;
 
 public sealed partial class ThatVerificationResultIs
 {
