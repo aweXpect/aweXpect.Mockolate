@@ -8,5 +8,5 @@ internal sealed class MyDescribableSubject<T>(IMock? mock) : IDescribableSubject
 	public string GetDescription()
 		=> mock is not null
 			? $"the {mock.ToString()}"
-			: typeof(T).ToString();
+			: $"the {Formatter.Format(typeof(T))} mock";
 }
