@@ -105,8 +105,8 @@ no setup configurations remain unused.
 
 ```csharp
 var sut = IMyService.CreateMock();
-sut.SetupMock.Method.MyMethod(It.Is(1)).Returns(10);
-sut.SetupMock.Method.MyMethod(It.Is(2)).Returns(20);
+sut.Mock.Setup.MyMethod(It.Is(1)).Returns(10);
+sut.Mock.Setup.MyMethod(It.Is(2)).Returns(20);
 
 sut.MyMethod(1);
 
@@ -124,10 +124,10 @@ especially useful for testing HTTP clients and web APIs.
 ```csharp
 // Verifies that a request was sent with a JSON body equivalent to { "foo": 1, "bar": "baz" }
 httpClient.Mock.Setup
-    .PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new { foo = 1, bar = \"baz\" }))
+    .PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new { foo = 1, bar = "baz" }))
     .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
-// You can also provide a string representation of the JSON and it ignores formatting differences or property order
+// You can also provide a string representation of the JSON, and it ignores formatting differences or property order
 httpClient.Mock.Setup
     .PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJson("{\"bar\": \"baz\", \"foo\": 1}"))
     .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
