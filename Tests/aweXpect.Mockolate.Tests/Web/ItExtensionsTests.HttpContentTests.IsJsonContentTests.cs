@@ -21,8 +21,8 @@ public sealed partial class ItExtensionsTests
 			[InlineData("false", false, true)]
 			public async Task BooleanValue_ShouldSucceedWhenMatching(string body, bool expected, bool expectSuccess)
 			{
-				HttpClient httpClient = Mock.Create<HttpClient>();
-				httpClient.SetupMock.Method
+				HttpClient httpClient = HttpClient.CreateMock();
+				httpClient.Mock.Setup
 					.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(expected))
 					.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
@@ -39,8 +39,8 @@ public sealed partial class ItExtensionsTests
 			[InlineData("1.2", 2.1, false)]
 			public async Task DoubleValue_ShouldSucceedWhenMatching(string body, double expected, bool expectSuccess)
 			{
-				HttpClient httpClient = Mock.Create<HttpClient>();
-				httpClient.SetupMock.Method
+				HttpClient httpClient = HttpClient.CreateMock();
+				httpClient.Mock.Setup
 					.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(expected))
 					.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
@@ -57,8 +57,8 @@ public sealed partial class ItExtensionsTests
 			[InlineData("1", 2, false)]
 			public async Task IntegerValue_ShouldSucceedWhenMatching(string body, int expected, bool expectSuccess)
 			{
-				HttpClient httpClient = Mock.Create<HttpClient>();
-				httpClient.SetupMock.Method
+				HttpClient httpClient = HttpClient.CreateMock();
+				httpClient.Mock.Setup
 					.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(expected))
 					.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
@@ -75,8 +75,8 @@ public sealed partial class ItExtensionsTests
 			[InlineData("{}", false)]
 			public async Task NullValue_ShouldSucceedWhenMatching(string body, bool expectSuccess)
 			{
-				HttpClient httpClient = Mock.Create<HttpClient>();
-				httpClient.SetupMock.Method
+				HttpClient httpClient = HttpClient.CreateMock();
+				httpClient.Mock.Setup
 					.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(null))
 					.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
@@ -92,8 +92,8 @@ public sealed partial class ItExtensionsTests
 			public async Task ShouldSupportNestedObjects()
 			{
 				string body = "[{\"foo\": 2}, {\"foo\": 3}, {\"foo\": 4}]";
-				HttpClient httpClient = Mock.Create<HttpClient>();
-				httpClient.SetupMock.Method
+				HttpClient httpClient = HttpClient.CreateMock();
+				httpClient.Mock.Setup
 					.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching([
 						new
 						{
@@ -116,7 +116,7 @@ public sealed partial class ItExtensionsTests
 
 				await That(result.StatusCode)
 					.IsEqualTo(HttpStatusCode.OK);
-				await That(httpClient.VerifyMock.Invoked
+				await That(httpClient.Mock.Verify
 						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching([
 							new
 							{
@@ -139,8 +139,8 @@ public sealed partial class ItExtensionsTests
 			[InlineData("\"foo\"", "bar", false)]
 			public async Task StringValue_ShouldSucceedWhenMatching(string body, string expected, bool expectSuccess)
 			{
-				HttpClient httpClient = Mock.Create<HttpClient>();
-				httpClient.SetupMock.Method
+				HttpClient httpClient = HttpClient.CreateMock();
+				httpClient.Mock.Setup
 					.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(expected))
 					.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
@@ -159,8 +159,8 @@ public sealed partial class ItExtensionsTests
 			public async Task WithBody_ShouldCompareAsJson(string body,
 				string expected, bool expectSuccess)
 			{
-				HttpClient httpClient = Mock.Create<HttpClient>();
-				httpClient.SetupMock.Method
+				HttpClient httpClient = HttpClient.CreateMock();
+				httpClient.Mock.Setup
 					.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJson(expected))
 					.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
@@ -175,8 +175,8 @@ public sealed partial class ItExtensionsTests
 			[Fact]
 			public async Task WithBodyMatching_ShouldCompareAsJson()
 			{
-				HttpClient httpClient = Mock.Create<HttpClient>();
-				httpClient.SetupMock.Method
+				HttpClient httpClient = HttpClient.CreateMock();
+				httpClient.Mock.Setup
 					.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
 					{
 						foo = 1,
@@ -195,7 +195,7 @@ public sealed partial class ItExtensionsTests
 
 				await That(result.StatusCode)
 					.IsEqualTo(HttpStatusCode.OK);
-				await That(httpClient.VerifyMock.Invoked
+				await That(httpClient.Mock.Verify
 						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
 						{
 							foo = 1,
@@ -210,8 +210,8 @@ public sealed partial class ItExtensionsTests
 			public async Task WithBodyMatching_WithAdditionalProperties_ShouldMatchWhenIgnoringAdditionalProperties(
 				bool ignoreAdditionalProperties)
 			{
-				HttpClient httpClient = Mock.Create<HttpClient>();
-				httpClient.SetupMock.Method
+				HttpClient httpClient = HttpClient.CreateMock();
+				httpClient.Mock.Setup
 					.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
 					{
 						foo = 1,
@@ -240,8 +240,8 @@ public sealed partial class ItExtensionsTests
 			[InlineData("[1, 2,]", "[1, 2]", false)]
 			public async Task WithOptions_ShouldApplyOptions(string body, string expected, bool allowTrailingCommas)
 			{
-				HttpClient httpClient = Mock.Create<HttpClient>();
-				httpClient.SetupMock.Method
+				HttpClient httpClient = HttpClient.CreateMock();
+				httpClient.Mock.Setup
 					.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJson(expected, new JsonDocumentOptions
 					{
 						AllowTrailingCommas = allowTrailingCommas,
@@ -262,8 +262,8 @@ public sealed partial class ItExtensionsTests
 				[MemberData(nameof(MatchingArrayValues))]
 				public async Task MatchingValues_ShouldSucceed(string[] expected, string body)
 				{
-					HttpClient httpClient = Mock.Create<HttpClient>();
-					httpClient.SetupMock.Method
+					HttpClient httpClient = HttpClient.CreateMock();
+					httpClient.Mock.Setup
 						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(expected))
 						.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
@@ -273,7 +273,7 @@ public sealed partial class ItExtensionsTests
 
 					await That(result.StatusCode)
 						.IsEqualTo(HttpStatusCode.OK);
-					await That(httpClient.VerifyMock.Invoked
+					await That(httpClient.Mock.Verify
 							.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(expected)))
 						.Once();
 				}
@@ -282,8 +282,8 @@ public sealed partial class ItExtensionsTests
 				[MemberData(nameof(NotMatchingArrayValues))]
 				public async Task NotMatchingValues_ShouldFail(string[] expected, string body)
 				{
-					HttpClient httpClient = Mock.Create<HttpClient>();
-					httpClient.SetupMock.Method
+					HttpClient httpClient = HttpClient.CreateMock();
+					httpClient.Mock.Setup
 						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(expected))
 						.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
@@ -299,8 +299,8 @@ public sealed partial class ItExtensionsTests
 				public async Task WhenElementsAreInDifferentOrder_ShouldFail()
 				{
 					string body = "[1, 2]";
-					HttpClient httpClient = Mock.Create<HttpClient>();
-					httpClient.SetupMock.Method
+					HttpClient httpClient = HttpClient.CreateMock();
+					httpClient.Mock.Setup
 						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching([2, 1,]))
 						.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
@@ -316,8 +316,8 @@ public sealed partial class ItExtensionsTests
 				public async Task WhenExpectedContainsAdditionalElements_ShouldFail()
 				{
 					string body = "[1, 2]";
-					HttpClient httpClient = Mock.Create<HttpClient>();
-					httpClient.SetupMock.Method
+					HttpClient httpClient = HttpClient.CreateMock();
+					httpClient.Mock.Setup
 						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching([1, 2, 3,]))
 						.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
@@ -333,8 +333,8 @@ public sealed partial class ItExtensionsTests
 				public async Task WhenSubjectContainsAdditionalElements_ShouldSucceed()
 				{
 					string body = "[1, 2, 3]";
-					HttpClient httpClient = Mock.Create<HttpClient>();
-					httpClient.SetupMock.Method
+					HttpClient httpClient = HttpClient.CreateMock();
+					httpClient.Mock.Setup
 						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching([1, 2,]))
 						.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
@@ -344,7 +344,7 @@ public sealed partial class ItExtensionsTests
 
 					await That(result.StatusCode)
 						.IsEqualTo(HttpStatusCode.OK);
-					await That(httpClient.VerifyMock.Invoked
+					await That(httpClient.Mock.Verify
 							.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching([1, 2,])))
 						.Once();
 				}
@@ -353,8 +353,8 @@ public sealed partial class ItExtensionsTests
 				public async Task WhenSubjectContainsAdditionalElements_WhenNotIgnoringAdditionalProperties_ShouldFail()
 				{
 					string body = "[1, 2, 3]";
-					HttpClient httpClient = Mock.Create<HttpClient>();
-					httpClient.SetupMock.Method
+					HttpClient httpClient = HttpClient.CreateMock();
+					httpClient.Mock.Setup
 						.PostAsync(It.IsAny<Uri>(),
 							It.IsHttpContent().WithJsonMatching([1, 2,]).IgnoringAdditionalProperties(false))
 						.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
@@ -373,8 +373,8 @@ public sealed partial class ItExtensionsTests
 				public async Task WithOptions_ShouldApplyOptions(bool allowTrailingCommas)
 				{
 					string body = "[1, 2,]";
-					HttpClient httpClient = Mock.Create<HttpClient>();
-					httpClient.SetupMock.Method
+					HttpClient httpClient = HttpClient.CreateMock();
+					httpClient.Mock.Setup
 						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching([1, 2,], new JsonDocumentOptions
 						{
 							AllowTrailingCommas = allowTrailingCommas,
@@ -431,8 +431,8 @@ public sealed partial class ItExtensionsTests
 				[InlineData("{\"foo\": 2}", true)]
 				public async Task ShouldFailIfPropertyIsMissing(string body, bool expectSuccess)
 				{
-					HttpClient httpClient = Mock.Create<HttpClient>();
-					httpClient.SetupMock.Method
+					HttpClient httpClient = HttpClient.CreateMock();
+					httpClient.Mock.Setup
 						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
 						{
 							foo = 2,
@@ -452,8 +452,8 @@ public sealed partial class ItExtensionsTests
 				[InlineData("{\"foo\": 1}")]
 				public async Task WhenExpectedIsEmpty_ShouldSucceed(string body)
 				{
-					HttpClient httpClient = Mock.Create<HttpClient>();
-					httpClient.SetupMock.Method
+					HttpClient httpClient = HttpClient.CreateMock();
+					httpClient.Mock.Setup
 						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new object()))
 						.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
@@ -463,7 +463,7 @@ public sealed partial class ItExtensionsTests
 
 					await That(result.StatusCode)
 						.IsEqualTo(HttpStatusCode.OK);
-					await That(httpClient.VerifyMock.Invoked
+					await That(httpClient.Mock.Verify
 							.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new object())))
 						.Once();
 				}
@@ -472,8 +472,8 @@ public sealed partial class ItExtensionsTests
 				public async Task WhenPropertyHasDifferentValue_ShouldFail()
 				{
 					string body = "{\"bar\": 2}";
-					HttpClient httpClient = Mock.Create<HttpClient>();
-					httpClient.SetupMock.Method
+					HttpClient httpClient = HttpClient.CreateMock();
+					httpClient.Mock.Setup
 						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
 						{
 							bar = 3,
@@ -492,8 +492,8 @@ public sealed partial class ItExtensionsTests
 				public async Task WhenSubjectHasAdditionalProperties_ShouldSucceed()
 				{
 					string body = "{\"foo\": null, \"bar\": 2}";
-					HttpClient httpClient = Mock.Create<HttpClient>();
-					httpClient.SetupMock.Method
+					HttpClient httpClient = HttpClient.CreateMock();
+					httpClient.Mock.Setup
 						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
 						{
 							bar = 2,
@@ -506,7 +506,7 @@ public sealed partial class ItExtensionsTests
 
 					await That(result.StatusCode)
 						.IsEqualTo(HttpStatusCode.OK);
-					await That(httpClient.VerifyMock.Invoked
+					await That(httpClient.Mock.Verify
 							.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
 							{
 								bar = 2,
@@ -518,8 +518,8 @@ public sealed partial class ItExtensionsTests
 				public async Task WhenSubjectHasAdditionalProperties_WhenNotIgnoringAdditionalProperties_ShouldFail()
 				{
 					string body = "{\"foo\": null, \"bar\": 2}";
-					HttpClient httpClient = Mock.Create<HttpClient>();
-					httpClient.SetupMock.Method
+					HttpClient httpClient = HttpClient.CreateMock();
+					httpClient.Mock.Setup
 						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
 						{
 							bar = 2,
@@ -540,8 +540,8 @@ public sealed partial class ItExtensionsTests
 				public async Task WithOptions_ShouldApplyOptions(bool allowTrailingCommas)
 				{
 					string body = "{\"foo\": 1,}";
-					HttpClient httpClient = Mock.Create<HttpClient>();
-					httpClient.SetupMock.Method
+					HttpClient httpClient = HttpClient.CreateMock();
+					httpClient.Mock.Setup
 						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
 							{
 								foo = 1,

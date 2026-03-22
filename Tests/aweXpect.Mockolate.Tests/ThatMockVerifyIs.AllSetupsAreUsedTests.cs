@@ -10,20 +10,20 @@ public sealed partial class ThatMockVerifyIs
 		[Fact]
 		public async Task Negated_WhenAllSetupsAreUsed_ShouldThrow()
 		{
-			IMyService mock = Mock.Create<IMyService>();
-			mock.SetupMock.Method.DoWork(It.IsAny<int>());
+			IMyService sut = IMyService.CreateMock();
+			sut.Mock.Setup.DoWork(It.IsAny<int>());
 
-			mock.DoWork(1);
-			mock.DoWork(2);
+			sut.DoWork(1);
+			sut.DoWork(2);
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock).DoesNotComplyWith(it => it.AllSetupsAreUsed());
+				await That(sut.Mock.Verify).DoesNotComplyWith(it => it.AllSetupsAreUsed());
 			}
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-				             Expected that the ThatMockVerifyIs.IMyService mock
+				             Expected that the aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService mock
 				             has not used all setups,
 				             but all were
 				             """);
@@ -32,15 +32,15 @@ public sealed partial class ThatMockVerifyIs
 		[Fact]
 		public async Task WhenAllInvocationsWereVerified_ShouldNotThrow()
 		{
-			IMyService mock = Mock.Create<IMyService>();
-			mock.SetupMock.Method.DoWork(It.IsAny<int>());
+			IMyService sut = IMyService.CreateMock();
+			sut.Mock.Setup.DoWork(It.IsAny<int>());
 
-			mock.DoWork(1);
-			mock.DoWork(2);
+			sut.DoWork(1);
+			sut.DoWork(2);
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock).AllSetupsAreUsed();
+				await That(sut.Mock.Verify).AllSetupsAreUsed();
 			}
 
 			await That(Act).DoesNotThrow();
@@ -49,48 +49,48 @@ public sealed partial class ThatMockVerifyIs
 		[Fact]
 		public async Task WhenMultipleSetupsAreNotUsed_ShouldThrow()
 		{
-			IMyService mock = Mock.Create<IMyService>();
-			mock.SetupMock.Method.DoWork(It.Is(1));
-			mock.SetupMock.Method.DoWork(It.Is(2));
-			mock.SetupMock.Method.DoWork(It.Is(3));
+			IMyService sut = IMyService.CreateMock();
+			sut.Mock.Setup.DoWork(It.Is(1));
+			sut.Mock.Setup.DoWork(It.Is(2));
+			sut.Mock.Setup.DoWork(It.Is(3));
 
-			mock.DoWork(2);
+			sut.DoWork(2);
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock).AllSetupsAreUsed();
+				await That(sut.Mock.Verify).AllSetupsAreUsed();
 			}
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-				             Expected that the ThatMockVerifyIs.IMyService mock
+				             Expected that the aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService mock
 				             has used all setups,
 				             but the following 2 setups were not used:
-				              - void aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService.DoWork(3)
-				              - void aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService.DoWork(1)
+				              - void global::aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService.DoWork(3)
+				              - void global::aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService.DoWork(1)
 				             """);
 		}
 
 		[Fact]
 		public async Task WhenOneSetupIsNotUsed_ShouldThrow()
 		{
-			IMyService mock = Mock.Create<IMyService>();
-			mock.SetupMock.Method.DoWork(It.Is(1));
-			mock.SetupMock.Method.DoWork(It.Is(2));
+			IMyService sut = IMyService.CreateMock();
+			sut.Mock.Setup.DoWork(It.Is(1));
+			sut.Mock.Setup.DoWork(It.Is(2));
 
-			mock.DoWork(1);
+			sut.DoWork(1);
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock).AllSetupsAreUsed();
+				await That(sut.Mock.Verify).AllSetupsAreUsed();
 			}
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-				             Expected that the ThatMockVerifyIs.IMyService mock
+				             Expected that the aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService mock
 				             has used all setups,
 				             but the following setup was not used:
-				              - void aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService.DoWork(2)
+				              - void global::aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService.DoWork(2)
 				             """);
 		}
 	}

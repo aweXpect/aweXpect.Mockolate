@@ -10,28 +10,28 @@ public sealed partial class ThatVerificationResultIs
 		[Fact]
 		public async Task WhenInvokedMoreThanTwice_ShouldFail()
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 
-			mock.MyMethod(1, false);
-			mock.MyMethod(1, false);
-			mock.MyMethod(1, false);
+			sut.MyMethod(1, false);
+			sut.MyMethod(1, false);
+			sut.MyMethod(1, false);
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Never();
+				await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).Never();
 			}
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-				             Expected that the ThatVerificationResultIs.IMyService mock
+				             Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
 				             never invoked method MyMethod(1, false),
 				             but found it 3 times
 
 				             Interactions:
 				             [
-				               [0] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1, False),
-				               [1] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1, False),
-				               [2] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1, False)
+				               [0] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1, False),
+				               [1] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1, False),
+				               [2] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1, False)
 				             ]
 				             """);
 		}
@@ -39,11 +39,11 @@ public sealed partial class ThatVerificationResultIs
 		[Fact]
 		public async Task WhenInvokedNever_ShouldSucceed()
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Never();
+				await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).Never();
 			}
 
 			await That(Act).DoesNotThrow();
@@ -52,24 +52,24 @@ public sealed partial class ThatVerificationResultIs
 		[Fact]
 		public async Task WhenInvokedOnce_ShouldFail()
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 
-			mock.MyMethod(1, false);
+			sut.MyMethod(1, false);
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Never();
+				await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).Never();
 			}
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-				             Expected that the ThatVerificationResultIs.IMyService mock
+				             Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
 				             never invoked method MyMethod(1, false),
 				             but found it once
 
 				             Interactions:
 				             [
-				               [0] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1, False)
+				               [0] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1, False)
 				             ]
 				             """);
 		}
@@ -77,26 +77,26 @@ public sealed partial class ThatVerificationResultIs
 		[Fact]
 		public async Task WhenInvokedTwice_ShouldFail()
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 
-			mock.MyMethod(1, false);
-			mock.MyMethod(1, false);
+			sut.MyMethod(1, false);
+			sut.MyMethod(1, false);
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Never();
+				await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).Never();
 			}
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-				             Expected that the ThatVerificationResultIs.IMyService mock
+				             Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
 				             never invoked method MyMethod(1, false),
 				             but found it twice
 
 				             Interactions:
 				             [
-				               [0] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1, False),
-				               [1] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1, False)
+				               [0] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1, False),
+				               [1] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1, False)
 				             ]
 				             """);
 		}

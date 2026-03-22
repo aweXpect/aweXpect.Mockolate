@@ -6,6 +6,7 @@ using aweXpect.Core;
 using aweXpect.Core.Constraints;
 using aweXpect.Helpers;
 using aweXpect.Options;
+using Mockolate;
 using Mockolate.Verify;
 
 namespace aweXpect;
@@ -129,7 +130,8 @@ public static partial class ThatVerificationResult
 		public override bool TryGetValue<TValue>([NotNullWhen(true)] out TValue? value) where TValue : default
 		{
 			if (typeof(TValue) == typeof(IDescribableSubject) &&
-			    new MyDescribableSubject<TVerify>() is TValue describableSubject)
+			    Actual is IVerificationResult<TVerify> verificationResult &&
+			    new MyDescribableSubject<TVerify>(verificationResult.Object as IMock) is TValue describableSubject)
 			{
 				value = describableSubject;
 				return true;
@@ -192,7 +194,8 @@ public static partial class ThatVerificationResult
 		public override bool TryGetValue<TValue>([NotNullWhen(true)] out TValue? value) where TValue : default
 		{
 			if (typeof(TValue) == typeof(IDescribableSubject) &&
-			    new MyDescribableSubject<TVerify>() is TValue describableSubject)
+			    Actual is IVerificationResult<TVerify> verificationResult &&
+			    new MyDescribableSubject<TVerify>(verificationResult.Object as IMock) is TValue describableSubject)
 			{
 				value = describableSubject;
 				return true;
@@ -288,7 +291,8 @@ public static partial class ThatVerificationResult
 		public override bool TryGetValue<TValue>([NotNullWhen(true)] out TValue? value) where TValue : default
 		{
 			if (typeof(TValue) == typeof(IDescribableSubject) &&
-			    new MyDescribableSubject<TVerify>() is TValue describableSubject)
+			    Actual is IVerificationResult<TVerify> verificationResult &&
+			    new MyDescribableSubject<TVerify>(verificationResult.Object as IMock) is TValue describableSubject)
 			{
 				value = describableSubject;
 				return true;

@@ -12,7 +12,7 @@ public sealed partial class ThatVerificationResultIs
 		[Fact]
 		public async Task WhenInvokedInBackground_ShouldFail()
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 			using CancellationTokenSource cts = new();
 			CancellationToken token = cts.Token;
 
@@ -24,7 +24,7 @@ public sealed partial class ThatVerificationResultIs
 					while (!token.IsCancellationRequested)
 					{
 						await Task.Delay(50, token).ConfigureAwait(false);
-						mock.MyMethod(1, false);
+						sut.MyMethod(1, false);
 					}
 				}
 				catch (OperationCanceledException)
@@ -35,12 +35,12 @@ public sealed partial class ThatVerificationResultIs
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Between(3).And(6);
+				await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).Between(3).And(6);
 			}
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-				             Expected that the ThatVerificationResultIs.IMyService mock
+				             Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
 				             invoked method MyMethod(1, false) between 3 and 6 times,
 				             but never found it
 
@@ -58,7 +58,7 @@ public sealed partial class ThatVerificationResultIs
 		public async Task WhenInvokedInBackground_WithCancellation_ShouldSucceed(int minimum, int maximum,
 			int invocationTimes)
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 			using CancellationTokenSource cts = new(30.Seconds());
 			CancellationToken token = cts.Token;
 
@@ -66,11 +66,11 @@ public sealed partial class ThatVerificationResultIs
 			{
 				for (int i = 0; i < invocationTimes; i++)
 				{
-					mock.MyMethod(1, false);
+					sut.MyMethod(1, false);
 				}
 			}, token);
 
-			await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Between(minimum).And(maximum)
+			await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).Between(minimum).And(maximum)
 				.WithCancellation(token);
 
 			await backgroundTask;
@@ -82,17 +82,17 @@ public sealed partial class ThatVerificationResultIs
 		[InlineData(5, 8, 8)]
 		public async Task WhenInvokedInBackground_Within_ShouldSucceed(int minimum, int maximum, int invocationTimes)
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 
 			Task backgroundTask = Task.Delay(50).ContinueWith(_ =>
 			{
 				for (int i = 0; i < invocationTimes; i++)
 				{
-					mock.MyMethod(1, false);
+					sut.MyMethod(1, false);
 				}
 			});
 
-			await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Between(minimum).And(maximum)
+			await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).Between(minimum).And(maximum)
 				.Within(30.Seconds());
 
 			await backgroundTask;
@@ -105,17 +105,17 @@ public sealed partial class ThatVerificationResultIs
 		public async Task WhenInvokedInBackground_WithTimeout_ShouldSucceed(int minimum, int maximum,
 			int invocationTimes)
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 
 			Task backgroundTask = Task.Delay(50).ContinueWith(_ =>
 			{
 				for (int i = 0; i < invocationTimes; i++)
 				{
-					mock.MyMethod(1, false);
+					sut.MyMethod(1, false);
 				}
 			});
 
-			await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Between(minimum).And(maximum)
+			await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).Between(minimum).And(maximum)
 				.WithTimeout(30.Seconds());
 
 			await backgroundTask;
@@ -128,16 +128,16 @@ public sealed partial class ThatVerificationResultIs
 		[InlineData(3, 8, 6)]
 		public async Task WhenInvokedInRange_ShouldSucceed(int minimum, int maximum, int invocationTimes)
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 
 			for (int i = 0; i < invocationTimes; i++)
 			{
-				mock.MyMethod(1, false);
+				sut.MyMethod(1, false);
 			}
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Between(minimum).And(maximum);
+				await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).Between(minimum).And(maximum);
 			}
 
 			await That(Act).DoesNotThrow();
@@ -149,16 +149,16 @@ public sealed partial class ThatVerificationResultIs
 		[InlineData(1, 2, true)]
 		public async Task WhenInvokedNever_ShouldFailUnlessZero(int minimum, int maximum, bool shouldThrow)
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Between(minimum).And(maximum);
+				await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).Between(minimum).And(maximum);
 			}
 
 			await That(Act).Throws<XunitException>().OnlyIf(shouldThrow)
 				.WithMessage($"""
-				              Expected that the ThatVerificationResultIs.IMyService mock
+				              Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
 				              invoked method MyMethod(1, false) between {minimum} and {maximum} times,
 				              but never found it
 
@@ -172,21 +172,21 @@ public sealed partial class ThatVerificationResultIs
 		[InlineData(8, 12, 6)]
 		public async Task WhenInvokedTooFewTimes_ShouldFail(int minimum, int maximum, int invocationTimes)
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 
 			for (int i = 0; i < invocationTimes; i++)
 			{
-				mock.MyMethod(1, false);
+				sut.MyMethod(1, false);
 			}
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Between(minimum).And(maximum);
+				await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).Between(minimum).And(maximum);
 			}
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage($"""
-				              Expected that the ThatVerificationResultIs.IMyService mock
+				              Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
 				              invoked method MyMethod(1, false) between {minimum} and {maximum} times,
 				              but found it only {invocationTimes} times
 
@@ -202,21 +202,21 @@ public sealed partial class ThatVerificationResultIs
 		[InlineData(8, 12, 14)]
 		public async Task WhenInvokedTooOften_ShouldFail(int minimum, int maximum, int invocationTimes)
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 
 			for (int i = 0; i < invocationTimes; i++)
 			{
-				mock.MyMethod(1, false);
+				sut.MyMethod(1, false);
 			}
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Between(minimum).And(maximum);
+				await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).Between(minimum).And(maximum);
 			}
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage($"""
-				              Expected that the ThatVerificationResultIs.IMyService mock
+				              Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
 				              invoked method MyMethod(1, false) between {minimum} and {maximum} times,
 				              but found it {invocationTimes} times
 

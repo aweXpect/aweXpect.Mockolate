@@ -8,7 +8,6 @@ using aweXpect.Core.Constraints;
 using aweXpect.Helpers;
 using aweXpect.Results;
 using Mockolate;
-using Mockolate.Exceptions;
 using Mockolate.Verify;
 using Mockolate.Interactions;
 
@@ -20,7 +19,7 @@ public static partial class ThatVerificationResult
 	///     Verifies that the <paramref name="interactions" /> happen after the current interaction in the given order.
 	/// </summary>
 	public static AndOrResult<VerificationResult<T>, IThat<VerificationResult<T>>> Then<T>(
-		this IThat<VerificationResult<T>> subject, params Func<IMockVerify<T>, VerificationResult<T>>[] interactions)
+		this IThat<VerificationResult<T>> subject, params Func<T, VerificationResult<T>>[] interactions)
 		=> new(subject.Get().ExpectationBuilder.AddConstraint((expectationBuilder, it, grammars)
 				=> new ThenConstraint<T>(expectationBuilder, it, grammars, interactions)),
 			subject);
@@ -29,7 +28,7 @@ public static partial class ThatVerificationResult
 		ExpectationBuilder expectationBuilder,
 		string it,
 		ExpectationGrammars grammars,
-		Func<IMockVerify<T>, VerificationResult<T>>[] interactions)
+		Func<T, VerificationResult<T>>[] interactions)
 		: ConstraintResult.WithValue<VerificationResult<T>>(grammars),
 			IValueConstraint<VerificationResult<T>>
 	{
@@ -41,10 +40,10 @@ public static partial class ThatVerificationResult
 			Actual = actual;
 			_expectations.Clear();
 			bool result = true;
-			IMockVerify<T> verify = GetMockVerify(((IVerificationResult<T>)actual).Object);
+			T verify = ((IVerificationResult<T>)actual).Object;
 			IVerificationResult verificationResult = actual;
 			int after = -1;
-			foreach (Func<IMockVerify<T>, VerificationResult<T>> check in interactions)
+			foreach (Func<T, VerificationResult<T>> check in interactions)
 			{
 				IVerificationResult currentVerificationResult = verificationResult;
 				_expectations.Add(currentVerificationResult.Expectation);
@@ -77,20 +76,6 @@ public static partial class ThatVerificationResult
 				}
 				return hasInteractionAfter;
 			}
-			static IMockVerify<T> GetMockVerify(T subject)
-			{
-				if (subject is IMockSubject<T> mockSubject)
-				{
-					return mockSubject.Mock;
-				}
-
-				if (subject is IHasMockRegistration hasMockRegistration)
-				{
-					return new Mock<T>(subject, hasMockRegistration.Registrations);
-				}
-
-				throw new MockException("The subject is no mock subject.");
-			}
 		}
 
 		protected override void AppendNormalExpectation(StringBuilder stringBuilder, string? indentation = null)
@@ -116,7 +101,8 @@ public static partial class ThatVerificationResult
 		public override bool TryGetValue<TValue>([NotNullWhen(true)] out TValue? value) where TValue : default
 		{
 			if (typeof(TValue) == typeof(IDescribableSubject) &&
-				new MyDescribableSubject<T>() is TValue describableSubject)
+			    Actual is IVerificationResult<T> verificationResult &&
+				new MyDescribableSubject<T>(verificationResult.Object as IMock) is TValue describableSubject)
 			{
 				value = describableSubject;
 				return true;

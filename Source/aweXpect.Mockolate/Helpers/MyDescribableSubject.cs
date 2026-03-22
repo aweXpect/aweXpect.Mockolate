@@ -1,23 +1,12 @@
-﻿using System;
-using aweXpect.Core;
+﻿using aweXpect.Core;
+using Mockolate;
 
 namespace aweXpect.Helpers;
 
-internal sealed class MyDescribableSubject<TVerify> : IDescribableSubject
+internal sealed class MyDescribableSubject<T>(IMock? mock) : IDescribableSubject
 {
 	public string GetDescription()
-	{
-		string mockVerify = Formatter.Format(typeof(TVerify));
-		if (mockVerify.StartsWith("MockVerify", StringComparison.Ordinal))
-		{
-			mockVerify = $"Mock{mockVerify.Substring("MockVerify".Length)}";
-			int genericSeparator = mockVerify.IndexOf(", ", StringComparison.Ordinal);
-			if (genericSeparator > 0)
-			{
-				mockVerify = $"{mockVerify.Substring(0, genericSeparator)}>";
-			}
-		}
-
-		return $"the {mockVerify} mock";
-	}
+		=> mock is not null
+			? $"the {mock.ToString()}"
+			: $"the {Formatter.Format(typeof(T))} mock";
 }

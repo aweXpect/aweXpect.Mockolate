@@ -32,7 +32,7 @@ public static partial class ThatMockVerify
 		public ConstraintResult IsMetBy(IMockVerify<TVerify> actual)
 		{
 			Actual = actual;
-			Outcome = actual.ThatAllSetupsAreUsed()
+			Outcome = actual is IMock mock && mock.Registrations.GetUnusedSetups(mock.Registrations.Interactions).Count == 0
 				? Outcome.Success
 				: Outcome.Failure;
 			return this;
@@ -43,10 +43,10 @@ public static partial class ThatMockVerify
 
 		protected override void AppendNormalResult(StringBuilder stringBuilder, string? indentation = null)
 		{
-			if (Actual is IHasMockRegistration mockRegistration)
+			if (Actual is IMock mock)
 			{
 				IReadOnlyCollection<ISetup> unusedSetups =
-					mockRegistration.Registrations.GetUnusedSetups(mockRegistration.Registrations.Interactions);
+					mock.Registrations.GetUnusedSetups(mock.Registrations.Interactions);
 				stringBuilder.Append("the following ");
 				if (unusedSetups.Count == 1)
 				{
@@ -76,7 +76,7 @@ public static partial class ThatMockVerify
 		public override bool TryGetValue<TValue>([NotNullWhen(true)] out TValue? value) where TValue : default
 		{
 			if (typeof(TValue) == typeof(IDescribableSubject) &&
-			    new MyDescribableSubject<TVerify>() is TValue describableSubject)
+			    new MyDescribableSubject<TVerify>(Actual as IMock) is TValue describableSubject)
 			{
 				value = describableSubject;
 				return true;
