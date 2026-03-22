@@ -15,19 +15,19 @@ Expectations to verify interactions with mocks from [Mockolate](https://github.c
 Verify that a method was called a specific number of times:
 
 ```csharp
-var mock = Mock.Create<IMyService>();
-mock.MyMethod();
+var sut = IMyService.CreateMock();
+sut.MyMethod();
 
-await That(mock.VerifyMock.Invoked.MyMethod()).Once();             // Exactly once
-await That(mock.VerifyMock.Invoked.MyMethod()).Twice();            // Exactly twice
-await That(mock.VerifyMock.Invoked.MyMethod()).Never();            // Never called
-await That(mock.VerifyMock.Invoked.MyMethod()).AtLeastOnce();      // At least once
-await That(mock.VerifyMock.Invoked.MyMethod()).AtLeastTwice();     // At least twice
-await That(mock.VerifyMock.Invoked.MyMethod()).AtLeast(3.Times()); // At least 3 times
-await That(mock.VerifyMock.Invoked.MyMethod()).AtMostOnce();       // At most once
-await That(mock.VerifyMock.Invoked.MyMethod()).AtMostTwice();      // At most twice
-await That(mock.VerifyMock.Invoked.MyMethod()).AtMost(4.Times());  // At most 4 times
-await That(mock.VerifyMock.Invoked.MyMethod()).Exactly(2.Times()); // Exactly 2 times
+await That(sut.Mock.Verify.MyMethod()).Once();             // Exactly once
+await That(sut.Mock.Verify.MyMethod()).Twice();            // Exactly twice
+await That(sut.Mock.Verify.MyMethod()).Never();            // Never called
+await That(sut.Mock.Verify.MyMethod()).AtLeastOnce();      // At least once
+await That(sut.Mock.Verify.MyMethod()).AtLeastTwice();     // At least twice
+await That(sut.Mock.Verify.MyMethod()).AtLeast(3.Times()); // At least 3 times
+await That(sut.Mock.Verify.MyMethod()).AtMostOnce();       // At most once
+await That(sut.Mock.Verify.MyMethod()).AtMostTwice();      // At most twice
+await That(sut.Mock.Verify.MyMethod()).AtMost(4.Times());  // At most 4 times
+await That(sut.Mock.Verify.MyMethod()).Exactly(2.Times()); // Exactly 2 times
 ```
 
 #### Asynchronous verification
@@ -36,17 +36,17 @@ With `Within(TimeSpan timeout)`, you can check whether the expected number of ca
 interval. This is useful for asynchronous or delayed invocations in the background.
 
 ```csharp
-var mock = Mock.Create<IMyService>();
+var sut = IMyService.CreateMock();
 
 // Start asynchronous calls, e.g., in a Task
 Task.Run(async () =>
 {
     await Task.Delay(500);
-    mock.MyMethod();
+    sut.MyMethod();
 });
 
 // Verifies that MyMethod was called at least once within 1 second
-await That(mock.VerifyMock.Invoked.MyMethod())
+await That(sut.Mock.Verify.MyMethod())
     .AtLeastOnce()
     .Within(TimeSpan.FromSeconds(1));
 ```
@@ -58,7 +58,7 @@ for the expected interactions:
 var token = new CancellationTokenSource(TimeSpan.FromSeconds(1)).Token;
 
 // Verifies that MyMethod was called at least once within 1 second
-await That(mock.VerifyMock.Invoked.MyMethod())
+await That(sut.Mock.Verify.MyMethod())
     .AtLeastOnce()
     .WithCancellation(token);
 ```
@@ -68,16 +68,16 @@ await That(mock.VerifyMock.Invoked.MyMethod())
 Verify that methods were called in a specific sequence:
 
 ```csharp
-var mock = Mock.Create<IMyService>();
-mock.MyMethod(1);
-mock.MyMethod(2);
-mock.MyMethod(3);
-mock.MyMethod(4);
+var sut = IMyService.CreateMock();
+sut.MyMethod(1);
+sut.MyMethod(2);
+sut.MyMethod(3);
+sut.MyMethod(4);
 
 // Verifies MyMethod(1), then MyMethod(2), then MyMethod(4) were called in order
-await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1))).Then(
-    m => m.Invoked.MyMethod(It.Is(2)),
-    m => m.Invoked.MyMethod(It.Is(4))
+await That(sut.Mock.Verify.MyMethod(It.Is(1))).Then(
+    m => m.MyMethod(It.Is(2)),
+    m => m.MyMethod(It.Is(4))
 );
 ```
 
@@ -89,13 +89,13 @@ With `AllInteractionsAreVerified` you can check whether all interactions with th
 helps to detect unintended or forgotten calls.
 
 ```csharp
-var mock = Mock.Create<IMyService>();
-mock.MyMethod(1);
-mock.MyMethod(2);
+var sut = IMyService.CreateMock();
+sut.MyMethod(1);
+sut.MyMethod(2);
 
-await That(mock.VerifyMock.Invoked.MyMethod(It.IsAny<int>())).AtLeastOnce();
+await That(sut.Mock.Verify.MyMethod(It.IsAny<int>())).AtLeastOnce();
  // Succeeds, because the verification applies to both method calls.
-await That(mock.VerifyMock).AllInteractionsAreVerified();
+await That(sut.Mock.Verify).AllInteractionsAreVerified();
 ```
 
 #### All setups are used
@@ -104,14 +104,14 @@ With `AllSetupsAreUsed` you can check whether all defined setups on the mock hav
 no setup configurations remain unused.
 
 ```csharp
-var mock = Mock.Create<IMyService>();
-mock.SetupMock.Method.MyMethod(It.Is(1)).Returns(10);
-mock.SetupMock.Method.MyMethod(It.Is(2)).Returns(20);
+var sut = IMyService.CreateMock();
+sut.SetupMock.Method.MyMethod(It.Is(1)).Returns(10);
+sut.SetupMock.Method.MyMethod(It.Is(2)).Returns(20);
 
-mock.MyMethod(1);
+sut.MyMethod(1);
 
 // Fails, because the setup for MyMethod(2) was never used.
-await That(mock.VerifyMock).AllSetupsAreUsed();
+await That(sut.Mock.Verify).AllSetupsAreUsed();
 ```
 
 ### Web Extensions
@@ -123,12 +123,12 @@ especially useful for testing HTTP clients and web APIs.
 
 ```csharp
 // Verifies that a request was sent with a JSON body equivalent to { "foo": 1, "bar": "baz" }
-httpClient.SetupMock.Method
+httpClient.Mock.Setup
     .PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new { foo = 1, bar = \"baz\" }))
     .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
 // You can also provide a string representation of the JSON and it ignores formatting differences or property order
-httpClient.SetupMock.Method
+httpClient.Mock.Setup
     .PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJson("{\"bar\": \"baz\", \"foo\": 1}"))
     .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 ```
