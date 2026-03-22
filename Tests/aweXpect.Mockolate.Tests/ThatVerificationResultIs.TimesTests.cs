@@ -18,15 +18,15 @@ public sealed partial class ThatVerificationResultIs
 		[InlineData(5, false)]
 		public async Task Times_WithEvenPredicate_ShouldReturnExpectedResult(int count, bool expectSuccess)
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 			for (int i = 0; i < count; i++)
 			{
-				mock.MyMethod(1, false);
+				sut.MyMethod(1, false);
 			}
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Times(n => n % 2 == 0);
+				await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).Times(n => n % 2 == 0);
 			}
 
 			string expectedFoundTimes = count switch
@@ -39,7 +39,7 @@ public sealed partial class ThatVerificationResultIs
 
 			await That(Act).Throws<XunitException>().OnlyIf(!expectSuccess)
 				.WithMessage($"""
-				              Expected that the ThatVerificationResultIs.IMyService mock
+				              Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
 				              invoked method MyMethod(1, false) according to the predicate n => n % 2 == 0,
 				              but {expectedFoundTimes}
 
@@ -57,15 +57,15 @@ public sealed partial class ThatVerificationResultIs
 		[InlineData(5, true)]
 		public async Task Times_WithOddPredicate_ShouldReturnExpectedResult(int count, bool expectSuccess)
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 			for (int i = 0; i < count; i++)
 			{
-				mock.MyMethod(1, false);
+				sut.MyMethod(1, false);
 			}
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Times(n => n % 2 == 1);
+				await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).Times(n => n % 2 == 1);
 			}
 
 			string expectedFoundTimes = count switch
@@ -78,7 +78,7 @@ public sealed partial class ThatVerificationResultIs
 
 			await That(Act).Throws<XunitException>().OnlyIf(!expectSuccess)
 				.WithMessage($"""
-				              Expected that the ThatVerificationResultIs.IMyService mock
+				              Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
 				              invoked method MyMethod(1, false) according to the predicate n => n % 2 == 1,
 				              but {expectedFoundTimes}
 
@@ -90,7 +90,7 @@ public sealed partial class ThatVerificationResultIs
 		[Fact]
 		public async Task WhenInvokedInBackground_ShouldFail()
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 			using CancellationTokenSource cts = new();
 			CancellationToken token = cts.Token;
 
@@ -102,7 +102,7 @@ public sealed partial class ThatVerificationResultIs
 					while (!token.IsCancellationRequested)
 					{
 						await Task.Delay(50, token).ConfigureAwait(false);
-						mock.MyMethod(1, false);
+						sut.MyMethod(1, false);
 					}
 				}
 				catch (OperationCanceledException)
@@ -113,12 +113,12 @@ public sealed partial class ThatVerificationResultIs
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Times(n => n % 3 == 2);
+				await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).Times(n => n % 3 == 2);
 			}
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-				             Expected that the ThatVerificationResultIs.IMyService mock
+				             Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
 				             invoked method MyMethod(1, false) according to the predicate n => n % 3 == 2,
 				             but never found it
 
@@ -134,7 +134,7 @@ public sealed partial class ThatVerificationResultIs
 		[InlineData(3)]
 		public async Task WhenInvokedInBackground_WithCancellation_ShouldSucceed(int invocationTimes)
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 			using CancellationTokenSource cts = new(30.Seconds());
 			CancellationToken token = cts.Token;
 
@@ -143,12 +143,12 @@ public sealed partial class ThatVerificationResultIs
 				await Task.Delay(50, token);
 				for (int i = 0; i < invocationTimes; i++)
 				{
-					mock.MyMethod(1, false);
+					sut.MyMethod(1, false);
 					await Task.Delay(50);
 				}
 			}, token);
 
-			await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Times(n => n % 3 == 2)
+			await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).Times(n => n % 3 == 2)
 				.WithCancellation(token);
 
 			await backgroundTask;
@@ -159,19 +159,19 @@ public sealed partial class ThatVerificationResultIs
 		[InlineData(3)]
 		public async Task WhenInvokedInBackground_Within_ShouldSucceed(int invocationTimes)
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 
 			Task backgroundTask = Task.Run(async () =>
 			{
 				await Task.Delay(50);
 				for (int i = 0; i < invocationTimes; i++)
 				{
-					mock.MyMethod(1, false);
+					sut.MyMethod(1, false);
 					await Task.Delay(50);
 				}
 			});
 
-			await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Times(n => n % 3 == 2)
+			await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).Times(n => n % 3 == 2)
 				.Within(30.Seconds());
 
 			await backgroundTask;
@@ -182,19 +182,19 @@ public sealed partial class ThatVerificationResultIs
 		[InlineData(3)]
 		public async Task WhenInvokedInBackground_WithTimeout_ShouldSucceed(int invocationTimes)
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 
 			Task backgroundTask = Task.Run(async () =>
 			{
 				await Task.Delay(50);
 				for (int i = 0; i < invocationTimes; i++)
 				{
-					mock.MyMethod(1, false);
+					sut.MyMethod(1, false);
 					await Task.Delay(50);
 				}
 			});
 
-			await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).Times(n => n % 3 == 2)
+			await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).Times(n => n % 3 == 2)
 				.WithTimeout(30.Seconds());
 
 			await backgroundTask;

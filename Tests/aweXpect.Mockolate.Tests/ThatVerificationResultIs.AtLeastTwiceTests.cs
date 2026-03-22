@@ -12,7 +12,7 @@ public sealed partial class ThatVerificationResultIs
 		[Fact]
 		public async Task WhenInvokedInBackground_ShouldFail()
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 			using CancellationTokenSource cts = new();
 			CancellationToken token = cts.Token;
 
@@ -24,7 +24,7 @@ public sealed partial class ThatVerificationResultIs
 					while (!token.IsCancellationRequested)
 					{
 						await Task.Delay(50, token).ConfigureAwait(false);
-						mock.MyMethod(1, false);
+						sut.MyMethod(1, false);
 					}
 				}
 				catch (OperationCanceledException)
@@ -35,12 +35,12 @@ public sealed partial class ThatVerificationResultIs
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).AtLeastTwice();
+				await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).AtLeastTwice();
 			}
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-				             Expected that the ThatVerificationResultIs.IMyService mock
+				             Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
 				             invoked method MyMethod(1, false) at least twice,
 				             but never found it
 
@@ -56,7 +56,7 @@ public sealed partial class ThatVerificationResultIs
 		[InlineData(2)]
 		public async Task WhenInvokedInBackground_WithCancellation_ShouldSucceed(int invocationTimes)
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 			using CancellationTokenSource cts = new(30.Seconds());
 			CancellationToken token = cts.Token;
 
@@ -64,11 +64,11 @@ public sealed partial class ThatVerificationResultIs
 			{
 				for (int i = 0; i < invocationTimes; i++)
 				{
-					mock.MyMethod(1, false);
+					sut.MyMethod(1, false);
 				}
 			}, token);
 
-			await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).AtLeastTwice().WithCancellation(token);
+			await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).AtLeastTwice().WithCancellation(token);
 
 			await backgroundTask;
 		}
@@ -78,17 +78,17 @@ public sealed partial class ThatVerificationResultIs
 		[InlineData(2)]
 		public async Task WhenInvokedInBackground_Within_ShouldSucceed(int invocationTimes)
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 
 			Task backgroundTask = Task.Delay(50).ContinueWith(_ =>
 			{
 				for (int i = 0; i < invocationTimes; i++)
 				{
-					mock.MyMethod(1, false);
+					sut.MyMethod(1, false);
 				}
 			});
 
-			await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).AtLeastTwice().Within(30.Seconds());
+			await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).AtLeastTwice().Within(30.Seconds());
 
 			await backgroundTask;
 		}
@@ -98,17 +98,17 @@ public sealed partial class ThatVerificationResultIs
 		[InlineData(2)]
 		public async Task WhenInvokedInBackground_WithTimeout_ShouldSucceed(int invocationTimes)
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 
 			Task backgroundTask = Task.Delay(50).ContinueWith(_ =>
 			{
 				for (int i = 0; i < invocationTimes; i++)
 				{
-					mock.MyMethod(1, false);
+					sut.MyMethod(1, false);
 				}
 			});
 
-			await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).AtLeastTwice()
+			await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).AtLeastTwice()
 				.WithTimeout(30.Seconds());
 
 			await backgroundTask;
@@ -117,15 +117,15 @@ public sealed partial class ThatVerificationResultIs
 		[Fact]
 		public async Task WhenInvokedMoreThanTwice_ShouldSucceed()
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 
-			mock.MyMethod(1, false);
-			mock.MyMethod(1, false);
-			mock.MyMethod(1, false);
+			sut.MyMethod(1, false);
+			sut.MyMethod(1, false);
+			sut.MyMethod(1, false);
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).AtLeastTwice();
+				await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).AtLeastTwice();
 			}
 
 			await That(Act).DoesNotThrow();
@@ -134,16 +134,16 @@ public sealed partial class ThatVerificationResultIs
 		[Fact]
 		public async Task WhenInvokedNever_ShouldFail()
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).AtLeastTwice();
+				await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).AtLeastTwice();
 			}
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-				             Expected that the ThatVerificationResultIs.IMyService mock
+				             Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
 				             invoked method MyMethod(1, false) at least twice,
 				             but never found it
 
@@ -155,24 +155,24 @@ public sealed partial class ThatVerificationResultIs
 		[Fact]
 		public async Task WhenInvokedOnce_ShouldFail()
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 
-			mock.MyMethod(1, false);
+			sut.MyMethod(1, false);
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).AtLeastTwice();
+				await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).AtLeastTwice();
 			}
 
 			await That(Act).Throws<XunitException>()
 				.WithMessage("""
-				             Expected that the ThatVerificationResultIs.IMyService mock
+				             Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
 				             invoked method MyMethod(1, false) at least twice,
 				             but found it only once
 
 				             Interactions:
 				             [
-				               [0] invoke method aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1, False)
+				               [0] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1, False)
 				             ]
 				             """);
 		}
@@ -180,14 +180,14 @@ public sealed partial class ThatVerificationResultIs
 		[Fact]
 		public async Task WhenInvokedTwice_ShouldSucceed()
 		{
-			IMyService mock = Mock.Create<IMyService>();
+			IMyService sut = IMyService.CreateMock();
 
-			mock.MyMethod(1, false);
-			mock.MyMethod(1, false);
+			sut.MyMethod(1, false);
+			sut.MyMethod(1, false);
 
 			async Task Act()
 			{
-				await That(mock.VerifyMock.Invoked.MyMethod(It.Is(1), It.Is(false))).AtLeastTwice();
+				await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false))).AtLeastTwice();
 			}
 
 			await That(Act).DoesNotThrow();
