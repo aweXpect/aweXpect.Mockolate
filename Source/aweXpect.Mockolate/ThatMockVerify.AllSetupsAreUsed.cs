@@ -32,7 +32,7 @@ public static partial class ThatMockVerify
 		public ConstraintResult IsMetBy(IMockVerify<TVerify> actual)
 		{
 			Actual = actual;
-			Outcome = actual is IMock mock && mock.Registrations.GetUnusedSetups(mock.Registrations.Interactions).Count == 0
+			Outcome = actual is IMock mock && mock.MockRegistry.GetUnusedSetups(mock.MockRegistry.Interactions).Count == 0
 				? Outcome.Success
 				: Outcome.Failure;
 			return this;
@@ -46,7 +46,7 @@ public static partial class ThatMockVerify
 			if (Actual is IMock mock)
 			{
 				IReadOnlyCollection<ISetup> unusedSetups =
-					mock.Registrations.GetUnusedSetups(mock.Registrations.Interactions);
+					mock.MockRegistry.GetUnusedSetups(mock.MockRegistry.Interactions);
 				stringBuilder.Append("the following ");
 				if (unusedSetups.Count == 1)
 				{

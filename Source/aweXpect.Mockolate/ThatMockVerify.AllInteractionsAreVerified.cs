@@ -32,7 +32,7 @@ public static partial class ThatMockVerify
 		public ConstraintResult IsMetBy(IMockVerify<TVerify> actual)
 		{
 			Actual = actual;
-			Outcome = actual is IMock mock && mock.Registrations.Interactions.GetUnverifiedInteractions().Count == 0
+			Outcome = actual is IMock mock && mock.MockRegistry.Interactions.GetUnverifiedInteractions().Count == 0
 				? Outcome.Success
 				: Outcome.Failure;
 			return this;
@@ -46,7 +46,7 @@ public static partial class ThatMockVerify
 			if (Actual is IMock mock)
 			{
 				IReadOnlyCollection<IInteraction> missingInteractions =
-					mock.Registrations.Interactions.GetUnverifiedInteractions();
+					mock.MockRegistry.Interactions.GetUnverifiedInteractions();
 				stringBuilder.Append("the following ");
 				if (missingInteractions.Count == 1)
 				{
