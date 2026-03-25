@@ -7,6 +7,7 @@ using aweXpect.Core.Constraints;
 using aweXpect.Helpers;
 using aweXpect.Options;
 using Mockolate;
+using Mockolate.Exceptions;
 using Mockolate.Verify;
 
 namespace aweXpect;
@@ -58,17 +59,32 @@ public static partial class ThatVerificationResult
 			{
 				_expectation = asyncVerificationResult.Expectation;
 				Actual = actual;
-				Outcome = await asyncVerificationResult.VerifyAsync(interactions =>
+				try
 				{
-					string context = Formatter.Format(interactions, FormattingOptions.MultipleLines);
-					expectationBuilder.UpdateContexts(contexts => contexts.Add(
-						new ResultContext.SyncCallback("Interactions", () => context)));
-					_count = interactions.Length;
-					return interactions.Length == expected;
-				})
-					? Outcome.Success
-					: Outcome.Failure;
-				return this;
+					Outcome = await asyncVerificationResult.VerifyAsync(interactions =>
+					{
+						string interactionsText = Formatter.Format(interactions, FormattingOptions.MultipleLines);
+						expectationBuilder.UpdateContexts(contexts => contexts
+							.Remove("Interactions")
+							.Add(new ResultContext.SyncCallback("Interactions", () => interactionsText)));
+						_count = interactions.Length;
+						return interactions.Length == expected;
+					})
+						? Outcome.Success
+						: Outcome.Failure;
+					return this;
+				}
+				catch (MockVerificationTimeoutException)
+				{
+					string interactionsText = Formatter.Format(((IVerificationResult)actual).MockInteractions.Interactions,
+						FormattingOptions.MultipleLines);
+					expectationBuilder.UpdateContexts(contexts => contexts
+						.Remove("Interactions")
+						.Add(new ResultContext.SyncCallback("Interactions",
+							() => interactionsText)));
+					Outcome = Outcome.Failure;
+					return this;
+				}
 			}
 
 			IVerificationResult result = actual;
@@ -238,17 +254,32 @@ public static partial class ThatVerificationResult
 			{
 				_expectation = asyncVerificationResult.Expectation;
 				Actual = actual;
-				Outcome = await asyncVerificationResult.VerifyAsync(interactions =>
+				try
 				{
-					string context = Formatter.Format(interactions, FormattingOptions.MultipleLines);
-					expectationBuilder.UpdateContexts(contexts => contexts.Add(
-						new ResultContext.SyncCallback("Interactions", () => context)));
-					_count = interactions.Length;
-					return interactions.Length >= expected;
-				})
-					? Outcome.Success
-					: Outcome.Failure;
-				return this;
+					Outcome = await asyncVerificationResult.VerifyAsync(interactions =>
+					{
+						string interactionsText = Formatter.Format(interactions, FormattingOptions.MultipleLines);
+						expectationBuilder.UpdateContexts(contexts => contexts
+							.Remove("Interactions")
+							.Add(new ResultContext.SyncCallback("Interactions", () => interactionsText)));
+						_count = interactions.Length;
+						return interactions.Length >= expected;
+					})
+						? Outcome.Success
+						: Outcome.Failure;
+					return this;
+				}
+				catch (MockVerificationTimeoutException)
+				{
+					string interactionsText = Formatter.Format(((IVerificationResult)actual).MockInteractions.Interactions,
+						FormattingOptions.MultipleLines);
+					expectationBuilder.UpdateContexts(contexts => contexts
+						.Remove("Interactions")
+						.Add(new ResultContext.SyncCallback("Interactions",
+							() => interactionsText)));
+					Outcome = Outcome.Failure;
+					return this;
+				}
 			}
 
 			IVerificationResult result = actual;
@@ -257,8 +288,8 @@ public static partial class ThatVerificationResult
 			Outcome = result.Verify(interactions =>
 			{
 				string context = Formatter.Format(interactions, FormattingOptions.MultipleLines);
-				expectationBuilder.UpdateContexts(contexts => contexts.Add(
-					new ResultContext.SyncCallback("Interactions", () => context)));
+				expectationBuilder.UpdateContexts(contexts => contexts
+					.Add(new ResultContext.SyncCallback("Interactions", () => context)));
 				_count = interactions.Length;
 				return interactions.Length >= expected;
 			})

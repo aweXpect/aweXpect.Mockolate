@@ -202,5 +202,26 @@ public sealed partial class ThatVerificationResultIs
 				             ]
 				             """);
 		}
+
+		[Fact]
+		public async Task WhenNotInvoked_Within_ShouldFailWithDescriptiveMessage()
+		{
+			IMyService sut = IMyService.CreateMock();
+
+			async Task Act()
+			{
+				await That(sut.Mock.Verify.MyMethod(It.IsAny<int>(), It.Is(true))).Once().Within(50.Milliseconds());
+			}
+
+			await That(Act).Throws<XunitException>()
+				.WithMessage("""
+				             Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
+				             invoked method MyMethod(It.IsAny<int>(), true) exactly once,
+				             but never found it
+
+				             Interactions:
+				             []
+				             """);
+		}
 	}
 }

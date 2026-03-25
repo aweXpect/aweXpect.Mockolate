@@ -192,5 +192,34 @@ public sealed partial class ThatVerificationResultIs
 
 			await That(Act).DoesNotThrow();
 		}
+
+		[Fact]
+		public async Task WhenNotInvoked_Within_ShouldFailWithDescriptiveMessage()
+		{
+			IMyService sut = IMyService.CreateMock();
+
+			sut.MyMethod(1, true);
+			sut.MyMethod(2, true);
+			sut.MyMethod(3, true);
+
+			async Task Act()
+			{
+				await That(sut.Mock.Verify.MyMethod(It.Is(2), It.Is(true))).AtLeastTwice().Within(50.Milliseconds());
+			}
+
+			await That(Act).Throws<XunitException>()
+				.WithMessage("""
+				             Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
+				             invoked method MyMethod(2, true) at least twice,
+				             but found it only once
+
+				             Interactions:
+				             [
+				               [0] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1, True),
+				               [1] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(2, True),
+				               [2] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(3, True)
+				             ]
+				             """);
+		}
 	}
 }

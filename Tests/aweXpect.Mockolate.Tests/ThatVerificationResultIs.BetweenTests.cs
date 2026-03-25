@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using aweXpect.Chronology;
+using aweXpect.Core;
 using Mockolate;
 using Xunit.Sdk;
 
@@ -225,6 +226,35 @@ public sealed partial class ThatVerificationResultIs
 				              *
 				              ]
 				              """).AsWildcard();
+		}
+
+		[Fact]
+		public async Task WhenNotInvoked_Within_ShouldFailWithDescriptiveMessage()
+		{
+			IMyService sut = IMyService.CreateMock();
+
+			sut.MyMethod(1, true);
+			sut.MyMethod(2, true);
+			sut.MyMethod(3, true);
+
+			async Task Act()
+			{
+				await That(sut.Mock.Verify.MyMethod(It.IsAny<int>(), It.Is(true))).Between(4).And(6.Times()).Within(50.Milliseconds());
+			}
+
+			await That(Act).Throws<XunitException>()
+				.WithMessage("""
+				             Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
+				             invoked method MyMethod(It.IsAny<int>(), true) between 4 and 6 times,
+				             but found it only 3 times
+
+				             Interactions:
+				             [
+				               [0] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1, True),
+				               [1] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(2, True),
+				               [2] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(3, True)
+				             ]
+				             """);
 		}
 	}
 }
