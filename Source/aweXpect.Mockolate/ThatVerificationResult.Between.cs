@@ -86,16 +86,12 @@ public static partial class ThatVerificationResult
 				}
 				catch (MockVerificationTimeoutException)
 				{
-					if (actual is IVerificationResult verificationResult)
-					{
-						string interactionsText = Formatter.Format(verificationResult.MockInteractions.Interactions,
-							FormattingOptions.MultipleLines);
-						expectationBuilder.UpdateContexts(contexts => contexts
-							.Remove("Interactions")
-							.Add(new ResultContext.SyncCallback("Interactions",
-								() => interactionsText)));
-					}
-
+					string interactionsText = Formatter.Format(((IVerificationResult)actual).MockInteractions.Interactions,
+						FormattingOptions.MultipleLines);
+					expectationBuilder.UpdateContexts(contexts => contexts
+						.Remove("Interactions")
+						.Add(new ResultContext.SyncCallback("Interactions",
+							() => interactionsText)));
 					Outcome = Outcome.Failure;
 					return this;
 				}
