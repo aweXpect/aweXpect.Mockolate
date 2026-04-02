@@ -8,4 +8,12 @@
 		<PackageReference Include="Mockolate"/>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Remove="ThatVerificationResultIs.AtLeastOnceTests.cs" />
+	  <Compile Remove="ThatVerificationResultIs.AtLeastTests.cs" />
+	  <Compile Remove="ThatVerificationResultIs.AtLeastTwiceTests.cs" />
+	  <Compile Remove="ThatVerificationResultIs.BetweenTests.cs" />
+	  <Compile Remove="ThatVerificationResultIs.ExactlyTests.cs" />
+	</ItemGroup>
+
 </Project>

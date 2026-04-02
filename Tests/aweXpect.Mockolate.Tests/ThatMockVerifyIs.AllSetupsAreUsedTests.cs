@@ -66,8 +66,8 @@ public sealed partial class ThatMockVerifyIs
 				             Expected that the aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService mock
 				             has used all setups,
 				             but the following 2 setups were not used:
-				              - void global::aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService.DoWork(3)
 				              - void global::aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService.DoWork(1)
+				              - void global::aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService.DoWork(3)
 				             """);
 		}
 

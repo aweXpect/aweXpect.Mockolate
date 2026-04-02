@@ -29,10 +29,10 @@ public sealed partial class ThatVerificationResultIs
 
 				             Interactions:
 				             [
-				               [0] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1),
-				               [1] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(2),
-				               [2] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(3),
-				               [3] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(4)
+				               [0] invoke method MyMethod(1),
+				               [1] invoke method MyMethod(2),
+				               [2] invoke method MyMethod(3),
+				               [3] invoke method MyMethod(4)
 				             ]
 				             """);
 			await That(sut.Mock.Verify.MyMethod(It.Is(1)))
@@ -60,10 +60,10 @@ public sealed partial class ThatVerificationResultIs
 
 				             Interactions:
 				             [
-				               [0] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1),
-				               [1] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(2),
-				               [2] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(3),
-				               [3] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(4)
+				               [0] invoke method MyMethod(1),
+				               [1] invoke method MyMethod(2),
+				               [2] invoke method MyMethod(3),
+				               [3] invoke method MyMethod(4)
 				             ]
 				             """);
 
@@ -79,10 +79,10 @@ public sealed partial class ThatVerificationResultIs
 
 				             Interactions:
 				             [
-				               [0] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1),
-				               [1] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(2),
-				               [2] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(3),
-				               [3] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(4)
+				               [0] invoke method MyMethod(1),
+				               [1] invoke method MyMethod(2),
+				               [2] invoke method MyMethod(3),
+				               [3] invoke method MyMethod(4)
 				             ]
 				             """);
 
@@ -98,10 +98,10 @@ public sealed partial class ThatVerificationResultIs
 
 				             Interactions:
 				             [
-				               [0] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(1),
-				               [1] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(2),
-				               [2] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(3),
-				               [3] invoke method global::aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService.MyMethod(4)
+				               [0] invoke method MyMethod(1),
+				               [1] invoke method MyMethod(2),
+				               [2] invoke method MyMethod(3),
+				               [3] invoke method MyMethod(4)
 				             ]
 				             """);
 		}
