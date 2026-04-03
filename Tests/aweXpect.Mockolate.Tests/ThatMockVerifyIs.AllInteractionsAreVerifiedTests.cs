@@ -70,8 +70,8 @@ public sealed partial class ThatMockVerifyIs
 				             Expected that the aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService mock
 				             has all interactions verified,
 				             but the following 2 interactions were not verified:
-				              - [0] invoke method global::aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService.DoWork(1)
-				              - [2] invoke method global::aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService.DoWork(3)
+				              - [0] invoke method DoWork(1)
+				              - [2] invoke method DoWork(3)
 				             """);
 		}
 
@@ -95,7 +95,7 @@ public sealed partial class ThatMockVerifyIs
 				             Expected that the aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService mock
 				             has all interactions verified,
 				             but the following interaction was not verified:
-				              - [1] invoke method global::aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService.DoWork(2)
+				              - [1] invoke method DoWork(2)
 				             """);
 		}
 	}

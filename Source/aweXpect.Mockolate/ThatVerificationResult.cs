@@ -76,7 +76,7 @@ public static partial class ThatVerificationResult
 				}
 				catch (MockVerificationTimeoutException)
 				{
-					string interactionsText = Formatter.Format(((IVerificationResult)actual).MockInteractions.Interactions,
+					string interactionsText = Formatter.Format(((IVerificationResult)actual).MockInteractions,
 						FormattingOptions.MultipleLines);
 					expectationBuilder.UpdateContexts(contexts => contexts
 						.Remove("Interactions")
@@ -271,7 +271,7 @@ public static partial class ThatVerificationResult
 				}
 				catch (MockVerificationTimeoutException)
 				{
-					string interactionsText = Formatter.Format(((IVerificationResult)actual).MockInteractions.Interactions,
+					string interactionsText = Formatter.Format(((IVerificationResult)actual).MockInteractions,
 						FormattingOptions.MultipleLines);
 					expectationBuilder.UpdateContexts(contexts => contexts
 						.Remove("Interactions")
