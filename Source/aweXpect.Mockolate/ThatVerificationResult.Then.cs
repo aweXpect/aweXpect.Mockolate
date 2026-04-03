@@ -8,8 +8,8 @@ using aweXpect.Core.Constraints;
 using aweXpect.Helpers;
 using aweXpect.Results;
 using Mockolate;
-using Mockolate.Verify;
 using Mockolate.Interactions;
+using Mockolate.Verify;
 
 namespace aweXpect;
 
@@ -51,6 +51,7 @@ public static partial class ThatVerificationResult
 				{
 					result = false;
 				}
+
 				verificationResult = check(verify);
 			}
 
@@ -59,11 +60,14 @@ public static partial class ThatVerificationResult
 			Outcome = result ? Outcome.Success : Outcome.Failure;
 			if (!result)
 			{
-				string context = Formatter.Format(((IVerificationResult)actual).MockInteractions, FormattingOptions.MultipleLines);
+				string context = Formatter.Format(((IVerificationResult)actual).MockInteractions,
+					FormattingOptions.MultipleLines);
 				expectationBuilder.UpdateContexts(contexts => contexts.Add(
 					new ResultContext.SyncCallback("Interactions", () => context)));
 			}
+
 			return this;
+
 			bool VerifyInteractions(IInteraction[] filteredInteractions, IVerificationResult currentVerificationResult)
 			{
 				bool hasInteractionAfter = filteredInteractions.Any(x => x.Index > after);
@@ -72,26 +76,27 @@ public static partial class ThatVerificationResult
 					: int.MaxValue;
 				if (!hasInteractionAfter && _error is null)
 				{
-					_error = filteredInteractions.Length > 0 ? $"{currentVerificationResult.Expectation} too early" : $"{currentVerificationResult.Expectation} not at all";
+					_error = filteredInteractions.Length > 0
+						? $"{currentVerificationResult.Expectation} too early"
+						: $"{currentVerificationResult.Expectation} not at all";
 				}
+
 				return hasInteractionAfter;
 			}
 		}
 
 		protected override void AppendNormalExpectation(StringBuilder stringBuilder, string? indentation = null)
 		{
-			var separator = $", then{Environment.NewLine}{indentation}";
+			string separator = $", then{Environment.NewLine}{indentation}";
 			stringBuilder.Append(string.Join(separator, _expectations)).Append(" in order");
 		}
 
 		protected override void AppendNormalResult(StringBuilder stringBuilder, string? indentation = null)
-		{
-			stringBuilder.Append(it).Append(' ').Append(_error);
-		}
+			=> stringBuilder.Append(it).Append(' ').Append(_error);
 
 		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
 		{
-			var separator = $", then{Environment.NewLine}{indentation}";
+			string separator = $", then{Environment.NewLine}{indentation}";
 			stringBuilder.Append(string.Join(separator, _expectations)).Append(" not in order");
 		}
 
@@ -102,7 +107,7 @@ public static partial class ThatVerificationResult
 		{
 			if (typeof(TValue) == typeof(IDescribableSubject) &&
 			    Actual is IVerificationResult<T> verificationResult &&
-				new MyDescribableSubject<T>(verificationResult.Object as IMock) is TValue describableSubject)
+			    new MyDescribableSubject<T>(verificationResult.Object as IMock) is TValue describableSubject)
 			{
 				value = describableSubject;
 				return true;

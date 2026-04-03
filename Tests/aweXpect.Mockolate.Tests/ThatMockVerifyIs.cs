@@ -1,4 +1,4 @@
-﻿namespace aweXpect.Mockolate.Tests;
+namespace aweXpect.Mockolate.Tests;
 
 public sealed partial class ThatMockVerifyIs
 {

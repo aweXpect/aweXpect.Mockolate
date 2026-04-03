@@ -1,4 +1,4 @@
-﻿#if !NET8_0_OR_GREATER
+#if !NET8_0_OR_GREATER
 using System.Diagnostics.CodeAnalysis;
 
 // Licensed to the .NET Foundation under one or more agreements.

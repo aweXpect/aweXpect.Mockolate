@@ -212,7 +212,8 @@ public sealed partial class ThatVerificationResultIs
 
 			async Task Act()
 			{
-				await That(sut.Mock.Verify.MyMethod(It.IsAny<int>(), It.Is(true))).Times(x => x != 4).Within(50.Milliseconds());
+				await That(sut.Mock.Verify.MyMethod(It.IsAny<int>(), It.Is(true))).Times(x => x != 4)
+					.Within(50.Milliseconds());
 			}
 
 			await That(Act).Throws<XunitException>()

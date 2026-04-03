@@ -32,7 +32,8 @@ public static partial class ThatMockVerify
 		public ConstraintResult IsMetBy(IMockVerify<TVerify> actual)
 		{
 			Actual = actual;
-			Outcome = actual is IMock mock && mock.MockRegistry.GetUnusedSetups(mock.MockRegistry.Interactions).Count == 0
+			Outcome = actual is IMock mock &&
+			          mock.MockRegistry.GetUnusedSetups(mock.MockRegistry.Interactions).Count == 0
 				? Outcome.Success
 				: Outcome.Failure;
 			return this;

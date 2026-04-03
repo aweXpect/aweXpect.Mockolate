@@ -91,10 +91,12 @@ public static class AweXpectItExtensions
 			params IEnumerable<(string Name, HttpHeaderValue Value)> headers)
 			=> _parameter.WithHeaders(headers);
 
-		public ItExtensions.IHttpContentParameter WithString(Func<string, bool> predicate, [CallerArgumentExpression(nameof(predicate))] string doNotPopulateThisValue = "")
+		public ItExtensions.IHttpContentParameter WithString(Func<string, bool> predicate,
+			[CallerArgumentExpression(nameof(predicate))] string doNotPopulateThisValue = "")
 			=> _parameter.WithString(predicate, doNotPopulateThisValue);
 
-		public ItExtensions.IHttpContentParameter WithBytes(Func<byte[], bool> predicate, [CallerArgumentExpression(nameof(predicate))] string doNotPopulateThisValue = "")
+		public ItExtensions.IHttpContentParameter WithBytes(Func<byte[], bool> predicate,
+			[CallerArgumentExpression(nameof(predicate))] string doNotPopulateThisValue = "")
 			=> _parameter.WithBytes(predicate, doNotPopulateThisValue);
 
 		public ItExtensions.IHttpContentParameter WithMediaType(string? mediaType)

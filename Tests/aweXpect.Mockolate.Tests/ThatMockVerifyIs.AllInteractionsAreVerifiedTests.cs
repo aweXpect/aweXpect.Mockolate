@@ -1,4 +1,4 @@
-﻿using Mockolate;
+using Mockolate;
 using Mockolate.Verify;
 using Xunit.Sdk;
 

@@ -1,4 +1,4 @@
-﻿using Mockolate.Verify;
+using Mockolate.Verify;
 
 namespace aweXpect;
 
