@@ -1,4 +1,4 @@
-﻿#if NET8_0_OR_GREATER
+#if NET8_0_OR_GREATER
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
@@ -543,9 +543,9 @@ public sealed partial class ItExtensionsTests
 					HttpClient httpClient = HttpClient.CreateMock();
 					httpClient.Mock.Setup
 						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
-							{
-								foo = 1,
-							},
+						{
+							foo = 1,
+						},
 							new JsonDocumentOptions
 							{
 								AllowTrailingCommas = allowTrailingCommas,

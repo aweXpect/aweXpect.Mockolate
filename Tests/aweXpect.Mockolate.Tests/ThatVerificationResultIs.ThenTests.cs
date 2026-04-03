@@ -1,4 +1,4 @@
-﻿using Mockolate;
+using Mockolate;
 using Xunit.Sdk;
 
 namespace aweXpect.Mockolate.Tests;

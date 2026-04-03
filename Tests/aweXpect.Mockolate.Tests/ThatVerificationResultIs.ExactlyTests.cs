@@ -1,4 +1,4 @@
-﻿using System.Threading;
+using System.Threading;
 using aweXpect.Chronology;
 using aweXpect.Core;
 using Mockolate;

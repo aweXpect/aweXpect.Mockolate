@@ -22,7 +22,7 @@ namespace Build;
 
 partial class Build
 {
-	private static bool DisableMutationTests = true;
+	private static readonly bool DisableMutationTests = true;
 	static string MutationCommentBody = "";
 
 	Target MutationTests => _ => _
@@ -60,6 +60,7 @@ partial class Build
 					branchName = "release/" + version;
 					Log.Information("Use release branch analysis for '{BranchName}'", branchName);
 				}
+
 				File.WriteAllText(ArtifactsDirectory / "BranchName.txt", branchName);
 
 				string configText = $$"""
@@ -129,7 +130,8 @@ partial class Build
 			File.WriteAllText(ArtifactsDirectory / "PR_Comment.md", body);
 
 			if (prId != null)
-			{				File.WriteAllText(ArtifactsDirectory / "PR.txt", prId.Value.ToString());
+			{
+				File.WriteAllText(ArtifactsDirectory / "PR.txt", prId.Value.ToString());
 			}
 		});
 
@@ -191,7 +193,8 @@ partial class Build
 					else
 					{
 						Log.Information($"Update comment:\n{body}");
-						await gitHubClient.Issue.Comment.Update("aweXpect", "aweXpect.Mockolate", commentId.Value, body);
+						await gitHubClient.Issue.Comment.Update("aweXpect", "aweXpect.Mockolate", commentId.Value,
+							body);
 					}
 				}
 			}

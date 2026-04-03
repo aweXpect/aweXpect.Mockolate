@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using aweXpect.Core;
 using aweXpect.Options;

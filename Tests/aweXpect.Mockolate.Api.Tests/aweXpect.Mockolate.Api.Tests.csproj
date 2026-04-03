@@ -5,13 +5,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Source\aweXpect.Mockolate\aweXpect.Mockolate.csproj" />
+		<ProjectReference Include="..\..\Source\aweXpect.Mockolate\aweXpect.Mockolate.csproj"/>
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Remove="xunit" />
-		<PackageReference Include="xunit.v3" />
-		<PackageReference Include="PublicApiGenerator" />
+		<PackageReference Remove="xunit"/>
+		<PackageReference Include="xunit.v3"/>
+		<PackageReference Include="PublicApiGenerator"/>
 	</ItemGroup>
-	
+
 </Project>

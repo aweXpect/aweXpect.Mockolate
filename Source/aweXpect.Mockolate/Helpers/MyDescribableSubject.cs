@@ -1,4 +1,4 @@
-﻿using aweXpect.Core;
+using aweXpect.Core;
 using Mockolate;
 
 namespace aweXpect.Helpers;

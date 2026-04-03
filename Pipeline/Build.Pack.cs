@@ -32,7 +32,8 @@ partial class Build
 				$"[![Changelog](https://img.shields.io/badge/Changelog-v{version}-blue)](https://github.com/aweXpect/aweXpect.Mockolate/releases/tag/v{version})");
 			foreach (string line in lines.Skip(1))
 			{
-				if (line.StartsWith("[![Build](https://github.com/aweXpect/aweXpect.Mockolate/actions/workflows/build.yml") ||
+				if (line.StartsWith(
+					    "[![Build](https://github.com/aweXpect/aweXpect.Mockolate/actions/workflows/build.yml") ||
 				    line.StartsWith("[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure"))
 				{
 					continue;
