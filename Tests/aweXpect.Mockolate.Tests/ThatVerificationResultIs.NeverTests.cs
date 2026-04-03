@@ -14,6 +14,7 @@ public sealed partial class ThatVerificationResultIs
 
 			sut.MyMethod(1, false);
 			sut.MyMethod(1, false);
+			sut.MyMethod(2, false);
 			sut.MyMethod(1, false);
 
 			async Task Act()
@@ -27,11 +28,19 @@ public sealed partial class ThatVerificationResultIs
 				             never invoked method MyMethod(1, false),
 				             but found it 3 times
 
-				             Interactions:
+				             Matching Interactions:
 				             [
 				               [0] invoke method MyMethod(1, False),
 				               [1] invoke method MyMethod(1, False),
-				               [2] invoke method MyMethod(1, False)
+				               [3] invoke method MyMethod(1, False)
+				             ]
+
+				             All Interactions:
+				             [
+				               [0] invoke method MyMethod(1, False),
+				               [1] invoke method MyMethod(1, False),
+				               [2] invoke method MyMethod(2, False),
+				               [3] invoke method MyMethod(1, False)
 				             ]
 				             """);
 		}
@@ -67,7 +76,12 @@ public sealed partial class ThatVerificationResultIs
 				             never invoked method MyMethod(1, false),
 				             but found it once
 
-				             Interactions:
+				             Matching Interactions:
+				             [
+				               [0] invoke method MyMethod(1, False)
+				             ]
+
+				             All Interactions:
 				             [
 				               [0] invoke method MyMethod(1, False)
 				             ]
@@ -93,7 +107,13 @@ public sealed partial class ThatVerificationResultIs
 				             never invoked method MyMethod(1, false),
 				             but found it twice
 
-				             Interactions:
+				             Matching Interactions:
+				             [
+				               [0] invoke method MyMethod(1, False),
+				               [1] invoke method MyMethod(1, False)
+				             ]
+
+				             All Interactions:
 				             [
 				               [0] invoke method MyMethod(1, False),
 				               [1] invoke method MyMethod(1, False)

@@ -27,7 +27,15 @@ public sealed partial class ThatVerificationResultIs
 				             invoked method MyMethod(1) in order,
 				             but it invoked method MyMethod(1) too early
 
-				             Interactions:
+				             Matching Interactions:
+				             [
+				               [0] invoke method MyMethod(1),
+				               [1] invoke method MyMethod(2),
+				               [2] invoke method MyMethod(3),
+				               [3] invoke method MyMethod(4)
+				             ]
+
+				             All Interactions:
 				             [
 				               [0] invoke method MyMethod(1),
 				               [1] invoke method MyMethod(2),
@@ -58,7 +66,15 @@ public sealed partial class ThatVerificationResultIs
 				             invoked method MyMethod(4) in order,
 				             but it invoked method MyMethod(6) not at all
 
-				             Interactions:
+				             Matching Interactions:
+				             [
+				               [0] invoke method MyMethod(1),
+				               [1] invoke method MyMethod(2),
+				               [2] invoke method MyMethod(3),
+				               [3] invoke method MyMethod(4)
+				             ]
+
+				             All Interactions:
 				             [
 				               [0] invoke method MyMethod(1),
 				               [1] invoke method MyMethod(2),
@@ -77,7 +93,15 @@ public sealed partial class ThatVerificationResultIs
 				             invoked method MyMethod(3) in order,
 				             but it invoked method MyMethod(6) not at all
 
-				             Interactions:
+				             Matching Interactions:
+				             [
+				               [0] invoke method MyMethod(1),
+				               [1] invoke method MyMethod(2),
+				               [2] invoke method MyMethod(3),
+				               [3] invoke method MyMethod(4)
+				             ]
+
+				             All Interactions:
 				             [
 				               [0] invoke method MyMethod(1),
 				               [1] invoke method MyMethod(2),
@@ -96,7 +120,15 @@ public sealed partial class ThatVerificationResultIs
 				             invoked method MyMethod(6) in order,
 				             but it invoked method MyMethod(6) not at all
 
-				             Interactions:
+				             Matching Interactions:
+				             [
+				               [0] invoke method MyMethod(1),
+				               [1] invoke method MyMethod(2),
+				               [2] invoke method MyMethod(3),
+				               [3] invoke method MyMethod(4)
+				             ]
+
+				             All Interactions:
 				             [
 				               [0] invoke method MyMethod(1),
 				               [1] invoke method MyMethod(2),

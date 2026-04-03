@@ -43,7 +43,7 @@ public sealed partial class ThatVerificationResultIs
 				              invoked method MyMethod(1, false) according to the predicate n => n % 2 == 0,
 				              but {expectedFoundTimes}
 
-				              Interactions:
+				              Matching Interactions:
 				              [*]
 				              """).AsWildcard();
 		}
@@ -82,7 +82,7 @@ public sealed partial class ThatVerificationResultIs
 				              invoked method MyMethod(1, false) according to the predicate n => n % 2 == 1,
 				              but {expectedFoundTimes}
 
-				              Interactions:
+				              Matching Interactions:
 				              [*]
 				              """).AsWildcard();
 		}
@@ -122,7 +122,10 @@ public sealed partial class ThatVerificationResultIs
 				             invoked method MyMethod(1, false) according to the predicate n => n % 3 == 2,
 				             but never found it
 
-				             Interactions:
+				             Matching Interactions:
+				             []
+
+				             All Interactions:
 				             []
 				             """);
 			cts.Cancel();
@@ -222,7 +225,7 @@ public sealed partial class ThatVerificationResultIs
 				             invoked method MyMethod(It.IsAny<int>(), true) according to the predicate x => x != 4,
 				             but found it 4 times
 
-				             Interactions:
+				             Matching Interactions:
 				             [
 				               [0] invoke method MyMethod(1, True),
 				               [1] invoke method MyMethod(2, True),

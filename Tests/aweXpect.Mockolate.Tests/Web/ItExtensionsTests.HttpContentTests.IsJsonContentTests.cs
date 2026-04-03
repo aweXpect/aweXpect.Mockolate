@@ -543,9 +543,9 @@ public sealed partial class ItExtensionsTests
 					HttpClient httpClient = HttpClient.CreateMock();
 					httpClient.Mock.Setup
 						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
-						{
-							foo = 1,
-						},
+							{
+								foo = 1,
+							},
 							new JsonDocumentOptions
 							{
 								AllowTrailingCommas = allowTrailingCommas,

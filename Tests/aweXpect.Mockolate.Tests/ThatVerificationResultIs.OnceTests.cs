@@ -44,7 +44,10 @@ public sealed partial class ThatVerificationResultIs
 				             invoked method MyMethod(1, false) exactly once,
 				             but never found it
 
-				             Interactions:
+				             Matching Interactions:
+				             []
+
+				             All Interactions:
 				             []
 				             """);
 			cts.Cancel();
@@ -130,7 +133,14 @@ public sealed partial class ThatVerificationResultIs
 				             invoked method MyMethod(1, false) exactly once,
 				             but found it 3 times
 
-				             Interactions:
+				             Matching Interactions:
+				             [
+				               [0] invoke method MyMethod(1, False),
+				               [1] invoke method MyMethod(1, False),
+				               [2] invoke method MyMethod(1, False)
+				             ]
+
+				             All Interactions:
 				             [
 				               [0] invoke method MyMethod(1, False),
 				               [1] invoke method MyMethod(1, False),
@@ -156,7 +166,10 @@ public sealed partial class ThatVerificationResultIs
 				             invoked method MyMethod(1, false) exactly once,
 				             but never found it
 
-				             Interactions:
+				             Matching Interactions:
+				             []
+
+				             All Interactions:
 				             []
 				             """);
 		}
@@ -183,6 +196,7 @@ public sealed partial class ThatVerificationResultIs
 
 			sut.MyMethod(1, false);
 			sut.MyMethod(1, false);
+			sut.MyMethod(2, false);
 
 			async Task Act()
 			{
@@ -195,10 +209,17 @@ public sealed partial class ThatVerificationResultIs
 				             invoked method MyMethod(1, false) exactly once,
 				             but found it twice
 
-				             Interactions:
+				             Matching Interactions:
 				             [
 				               [0] invoke method MyMethod(1, False),
 				               [1] invoke method MyMethod(1, False)
+				             ]
+
+				             All Interactions:
+				             [
+				               [0] invoke method MyMethod(1, False),
+				               [1] invoke method MyMethod(1, False),
+				               [2] invoke method MyMethod(2, False)
 				             ]
 				             """);
 		}
@@ -219,7 +240,7 @@ public sealed partial class ThatVerificationResultIs
 				             invoked method MyMethod(It.IsAny<int>(), true) exactly once,
 				             but never found it
 
-				             Interactions:
+				             Matching Interactions:
 				             []
 				             """);
 		}
