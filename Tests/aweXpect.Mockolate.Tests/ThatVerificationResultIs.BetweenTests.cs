@@ -239,7 +239,8 @@ public sealed partial class ThatVerificationResultIs
 
 			async Task Act()
 			{
-				await That(sut.Mock.Verify.MyMethod(It.IsAny<int>(), It.Is(true))).Between(4).And(6.Times()).Within(50.Milliseconds());
+				await That(sut.Mock.Verify.MyMethod(It.IsAny<int>(), It.Is(true))).Between(4).And(6.Times())
+					.Within(50.Milliseconds());
 			}
 
 			await That(Act).Throws<XunitException>()
@@ -255,6 +256,83 @@ public sealed partial class ThatVerificationResultIs
 				               [2] invoke method MyMethod(3, True)
 				             ]
 				             """);
+		}
+
+		public sealed class NegatedTests
+		{
+			[Theory]
+			[InlineData(3, 5, 3)]
+			[InlineData(3, 5, 4)]
+			[InlineData(3, 5, 5)]
+			public async Task WhenInvokedInRange_ShouldFail(int minimum, int maximum, int invocationTimes)
+			{
+				IMyService sut = IMyService.CreateMock();
+
+				for (int i = 0; i < invocationTimes; i++)
+				{
+					sut.MyMethod(1, false);
+				}
+
+				async Task Act()
+				{
+					await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false)))
+						.DoesNotComplyWith(it => it.Between(minimum).And(maximum));
+				}
+
+				await That(Act).Throws<XunitException>()
+					.WithMessage($"""
+					              Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
+					              invoked method MyMethod(1, false) not between {minimum} and {maximum} times,
+					              but found it {invocationTimes} times
+
+					              Interactions:
+					              [
+					              *
+					              ]
+					              """).AsWildcard();
+			}
+
+			[Theory]
+			[InlineData(3, 5, 2)]
+			[InlineData(8, 12, 6)]
+			public async Task WhenInvokedTooFewTimes_ShouldSucceed(int minimum, int maximum, int invocationTimes)
+			{
+				IMyService sut = IMyService.CreateMock();
+
+				for (int i = 0; i < invocationTimes; i++)
+				{
+					sut.MyMethod(1, false);
+				}
+
+				async Task Act()
+				{
+					await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false)))
+						.DoesNotComplyWith(it => it.Between(minimum).And(maximum));
+				}
+
+				await That(Act).DoesNotThrow();
+			}
+
+			[Theory]
+			[InlineData(3, 5, 6)]
+			[InlineData(8, 12, 14)]
+			public async Task WhenInvokedTooOften_ShouldSucceed(int minimum, int maximum, int invocationTimes)
+			{
+				IMyService sut = IMyService.CreateMock();
+
+				for (int i = 0; i < invocationTimes; i++)
+				{
+					sut.MyMethod(1, false);
+				}
+
+				async Task Act()
+				{
+					await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false)))
+						.DoesNotComplyWith(it => it.Between(minimum).And(maximum));
+				}
+
+				await That(Act).DoesNotThrow();
+			}
 		}
 	}
 }
