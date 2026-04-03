@@ -53,7 +53,7 @@ public sealed partial class ThatVerificationResultIs
 				              invoked method MyMethod(1, false) at least {times} times,
 				              but found it only {invocationTimes} times
 
-				              Interactions:
+				              Matching Interactions:
 				              [
 				              *
 				              ]
@@ -95,7 +95,10 @@ public sealed partial class ThatVerificationResultIs
 				             invoked method MyMethod(1, false) at least 3 times,
 				             but never found it
 
-				             Interactions:
+				             Matching Interactions:
+				             []
+
+				             All Interactions:
 				             []
 				             """);
 			cts.Cancel();
@@ -204,7 +207,10 @@ public sealed partial class ThatVerificationResultIs
 				              invoked method MyMethod(1, false) at least {times} times,
 				              but never found it
 
-				              Interactions:
+				              Matching Interactions:
+				              []
+
+				              All Interactions:
 				              []
 				              """);
 		}
@@ -229,7 +235,7 @@ public sealed partial class ThatVerificationResultIs
 				             invoked method MyMethod(It.IsAny<int>(), true) at least 4 times,
 				             but found it only 3 times
 
-				             Interactions:
+				             Matching Interactions:
 				             [
 				               [0] invoke method MyMethod(1, True),
 				               [1] invoke method MyMethod(2, True),
@@ -264,7 +270,7 @@ public sealed partial class ThatVerificationResultIs
 					              invoked method MyMethod(1, false) less than {times} times,
 					              but found it {invocationTimes} times
 
-					              Interactions:
+					              Matching Interactions:
 					              [
 					              *
 					              ]

@@ -54,7 +54,7 @@ public sealed partial class ThatVerificationResultIs
 				              invoked method MyMethod(1, false) exactly {times} times,
 				              but found it only {invocationTimes} times
 
-				              Interactions:
+				              Matching Interactions:
 				              [
 				              *
 				              ]
@@ -96,7 +96,10 @@ public sealed partial class ThatVerificationResultIs
 				             invoked method MyMethod(1, false) exactly 3 times,
 				             but never found it
 
-				             Interactions:
+				             Matching Interactions:
+				             []
+
+				             All Interactions:
 				             []
 				             """);
 			cts.Cancel();
@@ -189,7 +192,7 @@ public sealed partial class ThatVerificationResultIs
 				              invoked method MyMethod(1, false) exactly {times} times,
 				              but found it {invocationTimes} times
 
-				              Interactions:
+				              Matching Interactions:
 				              [
 				              *
 				              ]
@@ -215,7 +218,10 @@ public sealed partial class ThatVerificationResultIs
 				              invoked method MyMethod(1, false) exactly {times} times,
 				              but never found it
 
-				              Interactions:
+				              Matching Interactions:
+				              []
+
+				              All Interactions:
 				              []
 				              """);
 		}
@@ -242,7 +248,7 @@ public sealed partial class ThatVerificationResultIs
 				             invoked method MyMethod(It.IsAny<int>(), true) exactly 3 times,
 				             but found it 4 times
 
-				             Interactions:
+				             Matching Interactions:
 				             [
 				               [0] invoke method MyMethod(1, True),
 				               [1] invoke method MyMethod(2, True),
@@ -278,7 +284,7 @@ public sealed partial class ThatVerificationResultIs
 					              invoked method MyMethod(1, false) not exactly {times} times,
 					              but it was
 
-					              Interactions:
+					              Matching Interactions:
 					              [
 					              *
 					              ]

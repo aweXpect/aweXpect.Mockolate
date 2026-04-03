@@ -30,7 +30,7 @@ public sealed partial class ThatVerificationResultIs
 				              invoked method MyMethod(1, false) at most never,
 				              but found it {amountString}
 
-				              Interactions:
+				              Matching Interactions:
 				              [
 				              *
 				              ]
@@ -102,7 +102,7 @@ public sealed partial class ThatVerificationResultIs
 				              invoked method MyMethod(1, false) at most {times} times,
 				              but found it {invocationTimes} times
 
-				              Interactions:
+				              Matching Interactions:
 				              [
 				              *
 				              ]
@@ -135,7 +135,7 @@ public sealed partial class ThatVerificationResultIs
 					              invoked method MyMethod(1, false) more than {times} times,
 					              but found it only {invocationTimes} times
 
-					              Interactions:
+					              Matching Interactions:
 					              [
 					              *
 					              ]
@@ -180,7 +180,7 @@ public sealed partial class ThatVerificationResultIs
 					             invoked method MyMethod(1, false) more than 3 times,
 					             but never found it
 
-					             Interactions:
+					             Matching Interactions:
 					             []
 					             """);
 			}

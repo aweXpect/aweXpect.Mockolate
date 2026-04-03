@@ -74,13 +74,18 @@ public static partial class ThatVerificationResult
 					{
 						string interactionsText = Formatter.Format(interactions, FormattingOptions.MultipleLines);
 						expectationBuilder.UpdateContexts(contexts => contexts
-							.Remove("Interactions")
-							.Add(new ResultContext.SyncCallback("Interactions", () => interactionsText)));
+							.Remove("Matching Interactions")
+							.Add(new ResultContext.SyncCallback("Matching Interactions", () => interactionsText)));
 						_count = interactions.Length;
 						return interactions.Length >= minimum && interactions.Length <= maximum;
 					})
 						? Outcome.Success
 						: Outcome.Failure;
+					if (Outcome == Outcome.Failure)
+					{
+						AppendAllInteractions(expectationBuilder,
+							((IVerificationResult<TVerify>)actual).Object as IMock);
+					}
 					return this;
 				}
 				catch (MockVerificationTimeoutException)
@@ -88,8 +93,8 @@ public static partial class ThatVerificationResult
 					string interactionsText = Formatter.Format(((IVerificationResult)actual).MockInteractions,
 						FormattingOptions.MultipleLines);
 					expectationBuilder.UpdateContexts(contexts => contexts
-						.Remove("Interactions")
-						.Add(new ResultContext.SyncCallback("Interactions",
+						.Remove("Matching Interactions")
+						.Add(new ResultContext.SyncCallback("Matching Interactions",
 							() => interactionsText)));
 					Outcome = Outcome.Failure;
 					return this;
@@ -103,12 +108,17 @@ public static partial class ThatVerificationResult
 			{
 				string context = Formatter.Format(interactions, FormattingOptions.MultipleLines);
 				expectationBuilder.UpdateContexts(contexts => contexts.Add(
-					new ResultContext.SyncCallback("Interactions", () => context)));
+					new ResultContext.SyncCallback("Matching Interactions", () => context)));
 				_count = interactions.Length;
 				return interactions.Length >= minimum && interactions.Length <= maximum;
 			})
 				? Outcome.Success
 				: Outcome.Failure;
+			if (Outcome == Outcome.Failure)
+			{
+				AppendAllInteractions(expectationBuilder,
+					((IVerificationResult<TVerify>)actual).Object as IMock);
+			}
 			return this;
 		}
 
