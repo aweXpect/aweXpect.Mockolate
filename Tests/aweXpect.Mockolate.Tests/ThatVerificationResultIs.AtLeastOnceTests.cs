@@ -209,5 +209,76 @@ public sealed partial class ThatVerificationResultIs
 				             ]
 				             """);
 		}
+
+		public sealed class NegatedTests
+		{
+			[Fact]
+			public async Task WhenInvokedNever_ShouldSucceed()
+			{
+				IMyService sut = IMyService.CreateMock();
+
+				async Task Act()
+				{
+					await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false)))
+						.DoesNotComplyWith(it => it.AtLeastOnce());
+				}
+
+				await That(Act).DoesNotThrow();
+			}
+
+			[Fact]
+			public async Task WhenInvokedOnce_ShouldFail()
+			{
+				IMyService sut = IMyService.CreateMock();
+
+				sut.MyMethod(1, false);
+
+				async Task Act()
+				{
+					await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false)))
+						.DoesNotComplyWith(it => it.AtLeastOnce());
+				}
+
+				await That(Act).Throws<XunitException>()
+					.WithMessage("""
+					             Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
+					             invoked method MyMethod(1, false) less than once,
+					             but found it once
+
+					             Interactions:
+					             [
+					               [0] invoke method MyMethod(1, False)
+					             ]
+					             """);
+			}
+
+			[Fact]
+			public async Task WhenInvokedTwice_ShouldFail()
+			{
+				IMyService sut = IMyService.CreateMock();
+
+				sut.MyMethod(1, false);
+				sut.MyMethod(1, false);
+
+				async Task Act()
+				{
+					await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false)))
+						.DoesNotComplyWith(it => it.AtLeastOnce());
+				}
+
+				await That(Act).Throws<XunitException>()
+					.WithMessage("""
+					             Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
+					             invoked method MyMethod(1, false) less than once,
+					             but found it twice
+
+					             Interactions:
+					             [
+					               [0] invoke method MyMethod(1, False),
+					               [1] invoke method MyMethod(1, False)
+					             ]
+					             """);
+			}
+		}
 	}
 }
