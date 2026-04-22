@@ -560,6 +560,151 @@ public sealed partial class ItExtensionsTests
 						.IsEqualTo(allowTrailingCommas ? HttpStatusCode.OK : HttpStatusCode.NotImplemented);
 				}
 			}
+
+			public sealed class ChainedMatcherTests
+			{
+				[Theory]
+				[InlineData("application/json", true)]
+				[InlineData("text/plain", false)]
+				public async Task WithMediaType_ShouldForwardToInnerParameter(string expectedMediaType,
+					bool expectSuccess)
+				{
+					HttpClient httpClient = HttpClient.CreateMock();
+					httpClient.Mock.Setup
+						.PostAsync(It.IsAny<Uri>(),
+							It.IsHttpContent().WithJsonMatching(new
+							{
+								foo = 1,
+							}).WithMediaType(expectedMediaType))
+						.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
+
+					StringContent content = new("{\"foo\": 1}", System.Text.Encoding.UTF8, "application/json");
+					HttpResponseMessage result = await httpClient.PostAsync("https://www.aweXpect.com",
+						content,
+						CancellationToken.None);
+
+					await That(result.StatusCode)
+						.IsEqualTo(expectSuccess ? HttpStatusCode.OK : HttpStatusCode.NotImplemented);
+				}
+
+				[Theory]
+				[InlineData(true)]
+				[InlineData(false)]
+				public async Task WithString_ShouldForwardToInnerParameter(bool predicateResult)
+				{
+					HttpClient httpClient = HttpClient.CreateMock();
+					httpClient.Mock.Setup
+						.PostAsync(It.IsAny<Uri>(),
+							It.IsHttpContent().WithJsonMatching(new
+							{
+								foo = 1,
+							}).WithString(_ => predicateResult))
+						.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
+
+					HttpResponseMessage result = await httpClient.PostAsync("https://www.aweXpect.com",
+						new StringContent("{\"foo\": 1}"),
+						CancellationToken.None);
+
+					await That(result.StatusCode)
+						.IsEqualTo(predicateResult ? HttpStatusCode.OK : HttpStatusCode.NotImplemented);
+				}
+
+				[Theory]
+				[InlineData(true)]
+				[InlineData(false)]
+				public async Task WithBytes_ShouldForwardToInnerParameter(bool predicateResult)
+				{
+					HttpClient httpClient = HttpClient.CreateMock();
+					httpClient.Mock.Setup
+						.PostAsync(It.IsAny<Uri>(),
+							It.IsHttpContent().WithJsonMatching(new
+							{
+								foo = 1,
+							}).WithBytes(_ => predicateResult))
+						.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
+
+					HttpResponseMessage result = await httpClient.PostAsync("https://www.aweXpect.com",
+						new StringContent("{\"foo\": 1}"),
+						CancellationToken.None);
+
+					await That(result.StatusCode)
+						.IsEqualTo(predicateResult ? HttpStatusCode.OK : HttpStatusCode.NotImplemented);
+				}
+
+				[Theory]
+				[InlineData("expected-value", true)]
+				[InlineData("other-value", false)]
+				public async Task WithHeaders_ShouldForwardToInnerParameter(string requiredHeaderValue,
+					bool expectSuccess)
+				{
+					HttpClient httpClient = HttpClient.CreateMock();
+					httpClient.Mock.Setup
+						.PostAsync(It.IsAny<Uri>(),
+							It.IsHttpContent().WithJsonMatching(new
+							{
+								foo = 1,
+							}).WithHeaders(("X-Custom", new HttpHeaderValue(requiredHeaderValue))))
+						.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
+
+					StringContent content = new("{\"foo\": 1}");
+					content.Headers.Add("X-Custom", "expected-value");
+					HttpResponseMessage result = await httpClient.PostAsync("https://www.aweXpect.com",
+						content,
+						CancellationToken.None);
+
+					await That(result.StatusCode)
+						.IsEqualTo(expectSuccess ? HttpStatusCode.OK : HttpStatusCode.NotImplemented);
+				}
+
+				[Fact]
+				public async Task Do_ShouldForwardToInnerParameter()
+				{
+					int invocationCount = 0;
+					HttpClient httpClient = HttpClient.CreateMock();
+					httpClient.Mock.Setup
+						.PostAsync(It.IsAny<Uri>(),
+							It.IsHttpContent().WithJsonMatching(new
+							{
+								foo = 1,
+							}).Do(_ => invocationCount++))
+						.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
+
+					HttpResponseMessage result = await httpClient.PostAsync("https://www.aweXpect.com",
+						new StringContent("{\"foo\": 1}"),
+						CancellationToken.None);
+
+					await That(result.StatusCode).IsEqualTo(HttpStatusCode.OK);
+					await That(invocationCount).IsEqualTo(1);
+				}
+			}
+
+			public sealed class ExactMatchWithoutIgnoringAdditionalPropertiesTests
+			{
+				[Fact]
+				public async Task WhenSubjectMatchesExpectedExactly_ShouldSucceed()
+				{
+					HttpClient httpClient = HttpClient.CreateMock();
+					httpClient.Mock.Setup
+						.PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJsonMatching(new
+						{
+							foo = 1,
+							bar = 2,
+						}).IgnoringAdditionalProperties(false))
+						.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
+
+					HttpResponseMessage result = await httpClient.PostAsync("https://www.aweXpect.com",
+						new StringContent("""
+						                  {
+						                    "foo": 1,
+						                    "bar": 2
+						                  }
+						                  """),
+						CancellationToken.None);
+
+					await That(result.StatusCode)
+						.IsEqualTo(HttpStatusCode.OK);
+				}
+			}
 		}
 	}
 }

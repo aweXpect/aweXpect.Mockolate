@@ -234,5 +234,52 @@ public sealed partial class ThatVerificationResultIs
 				             ]
 				             """);
 		}
+
+		public sealed class NegatedTests
+		{
+			[Fact]
+			public async Task WhenPredicateDoesNotMatch_ShouldSucceed()
+			{
+				IMyService sut = IMyService.CreateMock();
+
+				sut.MyMethod(1, false);
+
+				async Task Act()
+				{
+					await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false)))
+						.DoesNotComplyWith(it => it.Times(n => n == 2));
+				}
+
+				await That(Act).DoesNotThrow();
+			}
+
+			[Fact]
+			public async Task WhenPredicateMatches_ShouldFail()
+			{
+				IMyService sut = IMyService.CreateMock();
+
+				sut.MyMethod(1, false);
+				sut.MyMethod(1, false);
+
+				async Task Act()
+				{
+					await That(sut.Mock.Verify.MyMethod(It.Is(1), It.Is(false)))
+						.DoesNotComplyWith(it => it.Times(n => n == 2));
+				}
+
+				await That(Act).Throws<XunitException>()
+					.WithMessage("""
+					             Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
+					             invoked method MyMethod(1, false) not according to the predicate n => n == 2,
+					             but found it twice
+
+					             Matching Interactions:
+					             [
+					               [0] invoke method MyMethod(1, False),
+					               [1] invoke method MyMethod(1, False)
+					             ]
+					             """);
+			}
+		}
 	}
 }
