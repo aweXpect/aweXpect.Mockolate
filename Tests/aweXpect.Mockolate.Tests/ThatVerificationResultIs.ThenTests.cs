@@ -137,5 +137,75 @@ public sealed partial class ThatVerificationResultIs
 				             ]
 				             """);
 		}
+
+		public sealed class NegatedTests
+		{
+			[Fact]
+			public async Task WhenInteractionsAreInOrder_ShouldFail()
+			{
+				IMyService sut = IMyService.CreateMock();
+
+				sut.MyMethod(1);
+				sut.MyMethod(2);
+
+				async Task Act()
+				{
+					await That(sut.Mock.Verify.MyMethod(It.Is(1)))
+						.DoesNotComplyWith(it => it.Then(m => m.MyMethod(It.Is(2))));
+				}
+
+				await That(Act).Throws<XunitException>()
+					.WithMessage("""
+					             Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
+					             invoked method MyMethod(1), then
+					             invoked method MyMethod(2) not in order,
+					             but it did
+					             """);
+			}
+
+			[Fact]
+			public async Task WhenInteractionsAreNotInOrder_ShouldSucceed()
+			{
+				IMyService sut = IMyService.CreateMock();
+
+				sut.MyMethod(2);
+				sut.MyMethod(1);
+
+				async Task Act()
+				{
+					await That(sut.Mock.Verify.MyMethod(It.Is(1)))
+						.DoesNotComplyWith(it => it.Then(m => m.MyMethod(It.Is(2))));
+				}
+
+				await That(Act).DoesNotThrow();
+			}
+
+			[Fact]
+			public async Task WithMultipleInteractionsInOrder_ShouldFail()
+			{
+				IMyService sut = IMyService.CreateMock();
+
+				sut.MyMethod(1);
+				sut.MyMethod(2);
+				sut.MyMethod(3);
+
+				async Task Act()
+				{
+					await That(sut.Mock.Verify.MyMethod(It.Is(1)))
+						.DoesNotComplyWith(it => it.Then(
+							m => m.MyMethod(It.Is(2)),
+							m => m.MyMethod(It.Is(3))));
+				}
+
+				await That(Act).Throws<XunitException>()
+					.WithMessage("""
+					             Expected that the aweXpect.Mockolate.Tests.ThatVerificationResultIs.IMyService mock
+					             invoked method MyMethod(1), then
+					             invoked method MyMethod(2), then
+					             invoked method MyMethod(3) not in order,
+					             but it did
+					             """);
+			}
+		}
 	}
 }
