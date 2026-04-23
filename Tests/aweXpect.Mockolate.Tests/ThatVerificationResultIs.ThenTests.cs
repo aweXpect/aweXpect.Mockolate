@@ -48,6 +48,30 @@ public sealed partial class ThatVerificationResultIs
 		}
 
 		[Fact]
+		public async Task Then_WhenFirstFilterMatchesMultipleInteractions_ShouldUseEarliestIndex()
+		{
+			IMyService sut = IMyService.CreateMock();
+
+			sut.MyMethod(1);
+			sut.MyMethod(2);
+			sut.MyMethod(1);
+
+			await That(sut.Mock.Verify.MyMethod(It.Is(1))).Then(m => m.MyMethod(It.Is(2)));
+		}
+
+		[Fact]
+		public async Task Then_WhenInitialAndThenFiltersMatchSameSingleInteraction_ShouldFail()
+		{
+			IMyService sut = IMyService.CreateMock();
+
+			sut.MyMethod(1);
+
+			await That(async Task () => await That(sut.Mock.Verify.MyMethod(It.Is(1)))
+					.Then(m => m.MyMethod(It.Is(1))))
+				.Throws<XunitException>();
+		}
+
+		[Fact]
 		public async Task Then_WhenNoMatch_ShouldReturnFalse()
 		{
 			IMyService sut = IMyService.CreateMock();
@@ -136,6 +160,20 @@ public sealed partial class ThatVerificationResultIs
 				               [3] invoke method MyMethod(4)
 				             ]
 				             """);
+		}
+
+		[Fact]
+		public async Task Then_WhenSecondFilterMatchesAtAndAfterEarliest_ShouldAdvanceStrictly()
+		{
+			IMyService sut = IMyService.CreateMock();
+
+			sut.MyMethod(1);
+			sut.MyMethod(3);
+			sut.MyMethod(2);
+
+			await That(async Task () => await That(sut.Mock.Verify.MyMethod(It.Is(1)))
+					.Then(m => m.MyMethod(It.IsAny<int>()), m => m.MyMethod(It.Is(3))))
+				.Throws<XunitException>();
 		}
 
 		public sealed class NegatedTests

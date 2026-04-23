@@ -50,8 +50,8 @@ public static partial class ThatVerificationResult
 		: ConstraintResult.WithValue<VerificationResult<TVerify>>(grammars),
 			IAsyncConstraint<VerificationResult<TVerify>>
 	{
-		private int _count = -1;
-		private string _expectation = "";
+		private int _count;
+		private string? _expectation;
 
 		public async Task<ConstraintResult> IsMetBy(VerificationResult<TVerify> actual,
 			CancellationToken cancellationToken)
@@ -149,6 +149,7 @@ public static partial class ThatVerificationResult
 			}
 			else
 			{
+				// Stryker disable once Equality : unreachable boundary — AppendNormalResult only runs when _count != expected
 				stringBuilder.Append("found ").Append(it).Append(_count < expected ? " only " : " ")
 					.Append(_count.ToAmountString());
 			}
@@ -191,8 +192,8 @@ public static partial class ThatVerificationResult
 		: ConstraintResult.WithValue<VerificationResult<TVerify>>(grammars),
 			IValueConstraint<VerificationResult<TVerify>>
 	{
-		private int _count = -1;
-		private string _expectation = "";
+		private int _count;
+		private string? _expectation;
 
 		public ConstraintResult IsMetBy(VerificationResult<TVerify> actual)
 		{
@@ -261,8 +262,8 @@ public static partial class ThatVerificationResult
 		: ConstraintResult.WithValue<VerificationResult<TVerify>>(grammars),
 			IAsyncConstraint<VerificationResult<TVerify>>
 	{
-		private int _count = -1;
-		private string _expectation = "";
+		private int _count;
+		private string? _expectation;
 
 		public async Task<ConstraintResult> IsMetBy(VerificationResult<TVerify> actual,
 			CancellationToken cancellationToken)

@@ -32,13 +32,13 @@ public static partial class ThatVerificationResult
 		: ConstraintResult.WithValue<VerificationResult<T>>(grammars),
 			IValueConstraint<VerificationResult<T>>
 	{
-		private readonly List<string> _expectations = [];
+		private List<string>? _expectations;
 		private string? _error;
 
 		public ConstraintResult IsMetBy(VerificationResult<T> actual)
 		{
 			Actual = actual;
-			_expectations.Clear();
+			_expectations = new List<string>();
 			bool result = true;
 			T verify = ((IVerificationResult<T>)actual).Object;
 			IVerificationResult verificationResult = actual;
@@ -73,10 +73,11 @@ public static partial class ThatVerificationResult
 			bool VerifyInteractions(IInteraction[] filteredInteractions, IVerificationResult currentVerificationResult)
 			{
 				bool hasInteractionAfter = filteredInteractions.Any(x => x.Index > after);
-				after = hasInteractionAfter
-					? filteredInteractions.Where(x => x.Index > after).Min(x => x.Index)
-					: int.MaxValue;
-				if (!hasInteractionAfter && _error is null)
+				if (hasInteractionAfter)
+				{
+					after = filteredInteractions.Where(x => x.Index > after).Min(x => x.Index);
+				}
+				else if (_error is null)
 				{
 					_error = filteredInteractions.Length > 0
 						? $"{currentVerificationResult.Expectation} too early"
@@ -90,7 +91,7 @@ public static partial class ThatVerificationResult
 		protected override void AppendNormalExpectation(StringBuilder stringBuilder, string? indentation = null)
 		{
 			string separator = $", then{Environment.NewLine}{indentation}";
-			stringBuilder.Append(string.Join(separator, _expectations)).Append(" in order");
+			stringBuilder.Append(string.Join(separator, _expectations!)).Append(" in order");
 		}
 
 		protected override void AppendNormalResult(StringBuilder stringBuilder, string? indentation = null)
@@ -99,7 +100,7 @@ public static partial class ThatVerificationResult
 		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
 		{
 			string separator = $", then{Environment.NewLine}{indentation}";
-			stringBuilder.Append(string.Join(separator, _expectations)).Append(" not in order");
+			stringBuilder.Append(string.Join(separator, _expectations!)).Append(" not in order");
 		}
 
 		protected override void AppendNegatedResult(StringBuilder stringBuilder, string? indentation = null)
