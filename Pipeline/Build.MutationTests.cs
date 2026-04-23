@@ -22,7 +22,7 @@ namespace Build;
 
 partial class Build
 {
-	private static readonly bool DisableMutationTests = true;
+	private static readonly bool DisableMutationTests = false;
 	static string MutationCommentBody = "";
 
 	Target MutationTests => _ => _
