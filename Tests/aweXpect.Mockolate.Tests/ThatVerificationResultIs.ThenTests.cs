@@ -48,18 +48,6 @@ public sealed partial class ThatVerificationResultIs
 		}
 
 		[Fact]
-		public async Task Then_WhenBothFiltersMatchSameSingleInteraction_ShouldFail()
-		{
-			IMyService sut = IMyService.CreateMock();
-
-			sut.MyMethod(1);
-
-			await That(async Task () => await That(sut.Mock.Verify.MyMethod(It.Is(1)))
-					.Then(m => m.MyMethod(It.Is(1))))
-				.Throws<XunitException>();
-		}
-
-		[Fact]
 		public async Task Then_WhenFirstFilterMatchesMultipleInteractions_ShouldUseEarliestIndex()
 		{
 			IMyService sut = IMyService.CreateMock();
@@ -69,6 +57,18 @@ public sealed partial class ThatVerificationResultIs
 			sut.MyMethod(1);
 
 			await That(sut.Mock.Verify.MyMethod(It.Is(1))).Then(m => m.MyMethod(It.Is(2)));
+		}
+
+		[Fact]
+		public async Task Then_WhenInitialAndThenFiltersMatchSameSingleInteraction_ShouldFail()
+		{
+			IMyService sut = IMyService.CreateMock();
+
+			sut.MyMethod(1);
+
+			await That(async Task () => await That(sut.Mock.Verify.MyMethod(It.Is(1)))
+					.Then(m => m.MyMethod(It.Is(1))))
+				.Throws<XunitException>();
 		}
 
 		[Fact]

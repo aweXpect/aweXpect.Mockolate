@@ -32,7 +32,7 @@ public static partial class ThatVerificationResult
 		: ConstraintResult.WithValue<VerificationResult<T>>(grammars),
 			IValueConstraint<VerificationResult<T>>
 	{
-		private List<string> _expectations = null!;
+		private List<string>? _expectations;
 		private string? _error;
 
 		public ConstraintResult IsMetBy(VerificationResult<T> actual)
@@ -91,7 +91,7 @@ public static partial class ThatVerificationResult
 		protected override void AppendNormalExpectation(StringBuilder stringBuilder, string? indentation = null)
 		{
 			string separator = $", then{Environment.NewLine}{indentation}";
-			stringBuilder.Append(string.Join(separator, _expectations)).Append(" in order");
+			stringBuilder.Append(string.Join(separator, _expectations!)).Append(" in order");
 		}
 
 		protected override void AppendNormalResult(StringBuilder stringBuilder, string? indentation = null)
@@ -100,7 +100,7 @@ public static partial class ThatVerificationResult
 		protected override void AppendNegatedExpectation(StringBuilder stringBuilder, string? indentation = null)
 		{
 			string separator = $", then{Environment.NewLine}{indentation}";
-			stringBuilder.Append(string.Join(separator, _expectations)).Append(" not in order");
+			stringBuilder.Append(string.Join(separator, _expectations!)).Append(" not in order");
 		}
 
 		protected override void AppendNegatedResult(StringBuilder stringBuilder, string? indentation = null)
