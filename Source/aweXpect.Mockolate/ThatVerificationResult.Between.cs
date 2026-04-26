@@ -90,7 +90,7 @@ public static partial class ThatVerificationResult
 				}
 				catch (MockVerificationTimeoutException)
 				{
-					string interactionsText = Formatter.Format(((IVerificationResult)actual).MockInteractions,
+					string interactionsText = Formatter.Format(((IVerificationResult)actual).Interactions,
 						FormattingOptions.MultipleLines);
 					expectationBuilder.UpdateContexts(contexts => contexts
 						.Remove("Matching Interactions")

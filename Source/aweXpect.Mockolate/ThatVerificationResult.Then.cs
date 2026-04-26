@@ -42,6 +42,13 @@ public static partial class ThatVerificationResult
 			bool result = true;
 			T verify = ((IVerificationResult<T>)actual).Object;
 			IVerificationResult verificationResult = actual;
+			IInteraction[] snapshot = verificationResult.Interactions.ToArray();
+			Dictionary<IInteraction, int> positions = new(snapshot.Length);
+			for (int i = 0; i < snapshot.Length; i++)
+			{
+				positions[snapshot[i]] = i;
+			}
+
 			int after = -1;
 			foreach (Func<T, VerificationResult<T>> check in interactions)
 			{
@@ -60,7 +67,7 @@ public static partial class ThatVerificationResult
 			Outcome = result ? Outcome.Success : Outcome.Failure;
 			if (!result)
 			{
-				string context = Formatter.Format(((IVerificationResult)actual).MockInteractions,
+				string context = Formatter.Format(((IVerificationResult)actual).Interactions,
 					FormattingOptions.MultipleLines);
 				expectationBuilder.UpdateContexts(contexts => contexts.Add(
 					new ResultContext.SyncCallback("Matching Interactions", () => context)));
@@ -72,12 +79,22 @@ public static partial class ThatVerificationResult
 
 			bool VerifyInteractions(IInteraction[] filteredInteractions, IVerificationResult currentVerificationResult)
 			{
-				bool hasInteractionAfter = filteredInteractions.Any(x => x.Index > after);
-				if (hasInteractionAfter)
+				int bestPosition = int.MaxValue;
+				IInteraction? firstInteraction = null;
+				foreach (IInteraction candidate in filteredInteractions)
 				{
-					after = filteredInteractions.Where(x => x.Index > after).Min(x => x.Index);
+					if (positions.TryGetValue(candidate, out int position) &&
+					    position > after &&
+					    position < bestPosition)
+					{
+						bestPosition = position;
+						firstInteraction = candidate;
+					}
 				}
-				else if (_error is null)
+
+				bool hasInteractionAfter = firstInteraction is not null;
+				after = hasInteractionAfter ? bestPosition : int.MaxValue;
+				if (!hasInteractionAfter && _error is null)
 				{
 					_error = filteredInteractions.Length > 0
 						? $"{currentVerificationResult.Expectation} too early"

@@ -135,16 +135,16 @@ public sealed partial class ThatVerificationResultIs
 
 				             Matching Interactions:
 				             [
-				               [0] invoke method MyMethod(1, False),
-				               [1] invoke method MyMethod(1, False),
-				               [2] invoke method MyMethod(1, False)
+				               invoke method MyMethod(1, False),
+				               invoke method MyMethod(1, False),
+				               invoke method MyMethod(1, False)
 				             ]
 
 				             All Interactions:
 				             [
-				               [0] invoke method MyMethod(1, False),
-				               [1] invoke method MyMethod(1, False),
-				               [2] invoke method MyMethod(1, False)
+				               invoke method MyMethod(1, False),
+				               invoke method MyMethod(1, False),
+				               invoke method MyMethod(1, False)
 				             ]
 				             """);
 		}
@@ -211,15 +211,15 @@ public sealed partial class ThatVerificationResultIs
 
 				             Matching Interactions:
 				             [
-				               [0] invoke method MyMethod(1, False),
-				               [1] invoke method MyMethod(1, False)
+				               invoke method MyMethod(1, False),
+				               invoke method MyMethod(1, False)
 				             ]
 
 				             All Interactions:
 				             [
-				               [0] invoke method MyMethod(1, False),
-				               [1] invoke method MyMethod(1, False),
-				               [2] invoke method MyMethod(2, False)
+				               invoke method MyMethod(1, False),
+				               invoke method MyMethod(1, False),
+				               invoke method MyMethod(2, False)
 				             ]
 				             """);
 		}

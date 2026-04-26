@@ -16,7 +16,7 @@ public sealed partial class ThatMockVerifyIs
 			sut.DoWork(1);
 			sut.DoWork(2);
 
-			sut.Mock.Verify.DoWork(It.IsAny<int>()).AtLeastOnce();
+			await That(sut.Mock.Verify.DoWork(It.IsAny<int>())).AtLeastOnce();
 
 			async Task Act()
 			{
@@ -39,7 +39,7 @@ public sealed partial class ThatMockVerifyIs
 			sut.DoWork(1);
 			sut.DoWork(2);
 
-			sut.Mock.Verify.DoWork(It.IsAny<int>()).AtLeastOnce();
+			await That(sut.Mock.Verify.DoWork(It.IsAny<int>())).AtLeastOnce();
 
 			async Task Act()
 			{
@@ -58,7 +58,7 @@ public sealed partial class ThatMockVerifyIs
 			sut.DoWork(2);
 			sut.DoWork(3);
 
-			sut.Mock.Verify.DoWork(It.Is(2)).AtLeastOnce();
+			await That(sut.Mock.Verify.DoWork(It.Is(2))).AtLeastOnce();
 
 			async Task Act()
 			{
@@ -70,8 +70,8 @@ public sealed partial class ThatMockVerifyIs
 				             Expected that the aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService mock
 				             has all interactions verified,
 				             but the following 2 interactions were not verified:
-				              - [0] invoke method DoWork(1)
-				              - [2] invoke method DoWork(3)
+				              - invoke method DoWork(1)
+				              - invoke method DoWork(3)
 				             """);
 		}
 
@@ -83,7 +83,7 @@ public sealed partial class ThatMockVerifyIs
 			sut.DoWork(1);
 			sut.DoWork(2);
 
-			sut.Mock.Verify.DoWork(It.Is(1)).AtLeastOnce();
+			await That(sut.Mock.Verify.DoWork(It.Is(1))).AtLeastOnce();
 
 			async Task Act()
 			{
@@ -95,7 +95,7 @@ public sealed partial class ThatMockVerifyIs
 				             Expected that the aweXpect.Mockolate.Tests.ThatMockVerifyIs.IMyService mock
 				             has all interactions verified,
 				             but the following interaction was not verified:
-				              - [1] invoke method DoWork(2)
+				              - invoke method DoWork(2)
 				             """);
 		}
 	}
