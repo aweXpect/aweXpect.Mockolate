@@ -34,7 +34,7 @@ public static partial class ThatVerificationResult
 			return;
 		}
 
-		MockInteractions allInteractions = mock.MockRegistry.Interactions;
+		IMockInteractions allInteractions = mock.MockRegistry.Interactions;
 		string interactionsText = Formatter.Format(allInteractions, FormattingOptions.MultipleLines);
 		expectationBuilder.UpdateContexts(contexts => contexts
 			.Remove("All Interactions")
@@ -97,7 +97,7 @@ public static partial class ThatVerificationResult
 				}
 				catch (MockVerificationTimeoutException)
 				{
-					string interactionsText = Formatter.Format(((IVerificationResult)actual).MockInteractions,
+					string interactionsText = Formatter.Format(((IVerificationResult)actual).Interactions,
 						FormattingOptions.MultipleLines);
 					expectationBuilder.UpdateContexts(contexts => contexts
 						.Remove("Matching Interactions")
@@ -308,7 +308,7 @@ public static partial class ThatVerificationResult
 				}
 				catch (MockVerificationTimeoutException)
 				{
-					string interactionsText = Formatter.Format(((IVerificationResult)actual).MockInteractions,
+					string interactionsText = Formatter.Format(((IVerificationResult)actual).Interactions,
 						FormattingOptions.MultipleLines);
 					expectationBuilder.UpdateContexts(contexts => contexts
 						.Remove("Matching Interactions")

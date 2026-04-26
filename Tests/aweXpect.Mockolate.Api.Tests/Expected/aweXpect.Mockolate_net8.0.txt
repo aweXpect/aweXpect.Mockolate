@@ -4,7 +4,7 @@ namespace Mockolate.Web
 {
     public static class AweXpectItExtensions
     {
-        public interface IJsonContentBodyParameter : Mockolate.Parameters.IParameter<System.Net.Http.HttpContent?>, Mockolate.Web.ItExtensions.IHttpContentParameter, Mockolate.Web.ItExtensions.IHttpHeaderParameter<Mockolate.Web.ItExtensions.IHttpContentHeaderParameter>
+        public interface IJsonContentBodyParameter : Mockolate.Parameters.IParameter, Mockolate.Parameters.IParameterWithCallback<System.Net.Http.HttpContent?>, Mockolate.Parameters.IParameter<System.Net.Http.HttpContent?>, Mockolate.Web.ItExtensions.IHttpContentParameter, Mockolate.Web.ItExtensions.IHttpHeaderParameter<Mockolate.Web.ItExtensions.IHttpContentHeaderParameter>
         {
             Mockolate.Web.AweXpectItExtensions.IJsonContentBodyParameter IgnoringAdditionalProperties(bool ignoreAdditionalProperties = true);
         }

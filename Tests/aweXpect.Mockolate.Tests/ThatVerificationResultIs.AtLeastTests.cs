@@ -237,9 +237,9 @@ public sealed partial class ThatVerificationResultIs
 
 				             Matching Interactions:
 				             [
-				               [0] invoke method MyMethod(1, True),
-				               [1] invoke method MyMethod(2, True),
-				               [2] invoke method MyMethod(3, True)
+				               invoke method MyMethod(1, True),
+				               invoke method MyMethod(2, True),
+				               invoke method MyMethod(3, True)
 				             ]
 				             """);
 		}

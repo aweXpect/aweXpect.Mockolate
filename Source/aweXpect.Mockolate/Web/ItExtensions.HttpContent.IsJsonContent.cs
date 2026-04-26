@@ -84,7 +84,7 @@ public static class AweXpectItExtensions
 			return this;
 		}
 
-		public IParameter<HttpContent?> Do(Action<HttpContent?> callback)
+		public IParameterWithCallback<HttpContent?> Do(Action<HttpContent?> callback)
 			=> _parameter.Do(callback);
 
 		public ItExtensions.IHttpContentHeaderParameter WithHeaders(

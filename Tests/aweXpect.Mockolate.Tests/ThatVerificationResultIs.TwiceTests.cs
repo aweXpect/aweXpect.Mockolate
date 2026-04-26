@@ -136,17 +136,17 @@ public sealed partial class ThatVerificationResultIs
 
 				             Matching Interactions:
 				             [
-				               [0] invoke method MyMethod(1, False),
-				               [1] invoke method MyMethod(1, False),
-				               [3] invoke method MyMethod(1, False)
+				               invoke method MyMethod(1, False),
+				               invoke method MyMethod(1, False),
+				               invoke method MyMethod(1, False)
 				             ]
 
 				             All Interactions:
 				             [
-				               [0] invoke method MyMethod(1, False),
-				               [1] invoke method MyMethod(1, False),
-				               [2] invoke method MyMethod(2, True),
-				               [3] invoke method MyMethod(1, False)
+				               invoke method MyMethod(1, False),
+				               invoke method MyMethod(1, False),
+				               invoke method MyMethod(2, True),
+				               invoke method MyMethod(1, False)
 				             ]
 				             """);
 		}
@@ -196,12 +196,12 @@ public sealed partial class ThatVerificationResultIs
 
 				             Matching Interactions:
 				             [
-				               [0] invoke method MyMethod(1, False)
+				               invoke method MyMethod(1, False)
 				             ]
 
 				             All Interactions:
 				             [
-				               [0] invoke method MyMethod(1, False)
+				               invoke method MyMethod(1, False)
 				             ]
 				             """);
 		}
@@ -245,10 +245,10 @@ public sealed partial class ThatVerificationResultIs
 
 				             Matching Interactions:
 				             [
-				               [0] invoke method MyMethod(1, True),
-				               [1] invoke method MyMethod(2, True),
-				               [2] invoke method MyMethod(3, True),
-				               [3] invoke method MyMethod(4, True)
+				               invoke method MyMethod(1, True),
+				               invoke method MyMethod(2, True),
+				               invoke method MyMethod(3, True),
+				               invoke method MyMethod(4, True)
 				             ]
 				             """);
 		}

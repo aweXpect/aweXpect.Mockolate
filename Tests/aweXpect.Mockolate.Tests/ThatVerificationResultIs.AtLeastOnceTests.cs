@@ -210,8 +210,8 @@ public sealed partial class ThatVerificationResultIs
 
 				             Matching Interactions:
 				             [
-				               [0] invoke method MyMethod(1, True),
-				               [1] invoke method MyMethod(2, True)
+				               invoke method MyMethod(1, True),
+				               invoke method MyMethod(2, True)
 				             ]
 				             """);
 		}
@@ -253,7 +253,7 @@ public sealed partial class ThatVerificationResultIs
 
 					             Matching Interactions:
 					             [
-					               [0] invoke method MyMethod(1, False)
+					               invoke method MyMethod(1, False)
 					             ]
 					             """);
 			}
@@ -280,8 +280,8 @@ public sealed partial class ThatVerificationResultIs
 
 					             Matching Interactions:
 					             [
-					               [0] invoke method MyMethod(1, False),
-					               [1] invoke method MyMethod(1, False)
+					               invoke method MyMethod(1, False),
+					               invoke method MyMethod(1, False)
 					             ]
 					             """);
 			}
