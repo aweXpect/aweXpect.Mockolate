@@ -18,22 +18,26 @@ Verify that a method was called a specific number of times:
 var sut = IMyService.CreateMock();
 sut.MyMethod();
 
-await That(sut.Mock.Verify.MyMethod()).Once();             // Exactly once
-await That(sut.Mock.Verify.MyMethod()).Twice();            // Exactly twice
-await That(sut.Mock.Verify.MyMethod()).Never();            // Never called
-await That(sut.Mock.Verify.MyMethod()).AtLeastOnce();      // At least once
-await That(sut.Mock.Verify.MyMethod()).AtLeastTwice();     // At least twice
-await That(sut.Mock.Verify.MyMethod()).AtLeast(3.Times()); // At least 3 times
-await That(sut.Mock.Verify.MyMethod()).AtMostOnce();       // At most once
-await That(sut.Mock.Verify.MyMethod()).AtMostTwice();      // At most twice
-await That(sut.Mock.Verify.MyMethod()).AtMost(4.Times());  // At most 4 times
-await That(sut.Mock.Verify.MyMethod()).Exactly(2.Times()); // Exactly 2 times
+await That(sut.Mock.Verify.MyMethod()).Once();                    // Exactly once
+await That(sut.Mock.Verify.MyMethod()).Twice();                   // Exactly twice
+await That(sut.Mock.Verify.MyMethod()).Never();                   // Never called
+await That(sut.Mock.Verify.MyMethod()).AtLeastOnce();             // At least once
+await That(sut.Mock.Verify.MyMethod()).AtLeastTwice();            // At least twice
+await That(sut.Mock.Verify.MyMethod()).AtLeast(3.Times());        // At least 3 times
+await That(sut.Mock.Verify.MyMethod()).AtMostOnce();              // At most once
+await That(sut.Mock.Verify.MyMethod()).AtMostTwice();             // At most twice
+await That(sut.Mock.Verify.MyMethod()).AtMost(4.Times());         // At most 4 times
+await That(sut.Mock.Verify.MyMethod()).Exactly(2.Times());        // Exactly 2 times
+await That(sut.Mock.Verify.MyMethod()).Between(2).And(5.Times()); // Between 2 and 5 times
 ```
 
 #### Asynchronous verification
 
 With `Within(TimeSpan timeout)`, you can check whether the expected number of calls occurred within a given time
 interval. This is useful for asynchronous or delayed invocations in the background.
+
+`Within` and `WithCancellation` are available on `AtLeast*`, `Once`, `Twice`, `Exactly`, and `Between`. They are not
+available on `Never` or `AtMost*`, since an upper bound cannot be confirmed by waiting longer.
 
 ```csharp
 var sut = IMyService.CreateMock();
@@ -116,6 +120,8 @@ await That(sut.Mock.Verify).AllSetupsAreUsed();
 
 ### Web Extensions
 
+> Web extensions require .NET 8.0 or later.
+
 #### JSON Content
 
 You can precisely verify JSON content in HTTP requests during your tests. This feature is
@@ -130,5 +136,17 @@ httpClient.Mock.Setup
 // You can also provide a string representation of the JSON, and it ignores formatting differences or property order
 httpClient.Mock.Setup
     .PostAsync(It.IsAny<Uri>(), It.IsHttpContent().WithJson("{\"bar\": \"baz\", \"foo\": 1}"))
+    .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
+```
+
+By default, additional properties in the actual JSON are ignored. Use `IgnoringAdditionalProperties(false)` to require
+an exact match:
+
+```csharp
+// Fails if the request body contains any property other than `foo` and `bar`
+httpClient.Mock.Setup
+    .PostAsync(It.IsAny<Uri>(), It.IsHttpContent()
+        .WithJsonMatching(new { foo = 1, bar = "baz" })
+        .IgnoringAdditionalProperties(false))
     .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 ```
