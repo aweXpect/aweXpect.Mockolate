@@ -1,10 +1,10 @@
 # aweXpect.Mockolate
 
 [![Nuget](https://img.shields.io/nuget/v/aweXpect.Mockolate)](https://www.nuget.org/packages/aweXpect.Mockolate)
-[![Build](https://github.com/aweXpect/aweXpect.Mockolate/actions/workflows/build.yml/badge.svg)](https://github.com/aweXpect/aweXpect.Mockolate/actions/workflows/build.yml)
+[![Build](https://github.com/Testably/aweXpect.Mockolate/actions/workflows/build.yml/badge.svg)](https://github.com/Testably/aweXpect.Mockolate/actions/workflows/build.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Testably_aweXpect.Mockolate&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Testably_aweXpect.Mockolate)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Testably_aweXpect.Mockolate&metric=coverage)](https://sonarcloud.io/summary/overall?id=Testably_aweXpect.Mockolate)
-[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FaweXpect%2FaweXpect.Mockolate%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/aweXpect/aweXpect.Mockolate/main)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FTestably%2FaweXpect.Mockolate%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/Testably/aweXpect.Mockolate/main)
 
 Expectations to verify interactions with mocks from [Mockolate](https://github.com/aweXpect/Mockolate).
 
